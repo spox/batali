@@ -2,12 +2,21 @@ require 'batali'
 
 module Batali
 
+  class Struct < AttributeStruct
+
+    def cookbook(*args)
+      set!(:cookbook, args)
+      self
+    end
+
+  end
+
   # Create a new file
   #
   # @param block [Proc]
   # @return [AttributeStruct]
   def self.define(&block)
-    struct = AttributeStruct.new
+    struct = Struct.new
     struct.set_state!(:value_collapse => true)
     struct.build!(&block)
     struct
@@ -33,7 +42,12 @@ module Batali
       when String
         Cookbook.new(:name => v)
       when Hash
-        Cookbook.new(v)
+        c_name = v.keys.first
+        constraints = v.values.first.to_a.flatten.find_all{|i| i.is_a?(String)}
+        Cookbook.new(
+          :name => c_name,
+          :constraint => constraints
+        )
       else
         raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
       end
