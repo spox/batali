@@ -10,7 +10,11 @@ Gem::Specification.new do |s|
   s.description = 'Magic'
   s.require_path = 'lib'
   s.license = 'Apache 2.0'
+  s.add_runtime_dependency 'grimoire'
+  s.add_runtime_dependency 'bogo-cli'
+  s.add_runtime_dependency 'http'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'pry'
+  s.executables << 'batali'
   s.files = Dir['{lib,bin}/**/**/*'] + %w(batali.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
 end
