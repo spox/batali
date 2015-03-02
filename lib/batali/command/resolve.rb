@@ -34,7 +34,7 @@ module Batali
           ui.error 'No solutions found defined requirements!'
         else
           ideal_solution = results.pop
-          ui.info "Found #{results.size} solutions for #{requirements.inspect}"
+          ui.info "Found #{results.size} solutions for defined requirements."
           ui.info 'Ideal solution:'
           ui.puts ideal_solution.units.sort_by(&:name).map{|u| "#{u.name}<#{u.version}>"}
         end
