@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+require 'batali'
+
+Bogo::Cli::Setup.define do
+
+  on :v, :version, 'Print version' do
+    puts "batali - Cookbook Collection Manager - [Version: #{Batali::VERSION}]"
+    exit
+  end
+
+  global_opts = lambda do
+    on :c, :config, 'Configuration file path'
+    on :V, :verbose, 'Enable verbose output'
+    on :D, :debug, 'Enable debug mode'
+    on :f, :file, 'Path to Batali file'
+  end
+
+  command 'install' do
+    description 'Install cookbooks from manifest'
+    self.instance_exec(&global_opts)
+    on :d, 'dry-run', 'Print changes'
+    run do |opts, args|
+      Batali::Command::Install.new({:install => opts.to_hash}, args).execute!
+    end
+  end
+
+  command 'update' do
+    description 'Update cookbooks manifest'
+    self.instance_exec(&global_opts)
+    on :i, 'install', 'Install cookbooks after update', :default => true
+
+    run do |opts, args|
+      Batali::Command::Update.new({:update => opts.to_hash}, args).execute!
+    end
+  end
+
+  command 'resolve' do
+    description 'Build the cookbook manifest'
+    self.instance_exec(&global_opts)
+    on :d, 'dry-run', 'Print changes'
+    on :l, 'least-impact', 'Update cookbooks with minimal version impact', :default => true
+
+    run do |opts, args|
+      Batali::Command::Resolve.new({:resolve => opts.to_hash}, args).execute!
+    end
+  end
+
+  command 'configure' do
+    self.instance_exec(&global_opts)
+    run do |opts, args|
+      Batali::Command::Configure.new(opts, args).execute!
+    end
+  end
+
+end
