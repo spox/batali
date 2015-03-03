@@ -26,12 +26,12 @@ module Batali
         super
       end
 
-      # @return [VERSION_CLASS]
+      # @return [String]
       def unit_version
         version
       end
 
-      # @return [Array<Grimoire::DEPENDENCY_CLASS>]
+      # @return [Array<Array<name, constraints>>]
       def unit_dependencies
         deps.to_a
       end
