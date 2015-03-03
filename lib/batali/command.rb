@@ -32,5 +32,17 @@ module Batali
       end
     end
 
+    # Do not execute block if dry run
+    #
+    # @param action [String] action to be performed
+    # @yield block to execute
+    def dry_run(action)
+      if(opts[:dry_run])
+        ui.warn "Dry run disabled: #{action}"
+      else
+        yield
+      end
+    end
+
   end
 end
