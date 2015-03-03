@@ -6,8 +6,12 @@ module Batali
     # Resolve cookbooks
     class Resolve < Command
 
+      # Resolve dependencies and constraints. Output results to stdout
+      # and dump serialized manifest
       def execute!
-        file = BFile.new(File.join(Dir.pwd, 'Batali'))
+        file = BFile.new(opts.fetch(:file, File.join(Dir.pwd, 'Batali')))
+        manifest = Manifest.build(File.join(File.dirname(file.path), 'batali.manifest'))
+        score_keeper = ScoreKeeper.new(:manifest => manifest)
         system = Grimoire::System.new
         run_action 'Loading sources' do
           file.source.map(&:units).flatten.map do |unit|
@@ -23,7 +27,8 @@ module Batali
         )
         solv = Grimoire::Solver.new(
           :requirements => requirements,
-          :system => system
+          :system => system,
+          :score_keeper => score_keeper
         )
         results = []
         run_action 'Resolving dependency constraints' do
