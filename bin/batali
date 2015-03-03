@@ -28,6 +28,8 @@ Bogo::Cli::Setup.define do
   command 'update' do
     description 'Update cookbooks manifest'
     self.instance_exec(&global_opts)
+    on :d, 'dry-run', 'Print changes'
+    on :l, 'least-impact', 'Update cookbooks with minimal version impact', :default => true
     on :i, 'install', 'Install cookbooks after update', :default => true
 
     run do |opts, args|
