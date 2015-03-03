@@ -37,6 +37,10 @@ module Batali
           ui.info "Found #{results.size} solutions for defined requirements."
           ui.info 'Ideal solution:'
           ui.puts ideal_solution.units.sort_by(&:name).map{|u| "#{u.name}<#{u.version}>"}
+          manifest = Manifest.new(:cookbook => ideal_solution.units)
+          File.open('batali.manifest', 'w') do |file|
+            file.write MultiJson.dump(manifest, :pretty => true)
+          end
         end
       end
 
