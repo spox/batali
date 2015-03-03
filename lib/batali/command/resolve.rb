@@ -9,19 +9,16 @@ module Batali
       # Resolve dependencies and constraints. Output results to stdout
       # and dump serialized manifest
       def execute!
-        file = BFile.new(opts.fetch(:file, File.join(Dir.pwd, 'Batali')))
-        manifest = Manifest.build(File.join(File.dirname(file.path), 'batali.manifest'))
-        score_keeper = ScoreKeeper.new(:manifest => manifest)
         system = Grimoire::System.new
         run_action 'Loading sources' do
-          file.source.map(&:units).flatten.map do |unit|
+          batali_file.source.map(&:units).flatten.map do |unit|
             system.add_unit(unit)
           end
           nil
         end
         requirements = Grimoire::RequirementList.new(
           :name => :batali_resolv,
-          :requirements => file.cookbook.map{ |ckbk|
+          :requirements => batali_file.cookbook.map{ |ckbk|
             [ckbk.name, *(ckbk.constraint ? ckbk.constraint : '> 0')]
           }
         )
@@ -46,6 +43,20 @@ module Batali
           File.open('batali.manifest', 'w') do |file|
             file.write MultiJson.dump(manifest, :pretty => true)
           end
+        end
+      end
+
+      # @return [ScoreKeeper]
+      def score_keeper
+        memoize(:score_keeper) do
+          sk_manifest = Manifest.new(:cookbook => manifest.cookbook)
+          unless(opts[:least_impact])
+            sk_manifest.cookbook.clear
+          end
+          sk_manifest.cookbook.delete_if do |unit|
+            arguments.include?(unit.name)
+          end
+          ScoreKeeper.new(:manifest => sk_manifest)
         end
       end
 
