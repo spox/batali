@@ -10,12 +10,12 @@ module Batali
 
     attribute :type, String, :required => true, :default => lambda{ self.name }
 
-    # @return [VERSION_CLASS]
+    # @return [String]
     def unit_version
       raise NotImplementedError.new 'Abstract class'
     end
 
-    # @return [Grimoire::RequirementList]
+    # @return [Array<Array<name, constraints>>]
     def unit_dependencies
       raise NotImplementedError.new 'Abstract class'
     end
@@ -38,7 +38,7 @@ module Batali
       unless(type.to_s.include?('::'))
         type = [self.name, Bogo::Utility.camel(type)].join('::')
       end
-      Bogo::Utility.constantize(type).new(args)
+      Bogo::Utility.constantize(type).new(args.merge(:type => type))
     end
 
   end
