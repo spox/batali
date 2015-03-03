@@ -12,16 +12,13 @@ module Batali
       attr_reader :version
 
       attribute :url, String, :required => true
+      attribute :version, String, :required => true
 
       # Extract extra info before allowing super to load data
       #
       # @param args [Hash]
       # @return [self]
       def initialize(args={})
-        @version = args.delete(:version)
-        unless(version)
-          raise ArgumentError.new 'Missing required option `:version`!'
-        end
         @deps = args.delete(:dependencies) || {}
         super
       end
