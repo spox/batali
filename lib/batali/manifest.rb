@@ -4,7 +4,9 @@ module Batali
   # Collection of resolved units
   class Manifest < Grimoire::Utility
 
-    attribute :cookbook, Unit, :multiple => true
+    include Bogo::Memoization
+
+    attribute :cookbook, Unit, :multiple => true, :coerce => lambda{|v| Unit.new(v)}
 
     # Build manifest from given path. If no file exists, empty
     # manifest will be provided.
@@ -13,11 +15,7 @@ module Batali
     # @return [Manifest]
     def self.build(path)
       if(File.exists?(path))
-        self.new(
-          :cookbook => Bogo::Config.new(
-            :path => path
-          ).data[:cookbook]
-        )
+        self.new(Bogo::Config.new(path).data)
       else
         self.new
       end
@@ -28,7 +26,16 @@ module Batali
     # @param unit [Unit]
     # @return [TrueClass, FalseClass]
     def include?(unit)
-      cookbook && cookbook.include?(unit)
+      memoize(unit.inspect) do
+        if(cookbook)
+          !!cookbook.detect do |ckbk|
+            ckbk.name == unit.name &&
+              ckbk.version == unit.version
+          end
+        else
+          false
+        end
+      end
     end
 
   end
