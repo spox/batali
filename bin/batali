@@ -20,6 +20,7 @@ Bogo::Cli::Setup.define do
     description 'Install cookbooks from manifest'
     self.instance_exec(&global_opts)
     on :d, 'dry-run', 'Print changes'
+    on :p, 'path', 'Cookbook install path'
     run do |opts, args|
       Batali::Command::Install.new({:install => opts.to_hash}, args).execute!
     end
