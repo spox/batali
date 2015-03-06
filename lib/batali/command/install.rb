@@ -10,9 +10,13 @@ module Batali
       # Install cookbooks
       def execute!
         dry_run('Cookbook installation') do
-          run_action('Installing cookbooks') do
-            install_path = opts.fetch(:path, 'cookbooks')
+          install_path = opts.fetch(:path, 'cookbooks')
+          run_action('Readying installation destination') do
+            FileUtils.rm_rf(install_path)
             FileUtils.mkdir_p(install_path)
+            nil
+          end
+          run_action('Installing cookbooks') do
             manifest.cookbook.each do |unit|
               asset_path = unit.source.asset
               begin
