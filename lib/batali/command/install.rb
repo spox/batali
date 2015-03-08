@@ -21,17 +21,14 @@ module Batali
               asset_path = unit.source.asset
               begin
                 FileUtils.mv(
-                  File.join(
-                    asset_path,
-                    unit.name
-                  ),
+                  File.join(asset_path),
                   File.join(
                     install_path,
                     unit.name
                   )
                 )
               ensure
-                FileUtils.rm_rf(asset_path)
+                unit.source.clean_asset(asset_path)
               end
             end
             nil
