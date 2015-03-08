@@ -2,7 +2,7 @@ require 'batali'
 
 module Batali
   # Source of asset
-  class Source < Grimoire::Utility
+  class Source < Utility
 
     autoload :Path, 'batali/source/path'
     autoload :Site, 'batali/source/site'
@@ -23,6 +23,16 @@ module Batali
     # @return [String] directory containing contents
     def asset
       raise NotImplementedError.new 'Abstract class'
+    end
+
+    # @return [TrueClass, FalseClass]
+    def clean_asset(asset_path)
+      if(File.exists?(asset_path))
+        FileUtils.rm_rf(asset_path)
+        true
+      else
+        false
+      end
     end
 
     # Build a source
