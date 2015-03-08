@@ -2,7 +2,7 @@ require 'batali'
 
 module Batali
   # Collection of resolved units
-  class Manifest < Grimoire::Utility
+  class Manifest < Utility
 
     include Bogo::Memoization
 
