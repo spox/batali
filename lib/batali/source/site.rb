@@ -62,7 +62,12 @@ module Batali
             end
           end
         end
-        path
+        Dir.glob(File.join(path, '*')).first
+      end
+
+      # @return [TrueClass, FalseClass]
+      def clean_asset(asset_path)
+        super File.dirname(asset_path)
       end
 
     end
