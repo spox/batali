@@ -13,7 +13,8 @@ module Batali
         run_action 'Loading sources' do
           UnitLoader.new(
             :file => batali_file,
-            :system => system
+            :system => system,
+            :cache => cache_directory(:git)
           ).populate!
           nil
         end
@@ -46,7 +47,7 @@ module Batali
               nil
             end
           end
-          ui.info "Found #{results.size} solutions for defined requirements."
+          ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
           ui.info 'Ideal solution:'
           ui.puts ideal_solution.units.sort_by(&:name).map{|u| "#{u.name}<#{u.version}>"}
         end
