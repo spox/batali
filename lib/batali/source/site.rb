@@ -62,6 +62,7 @@ module Batali
             end
           end
         end
+        FileUtils.rm(a_path)
         Dir.glob(File.join(path, '*')).first
       end
 
