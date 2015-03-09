@@ -4,8 +4,8 @@ module Batali
 
   class Struct < AttributeStruct
 
-    def cookbook(*args)
-      set!(:cookbook, args)
+    def cookbook(*args, &block)
+      set!(:cookbook, args, &block)
       self
     end
 
@@ -24,38 +24,58 @@ module Batali
 
   class BFile < Bogo::Config
 
-    class Cookbook < Grimoire::Utility
+    # @return [Proc] cookbook convert
+    def self.cookbook_coerce
+      proc do |v|
+        case v
+        when Array
+          case v.last
+          when String
+            Cookbook.new(
+              :name => v.first,
+              :constraint => v.slice(1, v.size)
+            )
+          when Hash
+            c_name = v.first
+            Cookbook.new(
+              v.last.merge(
+                :name => c_name
+              )
+            )
+          else
+            raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
+          end
+        when String
+          Cookbook.new(:name => v)
+        else
+          raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
+        end
+      end
+    end
+
+    class Cookbook < Utility
       attribute :name, String, :required => true
       attribute :constraint, String, :multiple => true
-      attribute :git, Smash, :coerce => lambda{|v| v.to_smash}
+      attribute :git, String
+      attribute :ref, String
       attribute :path, String
     end
 
-    attribute :source, RemoteSite, :multiple => true, :coerce => lambda{|v| RemoteSite.new(:endpoint => v)}
-    attribute :cookbook, Cookbook, :multiple => true, :coerce => lambda{|v|
-      case v
-      when Array
-        Cookbook.new(
-          :name => v.first,
-          :constraint => v.slice(1, v.size)
-        )
-      when String
-        Cookbook.new(:name => v)
-      when Hash
-        c_name = v.keys.first
-        constraints = v.values.first.to_a.flatten.find_all{|i| i.is_a?(String)}
-        Cookbook.new(
-          :name => c_name,
-          :constraint => constraints
-        )
-      else
-        raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
-      end
-    }
+    class Restriction < Utility
+      attribute :cookbook, String, :required => true
+      attribute :source, String, :required => true
+    end
 
-    ## TODO: supported values still required
-    # attribute :restrict -- restrict cookbooks of name `x` to source  named `y`
-    # attribute :group -- cookbook grouping (i.e. :integration)
+    class Group < Utility
+      attribute :name, String, :required => true
+      attribute :cookbook, Cookbook, :multiple => true, :required => true, :coerce => BFile.cookbook_coerce
+    end
+
+    attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v| Restriction.new(:cookbook => v.first, :source => v.last)}
+    attribute :source, Origin::RemoteSite, :multiple => true, :coerce => lambda{|v| Origin::RemoteSite.new(:endpoint => v)}
+    attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
+    attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce
+
   end
 
 end
