@@ -8,7 +8,7 @@ module Batali
       class Metadata < AttributeStruct
 
         def depends(*args)
-          set!(:version, args)
+          set!(:depends, args)
           self
         end
 
@@ -38,7 +38,14 @@ module Batali
               :source => Smash.new(
                 :type => :path,
                 :version => info[:version],
-                :dependencies => info[:depends]
+                :path => path,
+                :dependencies => info[:depends].map{ |dep|
+                  if(dep.size == 1)
+                    dep.push('> 0')
+                  else
+                    dep.to_a
+                  end
+                }
               )
             )
           ]
