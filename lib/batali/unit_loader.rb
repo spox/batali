@@ -8,6 +8,7 @@ module Batali
 
     attribute :file, BFile, :required => true
     attribute :system, Grimoire::System, :required => true
+    attribute :cache, String, :required => true
 
     # Populate the system with units
     #
@@ -35,7 +36,8 @@ module Batali
             source = Origin::Git.new(
               :name => ckbk.name,
               :url => ckbk.git,
-              :ref => ckbk.ref || 'master'
+              :ref => ckbk.ref || 'master',
+              :cache => cache
             )
           end
           if(source)
