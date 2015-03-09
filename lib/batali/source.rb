@@ -27,11 +27,15 @@ module Batali
 
     # @return [TrueClass, FalseClass]
     def clean_asset(asset_path)
-      if(File.exists?(asset_path))
-        FileUtils.rm_rf(asset_path)
-        true
-      else
+      if(self.respond_to?(:cache))
         false
+      else
+        if(File.exists?(asset_path))
+          FileUtils.rm_rf(asset_path)
+          true
+        else
+          false
+        end
       end
     end
 

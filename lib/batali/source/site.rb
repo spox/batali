@@ -13,6 +13,8 @@ module Batali
       attr_reader :dependencies
       # @return [String] version
       attr_reader :version
+      # @return [String] local cache path
+      attr_accessor :cache
 
       attribute :url, String, :required => true
       attribute :version, String, :required => true
@@ -38,31 +40,34 @@ module Batali
 
       # @return [String] directory
       def asset
-        path = Dir.mktmpdir('batali')
-        result = HTTP.get(url)
-        while(result.code == 302)
-          result = HTTP.get(result.headers['Location'])
-        end
-        File.open(a_path = File.join(path, 'asset'), 'w') do |file|
-          while(content = result.body.readpartial(2048))
-            file.write content
+        path = File.join(cache, Base64.urlsafe_encode64(url))
+        unless(File.directory?(path))
+          FileUtils.mkdir_p(path)
+          result = HTTP.get(url)
+          while(result.code == 302)
+            result = HTTP.get(result.headers['Location'])
           end
-        end
-        ext = Gem::Package::TarReader.new(
-          Zlib::GzipReader.open(a_path)
-        )
-        ext.rewind
-        ext.each do |entry|
-          next unless entry.file?
-          n_path = File.join(path, entry.full_name)
-          FileUtils.mkdir_p(File.dirname(n_path))
-          File.open(n_path, 'w') do |file|
-            while(content = entry.read(2048))
-              file.write(content)
+          File.open(a_path = File.join(path, 'asset'), 'w') do |file|
+            while(content = result.body.readpartial(2048))
+              file.write content
             end
           end
+          ext = Gem::Package::TarReader.new(
+            Zlib::GzipReader.open(a_path)
+          )
+          ext.rewind
+          ext.each do |entry|
+            next unless entry.file?
+            n_path = File.join(path, entry.full_name)
+            FileUtils.mkdir_p(File.dirname(n_path))
+            File.open(n_path, 'w') do |file|
+              while(content = entry.read(2048))
+                file.write(content)
+              end
+            end
+          end
+          FileUtils.rm(a_path)
         end
-        FileUtils.rm(a_path)
         Dir.glob(File.join(path, '*')).first
       end
 

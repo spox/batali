@@ -19,12 +19,14 @@ module Batali
           run_action('Installing cookbooks') do
             manifest.cookbook.each do |unit|
               if(unit.source.respond_to?(:cache))
-                unit.source.cache = cache_directory(:git)
+                unit.source.cache = cache_directory(
+                  Bogo::Utility.snake(unit.source.class.name.split('::').last)
+                )
               end
               asset_path = unit.source.asset
               begin
-                FileUtils.mv(
-                  File.join(asset_path),
+                FileUtils.cp_r(
+                  File.join(asset_path, '.'),
                   File.join(
                     install_path,
                     unit.name
