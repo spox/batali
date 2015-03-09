@@ -1,4 +1,5 @@
 require 'batali'
+require 'fileutils'
 
 module Batali
   # Customized command base for Batali
@@ -29,6 +30,18 @@ module Batali
             ), 'batali.manifest'
           )
         )
+      end
+    end
+
+    # @return [String] path to local cache
+    def cache_directory(*args)
+      memoize(:cache_directory) do
+        directory = opts.fetch(:cache_directory, '/tmp/batali-cache')
+        unless(args.empty?)
+          directory = File.join(directory, *args.map(&:to_s))
+        end
+        FileUtils.mkdir_p(directory)
+        directory
       end
     end
 
