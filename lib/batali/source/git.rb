@@ -9,18 +9,15 @@ module Batali
     class Git < Path
 
       include Bogo::Memoization
+      include Batali::Git
 
       attribute :path, String
-      attribute :url, String, :required => true
-      attribute :ref, String, :required => true
 
       # @return [String] directory containing contents
       def asset
-        memoize(:asset) do
-          dir = Dir.mktmpdir
-          FileUtils.cp_r(path, dir)
-          dir
-        end
+        clone_repository
+        self.path = ref_dup
+        super
       end
 
       # Overload to remove non-relevant attributes
