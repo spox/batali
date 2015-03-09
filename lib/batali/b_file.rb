@@ -24,28 +24,6 @@ module Batali
 
   class BFile < Bogo::Config
 
-    class Cookbook < Utility
-      attribute :name, String, :required => true
-      attribute :constraint, String, :multiple => true
-      attribute :git, Smash, :coerce => lambda{|v| v.to_smash}
-      attribute :path, String
-    end
-
-    class Restriction < Utility
-      attribute :cookbook, String, :required => true
-      attribute :source, String, :required => true
-    end
-
-    class Group < Utility
-      attribute :name, String, :required => true
-      attribute :cookbook, Cookbook, :multiple => true, :required => true, :coerce => BFile.cookbook_coerce
-    end
-
-    attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v| Restriction.new(:cookbook => v.first, :source => v.last)}
-    attribute :source, RemoteSite, :multiple => true, :coerce => lambda{|v| RemoteSite.new(:endpoint => v)}
-    attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
-    attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce
-
     # @return [Proc] cookbook convert
     def self.cookbook_coerce
       proc do |v|
@@ -69,6 +47,28 @@ module Batali
         end
       end
     end
+
+    class Cookbook < Utility
+      attribute :name, String, :required => true
+      attribute :constraint, String, :multiple => true
+      attribute :git, Smash, :coerce => lambda{|v| v.to_smash}
+      attribute :path, String
+    end
+
+    class Restriction < Utility
+      attribute :cookbook, String, :required => true
+      attribute :source, String, :required => true
+    end
+
+    class Group < Utility
+      attribute :name, String, :required => true
+      attribute :cookbook, Cookbook, :multiple => true, :required => true, :coerce => BFile.cookbook_coerce
+    end
+
+    attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v| Restriction.new(:cookbook => v.first, :source => v.last)}
+    attribute :source, Origin::RemoteSite, :multiple => true, :coerce => lambda{|v| Origin::RemoteSite.new(:endpoint => v)}
+    attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
+    attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce
 
   end
 
