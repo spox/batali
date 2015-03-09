@@ -5,6 +5,7 @@ module  Batali
   class Origin < Utility
 
     autoload :RemoteSite, 'batali/origin/remote_site'
+    autoload :Git, 'batali/origin/git'
     autoload :Path, 'batali/origin/path'
 
     attribute :name, String, :required => true
