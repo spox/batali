@@ -105,14 +105,14 @@ $ batali resolve --no-least-impact
 ### Light weight
 
 One of the goals for batali was a being light weight resolver, in the same vein as
-the librarian project. This means it does nothing more than manage cookbooks. This
+the [librarian][1] project. This means it does nothing more than manage cookbooks. This
 includes dependency and constraint resolution, as well as providing a local installation
 of assets defined within the generated manifest. It provides no extra features outside of
 that scope.
 
 ### Multiple platform support
 
-Batali does not rely on the chef gem to function. This removes any dependencies on
+Batali does not rely on the [chef][2] gem to function. This removes any dependencies on
 gems that may be incompatible outside the MRI platform.
 
 ### Isolated manifest files
@@ -125,3 +125,6 @@ from sources.
 # Info
 
 * Repository: https://github.com/hw-labs/batali
+
+[1]: https://rubygems.org/gems/librarian "A Framework for Bundlers"
+[2]: https://rubygems.org/gems/chef "A systems integration framework"
