@@ -11,15 +11,16 @@ module Batali
       def execute!
         system = Grimoire::System.new
         run_action 'Loading sources' do
-          batali_file.source.map(&:units).flatten.map do |unit|
-            system.add_unit(unit)
-          end
+          UnitLoader.new(
+            :file => batali_file,
+            :system => system
+          ).populate!
           nil
         end
         requirements = Grimoire::RequirementList.new(
           :name => :batali_resolv,
           :requirements => batali_file.cookbook.map{ |ckbk|
-            [ckbk.name, *(ckbk.constraint.empty? ? ['> 0'] : ckbk.constraint)]
+            [ckbk.name, *(ckbk.constraint.nil? || ckbk.constraint.empty? ? ['> 0'] : ckbk.constraint)]
           }
         )
         solv = Grimoire::Solver.new(
