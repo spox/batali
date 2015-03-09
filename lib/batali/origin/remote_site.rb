@@ -27,7 +27,7 @@ module Batali
         self.identifier = Digest::SHA256.hexdigest(endpoint)
         unless(name?)
           self.name = self.identifier
-f        end
+        end
       end
 
       # @return [String] cache directory path
