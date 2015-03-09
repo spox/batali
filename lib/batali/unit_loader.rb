@@ -4,6 +4,8 @@ module Batali
 
   class UnitLoader < Utility
 
+    include Bogo::Memoization
+
     attribute :file, BFile, :required => true
     attribute :system, Grimoire::System, :required => true
 
@@ -15,7 +17,7 @@ module Batali
         file.source.each do |src|
           src.units.find_all do |unit|
             if(restrictions[unit.name])
-              restriction[unit.name] == src.identifier
+              restrictions[unit.name] == src.identifier
             else
               true
             end
@@ -24,14 +26,16 @@ module Batali
           end
         end
         file.cookbook.each do |ckbk|
-          if(ckbk[:path])
+          if(ckbk.path)
             source = Origin::Path.new(
-              :path => ckbk[:path]
+              :name => ckbk.name,
+              :path => ckbk.path
             )
-          elsif(ckbk[:git])
+          elsif(ckbk.git)
             source = Origin::Git.new(
-              :url => ckbk[:git],
-              :ref => ckbk[:ref]
+              :name => ckbk.name,
+              :url => ckbk.git,
+              :ref => ckbk.ref || 'master'
             )
           end
           if(source)
@@ -44,14 +48,14 @@ module Batali
     # @return [Smash]
     def restrictions
       memoize(:restrictions) do
-        rest = file.restrict.dup
-        file.cookbook.each do |name, ckbk|
-          if(ckbk[:path])
-            rest[name] = Smash.new(:path => ckbk[:path]).checksum
-          elsif(ckbk[:git])
-            rest[name] = Smash.new(
-              :url => ckbk[:git],
-              :ref => ckbk[:ref]
+        rest = (file.restrict || Smash.new).to_smash
+        file.cookbook.each do |ckbk|
+          if(ckbk.path)
+            rest[ckbk.name] = Smash.new(:path => ckbk.path).checksum
+          elsif(ckbk.git)
+            rest[ckbk.name] = Smash.new(
+              :url => ckbk.git,
+              :ref => ckbk.ref
             ).checksum
           end
         end
