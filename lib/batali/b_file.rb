@@ -29,19 +29,24 @@ module Batali
       proc do |v|
         case v
         when Array
-          Cookbook.new(
-            :name => v.first,
-            :constraint => v.slice(1, v.size)
-          )
+          case v.last
+          when String
+            Cookbook.new(
+              :name => v.first,
+              :constraint => v.slice(1, v.size)
+            )
+          when Hash
+            c_name = v.first
+            Cookbook.new(
+              v.last.merge(
+                :name => c_name
+              )
+            )
+          else
+            raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
+          end
         when String
           Cookbook.new(:name => v)
-        when Hash
-          c_name = v.keys.first
-          constraints = v.values.first.to_a.flatten.find_all{|i| i.is_a?(String)}
-          Cookbook.new(
-            :name => c_name,
-            :constraint => constraints
-          )
         else
           raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
         end
@@ -51,7 +56,8 @@ module Batali
     class Cookbook < Utility
       attribute :name, String, :required => true
       attribute :constraint, String, :multiple => true
-      attribute :git, Smash, :coerce => lambda{|v| v.to_smash}
+      attribute :git, String
+      attribute :ref, String
       attribute :path, String
     end
 
