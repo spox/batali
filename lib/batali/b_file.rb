@@ -4,8 +4,8 @@ module Batali
 
   class Struct < AttributeStruct
 
-    def cookbook(*args)
-      set!(:cookbook, args)
+    def cookbook(*args, &block)
+      set!(:cookbook, args, &block)
       self
     end
 
