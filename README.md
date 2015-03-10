@@ -124,8 +124,8 @@ from sources.
 
 ### Infrastructure manifests
 
-Batali aims to solve the issue of full infrastructure resolution. Resolving dependencies
-from an infrastructure repository, resolving a single dependency path will not provide
+Batali aims to solve the issue of full infrastructure resolution: resolving dependencies
+from an infrastructure repository. Resolving a single dependency path will not provide
 a correct resolution. This is because environments or run lists can provide extra constraints
 that will result in unsolvable resolutions on individual nodes. In this case we want
 to know what cookbooks are _allowed_ within a solution, and ensure all those cookbooks
