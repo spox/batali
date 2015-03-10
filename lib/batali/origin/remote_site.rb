@@ -18,7 +18,7 @@ module Batali
       attribute :identifier, String
       attribute :endpoint, String, :required => true
       attribute :force_update, [TrueClass, FalseClass], :required => true, :default => false
-      attribute :update_interval, Integer, :required => true, :default => 10000 # NOTE: reset this default to 60/120 when ready
+      attribute :update_interval, Integer, :required => true, :default => 60
       attribute :cache, String, :default => File.expand_path('~/.batali/cache/remote_site'), :required => true
 
       def initialize(*_)
