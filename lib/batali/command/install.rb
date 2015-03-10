@@ -29,7 +29,7 @@ module Batali
                   File.join(asset_path, '.'),
                   File.join(
                     install_path,
-                    unit.name
+                    "#{unit.name}-#{unit.version}"
                   )
                 )
               ensure
