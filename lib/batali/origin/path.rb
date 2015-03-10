@@ -30,22 +30,29 @@ module Batali
       def units
         memoize(:units) do
           info = load_metadata
+          if(info[:depends])
+            unless(info[:depends].first.is_a?(Array))
+              info[:depends] = [info[:depends]]
+            end
+            info[:depends] = info[:depends].map do |dep|
+              case dep
+              when String
+                [dep, '> 0']
+              else
+                dep.size == 1 ? dep.push('> 0') : dep
+              end
+            end
+          end
           [
             Unit.new(
               :name => info[:name],
               :version => info[:version],
-              :dependencies => info[:depends],
+              :dependencies => info.fetch(:depends, []),
               :source => Smash.new(
                 :type => :path,
                 :version => info[:version],
                 :path => path,
-                :dependencies => info[:depends].map{ |dep|
-                  if(dep.size == 1)
-                    dep.push('> 0')
-                  else
-                    dep.to_a
-                  end
-                }
+                :dependencies => info.fetch(:depends, [])
               )
             )
           ]
