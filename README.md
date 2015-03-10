@@ -80,7 +80,7 @@ cookbook 'example', git: 'git://git.example.com/example-repo.git', ref: 'master'
 After a `batali.manifest` file has been generated, subsequent `resolve` requests
 will update cookbook versions using a "least impact" approach. This means that
 by default if the `Batali` file has not changed, running a `batali resolve` will
-be a noop even if new versions of cookbooks may be available. This helps to reduce
+be a noop, even if new versions of cookbooks may be available. This helps to reduce
 unintended upgrades that may break things due to a required cookbook update. Allowing
 a cookbook to be updated is done simply by adding it to the request:
 
@@ -104,8 +104,8 @@ $ batali resolve --no-least-impact
 
 ### Light weight
 
-One of the goals for batali was a being light weight resolver, in the same vein as
-the [librarian][1] project. This means it does nothing more than manage cookbooks. This
+One of the goals for batali was being light weight resolver, in the same vein as
+the [librarian][1] project. This means it does nothing more than manage local cookbooks. This
 includes dependency and constraint resolution, as well as providing a local installation
 of assets defined within the generated manifest. It provides no extra features outside of
 that scope.
