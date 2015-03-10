@@ -122,6 +122,22 @@ for installing cookbooks defined within the manifest. This allows for easy trans
 and direct installation of a manifest without the requirement of re-pulling information
 from sources.
 
+### Infrastructure manifests
+
+Batali aims to solve the issue of full infrastructure resolution: resolving dependencies
+from an infrastructure repository. Resolving a single dependency path will not provide
+a correct resolution. This is because environments or run lists can provide extra constraints
+that will result in unsolvable resolutions on individual nodes. In this case we want
+to know what cookbooks are _allowed_ within a solution, and ensure all those cookbooks
+are available. Batali provides infrastructure level manifests by setting the `infrastructure`
+flag:
+
+```
+$ batali resolve --infrastructure
+```
+
+_NOTE: Depending on constraints defined within the Batali file, this can be a very large manifest_
+
 # Info
 
 * Repository: https://github.com/hw-labs/batali

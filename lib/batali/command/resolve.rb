@@ -29,27 +29,39 @@ module Batali
           :system => system,
           :score_keeper => score_keeper
         )
-        results = []
-        run_action 'Resolving dependency constraints' do
-          results = solv.generate!
-          nil
-        end
-        if(results.empty?)
-          ui.error 'No solutions found defined requirements!'
-        else
-          ideal_solution = results.pop
-          dry_run('manifest file write') do
-            run_action 'Writing manifest' do
-              manifest = Manifest.new(:cookbook => ideal_solution.units)
-              File.open('batali.manifest', 'w') do |file|
-                file.write MultiJson.dump(manifest, :pretty => true)
-              end
+        if(opts[:infrastructure])
+          ui.info 'Performing infrastructure path resolution.'
+          run_action 'Writing infrastructure manifest file' do
+            File.open('batali.manifest', 'w') do |file|
+              manifest = Manifest.new(:cookbook => solv.world.units.values.flatten)
+              file.write MultiJson.dump(manifest, :pretty => true)
               nil
             end
           end
-          ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
-          ui.info 'Ideal solution:'
-          ui.puts ideal_solution.units.sort_by(&:name).map{|u| "#{u.name}<#{u.version}>"}
+        else
+          ui.info 'Performing single path resolution.'
+          results = []
+          run_action 'Resolving dependency constraints' do
+            results = solv.generate!
+            nil
+          end
+          if(results.empty?)
+            ui.error 'No solutions found defined requirements!'
+          else
+            ideal_solution = results.pop
+            dry_run('manifest file write') do
+              run_action 'Writing manifest' do
+                manifest = Manifest.new(:cookbook => ideal_solution.units)
+                File.open('batali.manifest', 'w') do |file|
+                  file.write MultiJson.dump(manifest, :pretty => true)
+                end
+                nil
+              end
+            end
+            ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
+            ui.info 'Ideal solution:'
+            ui.puts ideal_solution.units.sort_by(&:name).map{|u| "#{u.name}<#{u.version}>"}
+          end
         end
       end
 
