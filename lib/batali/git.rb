@@ -31,6 +31,7 @@ module Batali
     def ref_dup
       git = ::Git.open(base_path)
       git.checkout(ref)
+      git.pull('origin', ref)
       self.ref = git.log.first.sha
       self.path = File.join(cache, ref)
       unless(File.directory?(path))
