@@ -47,6 +47,13 @@ module Batali
           end
         when String
           Cookbook.new(:name => v)
+        when Hash
+          c_name = v.first
+          Cookbook.new(
+            v.last.merge(
+              :name => c_name
+            )
+          )
         else
           raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
         end
