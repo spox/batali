@@ -16,7 +16,7 @@ module Batali
       def asset
         memoize(:asset) do
           dir = Dir.mktmpdir
-          FileUtils.cp_r(path, dir)
+          FileUtils.cp_r(File.join(path, '.'), dir)
           dir
         end
       end
