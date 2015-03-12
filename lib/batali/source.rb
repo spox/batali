@@ -52,7 +52,12 @@ module Batali
       unless(type.to_s.include?('::'))
         type = [self.name, Bogo::Utility.camel(type)].join('::')
       end
-      Bogo::Utility.constantize(type).new(args.merge(:type => type))
+      klass = Bogo::Utility.constantize(type)
+      unless(klass)
+        raise TypeError.new "Unknown source type provided `#{type}`!"
+      else
+        klass.new(args.merge(:type => type))
+      end
     end
 
   end
