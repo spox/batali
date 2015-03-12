@@ -39,6 +39,11 @@ module Batali
             end
           end
         else
+          original_units = Smash[
+            [manifest.cookbook].flatten.compact.map do |unit|
+              [unit.name, unit.version]
+            end
+          ]
           ui.info 'Performing single path resolution.'
           results = []
           run_action 'Resolving dependency constraints' do
@@ -60,7 +65,20 @@ module Batali
             end
             ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
             ui.info 'Ideal solution:'
-            ui.puts ideal_solution.units.sort_by(&:name).map{|u| "#{u.name}<#{u.version}>"}
+            ideal_solution.units.sort_by(&:name).map do |unit|
+              output_args = ["#{unit.name} <#{unit.version}>"]
+              unless(original_units.empty?)
+                if(original_units[unit.name])
+                  unless(original_units[unit.name] == unit.version)
+                    output_args.first.replace "#{unit.name} <#{original_units[unit.name]} -> #{unit.version}>"
+                    output_args.push(:yellow)
+                  end
+                else
+                  output_args.push(:green)
+                end
+              end
+              ui.puts ui.color(*output_args)
+            end
           end
         end
       end
