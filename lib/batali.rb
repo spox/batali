@@ -1,5 +1,6 @@
 require 'bogo-cli'
 require 'grimoire'
+require 'batali/monkey'
 
 module Batali
 
@@ -8,6 +9,7 @@ module Batali
   autoload :Git, 'batali/git'
   autoload :Manifest, 'batali/manifest'
   autoload :Origin, 'batali/origin'
+  autoload :RequirementList, 'batali/requirement_list'
   autoload :ScoreKeeper, 'batali/score_keeper'
   autoload :Source, 'batali/source'
   autoload :Unit, 'batali/unit'
@@ -17,5 +19,4 @@ module Batali
 end
 
 require 'batali/b_file'
-require 'batali/monkey'
 require 'batali/version'

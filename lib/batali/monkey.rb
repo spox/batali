@@ -16,11 +16,3 @@ module Batali
     end
   end
 end
-
-Grimoire.send(:remove_const, :VERSION_CLASS)
-Grimoire.send(:remove_const, :DEPENDENCY_CLASS)
-Grimoire.send(:remove_const, :REQUIREMENT_CLASS)
-
-Grimoire.const_set(:VERSION_CLASS, Batali::UnitVersion)
-Grimoire.const_set(:DEPENDENCY_CLASS, Batali::UnitDependency)
-Grimoire.const_set(:REQUIREMENT_CLASS, Batali::UnitRequirement)
