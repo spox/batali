@@ -1,3 +1,8 @@
+# v0.1.8
+* Provide helpful exception message when source is not found
+* Allow using default classes when building items
+* Removing constant swapping in grimoire
+
 # v0.1.6
 * Bug fix for proper Batali file loading when single cookbook defined
 * Bug fix for cookbook install when using path source (git as well)
