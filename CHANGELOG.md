@@ -1,3 +1,6 @@
+# v0.1.10
+* Bug fix for Batali file parsing to provide expected format on processing
+
 # v0.1.8
 * Provide helpful exception message when source is not found
 * Allow using default classes when building items
