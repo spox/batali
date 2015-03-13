@@ -4,8 +4,12 @@ module Batali
 
   class Struct < AttributeStruct
 
-    def cookbook(*args, &block)
-      set!(:cookbook, args, &block)
+    def cookbook(*args)
+      unless(self[:cookbook])
+        set!(:cookbook, ::AttributeStruct::CollapseArray.new.push(args))
+      else
+        set!(:cookbook, args)
+      end
       self
     end
 
@@ -27,36 +31,8 @@ module Batali
     # @return [Proc] cookbook convert
     def self.cookbook_coerce
       proc do |v|
-        case v
-        when Array
-          case v.last
-          when String
-            Cookbook.new(
-              :name => v.first,
-              :constraint => v.slice(1, v.size)
-            )
-          when Hash
-            c_name = v.first
-            Cookbook.new(
-              v.last.merge(
-                :name => c_name
-              )
-            )
-          else
-            raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
-          end
-        when String
-          Cookbook.new(:name => v)
-        when Hash
-          c_name = v.first
-          Cookbook.new(
-            v.last.merge(
-              :name => c_name
-            )
-          )
-        else
-          raise ArgumentError.new "Unable to coerce given type `#{v.class}` to `Batali::BFile::Cookbook`!"
-        end
+        name, args = v
+        Cookbook.new(Smash.new(:name => name).merge(args || {}))
       end
     end
 
