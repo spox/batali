@@ -63,7 +63,7 @@ module Batali
                 nil
               end
             end
-            ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
+            # ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
             ui.info 'Ideal solution:'
             ideal_solution.units.sort_by(&:name).map do |unit|
               output_args = ["#{unit.name} <#{unit.version}>"]
