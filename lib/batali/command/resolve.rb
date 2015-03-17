@@ -21,7 +21,7 @@ module Batali
         requirements = Grimoire::RequirementList.new(
           :name => :batali_resolv,
           :requirements => batali_file.cookbook.map{ |ckbk|
-            [ckbk.name, *(ckbk.constraint.nil? || ckbk.constraint.empty? ? ['> 0'] : ckbk.constraint)]
+            [ckbk.name, (ckbk.constraint.nil? || ckbk.constraint.empty? ? ['> 0'] : ckbk.constraint)]
           }
         )
         solv = Grimoire::Solver.new(
