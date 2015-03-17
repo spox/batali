@@ -8,7 +8,7 @@ module Batali
       unless(self[:cookbook])
         set!(:cookbook, ::AttributeStruct::CollapseArray.new.push(args))
       else
-        set!(:cookbook, args)
+        self[:cookbook].push(args)
       end
       self
     end
@@ -31,8 +31,16 @@ module Batali
     # @return [Proc] cookbook convert
     def self.cookbook_coerce
       proc do |v|
-        name, args = v
-        Cookbook.new(Smash.new(:name => name).merge(args || {}))
+        v = [v].flatten.compact
+        name, args = v.first, v.slice(1, v.size)
+        if(args.empty?)
+          args = Smash.new
+        elsif(args.size == 1 && args.first.is_a?(Hash))
+          args = args.first
+        else
+          args = Smash.new(:constraint => args.map(&:to_s))
+        end
+        Cookbook.new(Smash.new(:name => name).merge(args))
       end
     end
 
