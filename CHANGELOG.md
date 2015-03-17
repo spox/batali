@@ -1,3 +1,8 @@
+# v0.1.12
+* Bug fix for multiple constraint arguments
+* Provide consistent type for values that can be multiples within Batali file
+* Get started on spec coverage
+
 # v0.1.10
 * Bug fix for Batali file parsing to provide expected format on processing
 
