@@ -13,6 +13,24 @@ module Batali
       self
     end
 
+    def source(*args)
+      unless(self[:source])
+        set!(:source, ::AttributeStruct::CollapseArray.new.push(args))
+      else
+        self[:source].push(args)
+      end
+      self
+    end
+
+    def restrict(*args)
+      unless(self[:restrict])
+        set!(:restrict, ::AttributeStruct::CollapseArray.new.push(args))
+      else
+        self[:restrict].push(args)
+      end
+      self
+    end
+
   end
 
   # Create a new file
@@ -62,8 +80,16 @@ module Batali
       attribute :cookbook, Cookbook, :multiple => true, :required => true, :coerce => BFile.cookbook_coerce
     end
 
-    attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v| Restriction.new(:cookbook => v.first, :source => v.last)}
-    attribute :source, Origin::RemoteSite, :multiple => true, :coerce => lambda{|v| Origin::RemoteSite.new(:endpoint => v)}
+    attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v|
+      Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:to])
+    }
+    attribute :source, Origin::RemoteSite, :multiple => true, :coerce => lambda{|v|
+      args = Smash.new(:endpoint => v.first)
+      if(v.last.is_a?(Hash))
+        args.merge!(v.last)
+      end
+      Origin::RemoteSite.new(args)
+    }
     attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce
 
