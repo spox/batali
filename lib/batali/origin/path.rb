@@ -76,7 +76,7 @@ module Batali
             end
             struct._dump.to_smash
           else
-            raise Errno::ENOENT.new('No metadata file available to load!')
+            raise Errno::ENOENT.new("Failed to locate metadata file in cookbook directory! (path: #{path})")
           end
         end
       end
