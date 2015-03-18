@@ -18,6 +18,26 @@ module Batali
   autoload :UnitLoader, 'batali/unit_loader'
   autoload :Utility, 'batali/utility'
 
+  class << self
+    # @return [Bogo::Ui]
+    attr_accessor :ui
+
+    # Write verbose message
+    def verbose(*args)
+      if(ui)
+        ui.verbose(*args)
+      end
+    end
+
+    # Write dbug message
+    def debug(*args)
+      if(ui)
+        ui.debug(*args)
+      end
+    end
+
+  end
+
 end
 
 require 'batali/b_file'
