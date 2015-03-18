@@ -12,6 +12,12 @@ module Batali
     autoload :Resolve, 'batali/command/resolve'
     autoload :Update, 'batali/command/update'
 
+    # Set UI when loading via command
+    def initialize(*_)
+      super
+      Batali.ui = ui
+    end
+
     # @return [BFile]
     def batali_file
       memoize(:batali_file) do
