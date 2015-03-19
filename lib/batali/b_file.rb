@@ -91,7 +91,7 @@ module Batali
       Origin::RemoteSite.new(args)
     }
     attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
-    attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce
+    attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []
 
   end
 
