@@ -1,3 +1,7 @@
+# v0.1.14
+* Start adding debug and verbose output (#9)
+* Update exception messages to provide more clarity
+
 # v0.1.12
 * Bug fix for multiple constraint arguments
 * Provide consistent type for values that can be multiples within Batali file
