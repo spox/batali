@@ -20,7 +20,18 @@ module Batali
 
   class << self
     # @return [Bogo::Ui]
-    attr_accessor :ui
+    attr_reader :ui
+
+    # Set Ui instance
+    #
+    # @param ui [Bogo::Ui]
+    # @return [Bogo::Ui]
+    def ui=(ui)
+      unless(ui.respond_to?(:verbose) && ui.respond_to?(:debug))
+        raise TypeError.new "Expecting type `Bogo::Ui` but received `#{ui.class}`"
+      end
+      @ui = Grimoire.ui = ui
+    end
 
     # Write verbose message
     def verbose(*args)
@@ -29,7 +40,7 @@ module Batali
       end
     end
 
-    # Write dbug message
+    # Write debug message
     def debug(*args)
       if(ui)
         ui.debug(*args)
