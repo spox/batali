@@ -1,3 +1,8 @@
+# v0.1.16
+* Include cookbook removals on resolve output
+* Add initial infrastructure resolve output to show cookbooks + versions
+* Update restrictions to use `:source` instead of `:to` for source reference
+
 # v0.1.14
 * Start adding debug and verbose output (#9)
 * Update exception messages to provide more clarity
