@@ -1,5 +1,5 @@
 Batali.define do
   source 'http://other.example.com', :name => 'custom'
   cookbook 'users'
-  restrict 'users', :to => 'custom'
+  restrict 'users', :source => 'custom'
 end

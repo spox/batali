@@ -81,7 +81,7 @@ module Batali
     end
 
     attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v|
-      Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:to])
+      Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
     }
     attribute :source, Origin::RemoteSite, :multiple => true, :coerce => lambda{|v|
       args = Smash.new(:endpoint => v.first)
