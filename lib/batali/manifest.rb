@@ -6,6 +6,7 @@ module Batali
 
     include Bogo::Memoization
 
+    attribute :path, String
     attribute :cookbook, Batali::Unit, :multiple => true, :coerce => lambda{|v| Batali::Unit.new(v)}, :default => []
 
     # Build manifest from given path. If no file exists, empty
@@ -15,9 +16,9 @@ module Batali
     # @return [Manifest]
     def self.build(path)
       if(File.exists?(path))
-        self.new(Bogo::Config.new(path).data)
+        self.new(Bogo::Config.new(path).data.merge(:path => path))
       else
-        self.new
+        self.new(:path => path)
       end
     end
 
