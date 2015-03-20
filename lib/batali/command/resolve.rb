@@ -30,56 +30,9 @@ module Batali
           :score_keeper => score_keeper
         )
         if(opts[:infrastructure])
-          ui.info 'Performing infrastructure path resolution.'
-          run_action 'Writing infrastructure manifest file' do
-            File.open('batali.manifest', 'w') do |file|
-              manifest = Manifest.new(:cookbook => solv.world.units.values.flatten)
-              file.write MultiJson.dump(manifest, :pretty => true)
-              nil
-            end
-          end
+          infrastructure_resolution(solv)
         else
-          original_units = Smash[
-            [manifest.cookbook].flatten.compact.map do |unit|
-              [unit.name, unit.version]
-            end
-          ]
-          ui.info 'Performing single path resolution.'
-          results = []
-          run_action 'Resolving dependency constraints' do
-            results = solv.generate!
-            nil
-          end
-          if(results.empty?)
-            ui.error 'No solutions found defined requirements!'
-          else
-            ideal_solution = results.pop
-            dry_run('manifest file write') do
-              run_action 'Writing manifest' do
-                manifest = Manifest.new(:cookbook => ideal_solution.units)
-                File.open('batali.manifest', 'w') do |file|
-                  file.write MultiJson.dump(manifest, :pretty => true)
-                end
-                nil
-              end
-            end
-            # ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
-            ui.info 'Ideal solution:'
-            ideal_solution.units.sort_by(&:name).map do |unit|
-              output_args = ["#{unit.name} <#{unit.version}>"]
-              unless(original_units.empty?)
-                if(original_units[unit.name])
-                  unless(original_units[unit.name] == unit.version)
-                    output_args.first.replace "#{unit.name} <#{original_units[unit.name]} -> #{unit.version}>"
-                    output_args.push(:yellow)
-                  end
-                else
-                  output_args.push(:green)
-                end
-              end
-              ui.puts ui.color(*output_args)
-            end
-          end
+          single_path_resolution(solv)
         end
       end
 
@@ -94,6 +47,75 @@ module Batali
             arguments.include?(unit.name)
           end
           ScoreKeeper.new(:manifest => sk_manifest)
+        end
+      end
+
+      # Generate manifest comprised of units for single path resolution
+      #
+      # @param solv [Grimoire::Solver]
+      # @return [TrueClass]
+      def single_path_resolution(solv)
+        original_units = Smash[
+          [manifest.cookbook].flatten.compact.map do |unit|
+            [unit.name, unit.version]
+          end
+        ]
+        ui.info 'Performing single path resolution.'
+        results = []
+        run_action 'Resolving dependency constraints' do
+          results = solv.generate!
+          nil
+        end
+        if(results.empty?)
+          ui.error 'No solutions found defined requirements!'
+        else
+          ideal_solution = results.pop
+          dry_run('manifest file write') do
+            run_action 'Writing manifest' do
+              manifest = Manifest.new(:cookbook => ideal_solution.units)
+              File.open('batali.manifest', 'w') do |file|
+                file.write MultiJson.dump(manifest, :pretty => true)
+              end
+              nil
+            end
+          end
+          # ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
+          ui.info 'Ideal solution:'
+          solution = Smash[ideal_solution.units.map{|unit| [unit.name, unit.version]}]
+          (original_units.keys + solution.keys).compact.uniq.sort.each do |unit_name|
+            if(original_units[unit_name])
+              if(solution[unit_name])
+                if(solution[unit_name] == original_units[unit_name])
+                  ui.puts "#{unit_name} <#{solution[unit_name]}>"
+                else
+                  ui.puts ui.color("#{unit_name} <#{original_units[unit_name]} -> #{solution[unit_name]}>", :yellow)
+                end
+              else
+                ui.puts ui.color("#{unit_name} <#{original_units[unit_name]}>", :red)
+              end
+            else
+              ui.puts ui.color("#{unit_name} <#{solution[unit_name]}>", :green)
+            end
+          end
+        end
+      end
+
+      # Generate manifest comprised of units for entire infrastructure
+      #
+      # @param solv [Grimoire::Solver]
+      # @return [TrueClass]
+      def infrastructure_resolution(solv)
+        ui.info 'Performing infrastructure path resolution.'
+        run_action 'Writing infrastructure manifest file' do
+          File.open(manifest.path, 'w') do |file|
+            manifest = Manifest.new(:cookbook => solv.world.units.values.flatten)
+            file.write MultiJson.dump(manifest, :pretty => true)
+            nil
+          end
+        end
+        ui.info 'Infrastructure manifest solution:'
+        solv.world.units.sort_by(&:first).each do |name, units|
+          ui.puts "#{name} <#{units.map(&:version).sort.map(&:to_s).join(', ')}>"
         end
       end
 
