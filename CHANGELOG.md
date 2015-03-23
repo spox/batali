@@ -1,3 +1,8 @@
+# v0.1.18
+* Update restriction key from :to -> :source (#7)
+* Show unit removals on single path resolution output
+* Complete unit scoring implementation (#11)
+
 # v0.1.16
 * Include cookbook removals on resolve output
 * Add initial infrastructure resolve output to show cookbooks + versions
