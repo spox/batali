@@ -29,22 +29,16 @@ module Batali
         else
           if(UnitRequirement.new("~> #{manifest_unit.version}").satisfied_by?(unit.version))
             multiplier = 1000000
-          elsif(UnitRequirement.new("~> #{manifest_unit.version.segments.slice(0,2).join('.')}").satisfied_by?(unit.version))
-            distance = (manifest_unit.version.segments[1] - unit.version.segments[1])
-            if(distance > 0)
-              distance = 1.0 / distance
-            else
-              distance = 0
-            end
-            multiplier = 1000 + (1000 * distance)
           else
-            distance = (manifest_unit.version.segments.first - unit.version.segments.first)
+            pos = UnitRequirement.new("~> #{manifest_unit.version.segments.slice(0,2).join('.')}").satisfied_by?(unit.version) ? 1 : 0
+            multi_val = pos == 1 ? 1000 : 100
+            distance = (manifest_unit.version.segments[pos] - unit.version.segments[pos])
             if(distance > 0)
               distance = 1.0 / distance
             else
               distance = 0
             end
-            multiplier = 100 + (100 * distance)
+            multiplier = multi_val + (multi_val * distance)
           end
         end
       end
