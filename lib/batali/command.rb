@@ -22,7 +22,7 @@ module Batali
     def batali_file
       memoize(:batali_file) do
         # TODO: Add directory traverse searching
-        path = opts.fetch(:file, File.join(Dir.pwd, 'Batali'))
+        path = config.fetch(:file, File.join(Dir.pwd, 'Batali'))
         ui.verbose "Loading Batali file from: #{path}"
         BFile.new(path)
       end
@@ -33,7 +33,7 @@ module Batali
       memoize(:manifest) do
         path = File.join(
           File.dirname(
-            opts.fetch(:file, File.join(Dir.pwd, 'batali.manifest'))
+            config.fetch(:file, File.join(Dir.pwd, 'batali.manifest'))
           ), 'batali.manifest'
         )
         ui.verbose "Loading manifest file from: #{path}"
@@ -44,7 +44,7 @@ module Batali
     # @return [String] path to local cache
     def cache_directory(*args)
       memoize(['cache_directory', *args].join('_')) do
-        directory = opts.fetch(:cache_directory, '/tmp/batali-cache')
+        directory = config.fetch(:cache_directory, '/tmp/batali-cache')
         ui.debug "Cache directory to persist cookbooks: #{directory}"
         unless(args.empty?)
           directory = File.join(directory, *args.map(&:to_s))
@@ -59,7 +59,7 @@ module Batali
     # @param action [String] action to be performed
     # @yield block to execute
     def dry_run(action)
-      if(opts[:dry_run])
+      if(config[:dry_run])
         ui.warn "Dry run disabled: #{action}"
       else
         yield

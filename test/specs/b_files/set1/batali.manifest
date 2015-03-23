@@ -1,0 +1,16 @@
+{
+  "cookbook": [
+    {
+      "name": "users",
+      "dependencies": [
+
+      ],
+      "version": "1.7.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io/api/v1/cookbooks/users/versions/1.7.0/download",
+        "version": "1.7.0"
+      }
+    }
+  ]
+}

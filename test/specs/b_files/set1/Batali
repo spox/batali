@@ -1,0 +1,4 @@
+Batali.define do
+  source 'https://supermarket.chef.io'
+  cookbook 'users', '1.7.0'
+end
