@@ -89,7 +89,63 @@ $ batali resolve example
 ```
 
 This will only update the version of the example cookbook, and any dependency cookbooks
-that _must_ be updated to provide resolution. Multiple cookbooks can be listed:
+that _must_ be updated to provide resolution. Dependency cookbooks that require an upgrade
+based on constraints will attempt to upgrade with the _least impact possible_ by attempting
+to satisfy constraints within the minimum version segement possible. For example, if our
+Batali file contains the following:
+
+```ruby
+Batali.define do
+  source 'https://example.com'
+  cookbook 'soup'
+end
+```
+
+and after resolving we have two cookbooks in our manifest:
+
+```
+soup <1.0.0>
+salad <0.1.4>
+```
+
+Some time passes and a new version of `soup` is released, version 1.0.2. In that time
+multiple new versions of the `salad` cookbook have been released, with new features and
+with some breaking changes. For this example, lets assume available versions of the `salad`
+cookbook are:
+
+```
+<0.1.4>
+<0.1.6>
+<0.1.8>
+<0.2.0>
+<0.2.2>
+<0.3.0>
+<1.0.0>
+```
+
+and the `soup` cookbook has updated its `salad` dependency:
+
+```ruby
+# soup metadata.rb
+depends 'salad', '> 0.2'
+```
+
+Due to the behavior of existing solvers, we may expect the resolved manifest to include
+`salad` at the latest possible version: `1.0.0`. This is a valid solution, since the
+dependency is simply stating the constraint requires `salad` be _greater_ than `0.2` and
+nothing more. However, this is a very large jump from what we currently have defined
+within our manifest, and jumps a major and minor version. The possibility of breaking
+changes being introduced is extremely high.
+
+Since Batali has the **least impact** feature enabled by default, it will only upgrade
+`salad` to the `0.2.2` version. This is due to the fact that the **least impact** feature
+prefers the _latest_ cookbook available within the _closest_ version segement of the cookbook
+version currently defined within the manifest. Since thew new `soup` dependency contraint
+requires versions `> 0.2`, no `> 0.1` versions are acceptable. Batali then looks to the
+next available segment `0.2` and attempts to use the latest version: `0.2.2`. This solves the
+constraint, and is used for the new solution.
+
+Multiple cookbooks can be listed for upgrade:
 
 ```
 $ batali resolve example ipsum lorem
