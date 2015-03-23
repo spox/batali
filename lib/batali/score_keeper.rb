@@ -18,7 +18,7 @@ module Batali
     # @param unit [Unit] unit to score
     # @param idx [Integer] current index location
     # @return [Numeric, NilClass]
-    def score_for(unit, idx)
+    def score_for(unit, idx=0)
       multiplier = 1
       manifest_unit = manifest.cookbook.detect do |m_unit|
         m_unit.name == unit.name
