@@ -6,9 +6,9 @@ module Batali
 
     attribute :manifest, Manifest, :required => true
 
-    SCORE_WEIGHT_MAX = 10_000_000
-    SCORE_WEIGHT_MID =  1_000_000
-    SCORE_WEIGHT_MIN =          1
+    SCORE_MULTIPLIER_MAX = 10_000_000
+    SCORE_MULTIPLIER_MID =  1_000_000
+    SCORE_MULTIPLIER_MIN =          1
 
     # Always prefer higher scoring units
     #
@@ -48,11 +48,11 @@ module Batali
     # @param multiplier [Numeric] weight based on version constraint
     # @return [Numeric]
     def score_multiplier(unit, manifest_unit)
-      return SCORE_WEIGHT_MIN if manifest_unit.nil?
+      return SCORE_MULTIPLIER_MIN if manifest_unit.nil?
       # If the unit version matches the manifest version, this
       # should be _the_ preferred version
-      return SCORE_WEIGHT_MAX if manifest_unit.version == unit.version
-      return SCORE_WEIGHT_MID if UnitRequirement.new("~> #{manifest_unit.version}").satisfied_by?(unit.version)
+      return SCORE_MULTIPLIER_MAX if manifest_unit.version == unit.version
+      return SCORE_MULTIPLIER_MID if UnitRequirement.new("~> #{manifest_unit.version}").satisfied_by?(unit.version)
 
       unit_req = UnitRequirement.new("~> #{manifest_unit.version.segments.slice(0,2).join('.')}")
       pos = unit_req.satisfied_by?(unit.version) ? 1 : 0
