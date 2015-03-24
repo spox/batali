@@ -1,3 +1,6 @@
+# v0.1.20
+* Reuse ui on `update` command when calling `resolve` and `install`
+
 # v0.1.18
 * Update restriction key from :to -> :source (#7)
 * Show unit removals on single path resolution output
