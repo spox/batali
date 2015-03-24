@@ -6,9 +6,10 @@ module Batali
 
     attribute :manifest, Manifest, :required => true
 
-    SCORE_MULTIPLIER_MAX = 10_000_000
-    SCORE_MULTIPLIER_MID =  1_000_000
-    SCORE_MULTIPLIER_MIN =          1
+    SCORE_MULTIPLIER_MAX  = 10_000_000
+    SCORE_MULTIPLIER_MID  =  1_000_000
+    SCORE_MULTIPLIER_BASE =        100
+    SCORE_MULTIPLIER_MIN  =          1
 
     # Always prefer higher scoring units
     #
@@ -48,19 +49,26 @@ module Batali
     # @param multiplier [Numeric] weight based on version constraint
     # @return [Numeric]
     def score_multiplier(unit, manifest_unit)
-      return SCORE_MULTIPLIER_MIN if manifest_unit.nil?
-      # If the unit version matches the manifest version, this
-      # should be _the_ preferred version
-      return SCORE_MULTIPLIER_MAX if manifest_unit.version == unit.version
-      return SCORE_MULTIPLIER_MID if UnitRequirement.new("~> #{manifest_unit.version}").satisfied_by?(unit.version)
-
-      unit_req = UnitRequirement.new("~> #{manifest_unit.version.segments.slice(0,2).join('.')}")
-      pos = unit_req.satisfied_by?(unit.version) ? 1 : 0
-      requirement_multiplier = pos == 1 ? 1000 : 100
-      version_distance = manifest_unit.version.segments[pos] - unit.version.segments[pos]
-      version_dist_multiplier = (version_distance > 0) ? (1.0 / distance) : 0
-
-      requirement_multiplier + (requirement_multiplier * version_dist_multiplier)
+      if(manifest_unit.nil?)
+        SCORE_MULTIPLIER_MIN
+      elsif(manifest_unit.version == unit.version)
+        # If the unit version matches the manifest version, this
+        # should be _the_ preferred version
+        SCORE_MULTIPLIER_MAX
+      elsif(UnitRequirement.new("~> #{manifest_unit.version}").satisfied_by?(unit.version))
+        SCORE_MULTIPLIER_MID
+      else
+        # If the unit version satisfies within the minor or major
+        # version segments of the manifest version, bump score
+        # value up (with satisfaction within minor segment being
+        # worth more than satisfaction within major segment)
+        unit_req = UnitRequirement.new("~> #{manifest_unit.version.segments.slice(0,2).join('.')}")
+        pos = unit_req.satisfied_by?(unit.version) ? 1 : 0
+        requirement_multiplier = pos.zero? ? SCORE_MULTIPLIER_BASE : (SCORE_MULTIPLIER_BASE * 10)
+        version_distance = manifest_unit.version.segments[pos] - unit.version.segments[pos]
+        version_dist_multiplier = (version_distance > 0) ? (1.0 / distance) : 0
+        requirement_multiplier + (requirement_multiplier * version_dist_multiplier)
+      end
     end
 
     # Create a score for each version segment (major, minor, patch)
