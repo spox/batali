@@ -7,8 +7,8 @@ module Batali
     class Update < Batali::Command
 
       def execute!
-        Resolve.new({:resolve => opts}, arguments).execute!
-        Install.new({:install => opts}, arguments).execute!
+        Resolve.new(options.merge(:ui => ui), arguments).execute!
+        Install.new(options.merge(:ui => ui), arguments).execute!
       end
 
     end
