@@ -31,6 +31,10 @@ module Batali
       self
     end
 
+    def metadata(*args)
+      set!(:metadata, *(args.empty? ? [true] : args))
+    end
+
   end
 
   # Create a new file
@@ -92,6 +96,13 @@ module Batali
     }
     attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []
+    attribute :metadata, Cookbook, :coerce => lambda{ |v, b_file|
+      dir = File.dirname(b_file.path)
+      m_unit = Origin::Path.new(:name => 'metadata', :path => dir).units.first
+      ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
+      b_file.cookbook.push ckbk
+      ckbk
+    }
 
   end
 
