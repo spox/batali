@@ -191,4 +191,47 @@ describe Batali::BFile do
 
   end
 
+  describe 'Batali.5' do
+
+    before do
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.5'))
+    end
+    let(:bfile){ @bfile }
+
+    it 'should have local metadata loaded cookbook' do
+      bfile.cookbook.size.must_equal 1
+      bfile.cookbook.first.name.must_equal 'test-cook'
+      bfile.cookbook.first.path.wont_be :nil?
+    end
+
+  end
+
+  describe 'Batali.6' do
+
+    before do
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.6'))
+    end
+    let(:bfile){ @bfile }
+
+    it 'should have local metadata loaded cookbook when other cookbooks defined before' do
+      bfile.cookbook.size.must_equal 2
+      bfile.cookbook.map(&:name).sort.must_equal ['test-cook', 'users']
+    end
+
+  end
+
+  describe 'Batali.7' do
+
+    before do
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.7'))
+    end
+    let(:bfile){ @bfile }
+
+    it 'should have local metadata loaded cookbook when other cookbooks defined after' do
+      bfile.cookbook.size.must_equal 2
+      bfile.cookbook.map(&:name).sort.must_equal ['test-cook', 'users']
+    end
+
+  end
+
 end
