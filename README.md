@@ -194,6 +194,12 @@ $ batali resolve --infrastructure
 
 _NOTE: Depending on constraints defined within the Batali file, this can be a very large manifest_
 
+## Test Kitchen
+
+Batali can be used with [Test Kitchen](https://github.com/test-kitchen/test-kitchen):
+
+* https://github.com/hw-labs/batali-tk
+
 # Info
 
 * Repository: https://github.com/hw-labs/batali
