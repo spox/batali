@@ -1,3 +1,7 @@
+# v0.1.22
+* Add support for `metadata` keyword in Batali file
+* Extract install path from merged config instead of only namespaced opts
+
 # v0.1.20
 * Reuse ui on `update` command when calling `resolve` and `install`
 
