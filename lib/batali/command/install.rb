@@ -10,7 +10,7 @@ module Batali
       # Install cookbooks
       def execute!
         dry_run('Cookbook installation') do
-          install_path = opts.fetch(:path, 'cookbooks')
+          install_path = config.fetch(:path, 'cookbooks')
           run_action('Readying installation destination') do
             FileUtils.rm_rf(install_path)
             FileUtils.mkdir_p(install_path)
@@ -27,13 +27,14 @@ module Batali
                   )
                 end
                 asset_path = unit.source.asset
+                final_path = File.join(install_path, unit.name)
+                if(config[:infrastructure])
+                  final_path << "-#{unit.version}"
+                end
                 begin
                   FileUtils.cp_r(
                     File.join(asset_path, '.'),
-                    File.join(
-                      install_path,
-                      "#{unit.name}-#{unit.version}"
-                    )
+                    final_path
                   )
                 ensure
                   unit.source.clean_asset(asset_path)
