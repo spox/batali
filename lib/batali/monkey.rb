@@ -22,8 +22,7 @@ require 'http/request'
 class HTTP::Request
 
   def proxy
-    endpoint = URI.parse(uri)
-    if(_proxy_point = ENV["#{endpoint.scheme}_proxy"])
+    if(_proxy_point = ENV["#{uri.scheme}_proxy"])
       _proxy = URI.parse(_proxy_point)
       Hash.new.tap do |opts|
         opts[:proxy_address] = _proxy.host
