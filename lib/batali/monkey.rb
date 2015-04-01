@@ -17,6 +17,7 @@ module Batali
   end
 end
 
+require 'http'
 require 'http/request'
 
 class HTTP::Request
