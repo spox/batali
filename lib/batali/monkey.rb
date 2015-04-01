@@ -16,3 +16,24 @@ module Batali
     end
   end
 end
+
+require 'http/request'
+
+class HTTP::Request
+
+  def proxy
+    endpoint = URI.parse(uri)
+    if(_proxy_point = ENV["#{endpoint.scheme}_proxy"])
+      _proxy = URI.parse(_proxy_point)
+      Hash.new.tap do |opts|
+        opts[:proxy_address] = _proxy.host
+        opts[:proxy_port] = _proxy.port
+        opts[:proxy_username] = _proxy.user if _proxy.user
+        opts[:proxy_password] = _proxy.password if _proxy.password
+      end
+    else
+      @proxy
+    end
+  end
+
+end
