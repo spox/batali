@@ -1,3 +1,7 @@
+# v0.2.0
+* Add proxy support (#18)
+* Transition to "beta" state
+
 # v0.1.22
 * Add support for `metadata` keyword in Batali file
 * Extract install path from merged config instead of only namespaced opts

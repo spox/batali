@@ -1,9 +1,13 @@
 # Batali
 
-Batali is a light weight cookbook resolver. It is currently
-in an alpha state and should not be used with anything you
-care about or love. There is a high chance it will burn it
-all to the ground, and laugh.
+Batali is a light weight cookbook resolver. It is now in
+a beta state, moving quickly towards a proper stable release.
+
+## What is Batali?
+
+Batali is a cookbook resolver. It's built to be light weight
+but feature rich. Batali helps to manage your cookbooks and
+stay out of your way.
 
 ## Usage
 
@@ -26,6 +30,10 @@ in the same directory. It will destroy your `cookbooks` directory
 by default.
 
 _IT WILL DESTROY YOUR COOKBOOKS DIRECTORY BY DEFAULT_
+
+You can make it not destroy your cookbooks directory by providing
+a different path. A better idea is to not use the cookbooks directory.
+Just ignore that sucker and let Batali do its thing.
 
 ## Commands
 
