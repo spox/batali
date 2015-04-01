@@ -17,6 +17,7 @@ module Batali
   end
 end
 
+require 'resolv'
 require 'http'
 require 'http/request'
 
