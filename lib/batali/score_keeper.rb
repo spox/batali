@@ -48,6 +48,12 @@ module Batali
             end
             multiplier = multi_val + (multi_val * distance)
           end
+        elsif(new_world)
+          new_world_unit = new_world.units.detect do |n_unit|
+            n_unit.name == unit.name &&
+              n_unit.version == unit.version
+          end
+          multiplier = 10000000 if new_world_unit
         end
       end
       score = []
