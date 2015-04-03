@@ -125,6 +125,7 @@ module Batali
             nil
           end
         end
+        solv.prune_world!
         ui.info 'Infrastructure manifest solution:'
         solv.world.units.sort_by(&:first).each do |name, units|
           ui.puts "#{name} <#{units.map(&:version).sort.map(&:to_s).join(', ')}>"
