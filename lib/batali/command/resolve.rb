@@ -61,6 +61,9 @@ module Batali
           end
         ]
         ui.info 'Performing single path resolution.'
+        if(manifest.infrastructure)
+          ui.ask 'Current manifest is resolved for infrastucture. Convert to single path?'
+        end
         results = []
         run_action 'Resolving dependency constraints' do
           results = solv.generate!
@@ -72,7 +75,10 @@ module Batali
           ideal_solution = results.pop
           dry_run('manifest file write') do
             run_action 'Writing manifest' do
-              manifest = Manifest.new(:cookbook => ideal_solution.units)
+              manifest = Manifest.new(
+                :cookbook => ideal_solution.units,
+                :infrastructure => false
+              )
               File.open('batali.manifest', 'w') do |file|
                 file.write MultiJson.dump(manifest, :pretty => true)
               end
@@ -106,9 +112,15 @@ module Batali
       # @return [TrueClass]
       def infrastructure_resolution(solv)
         ui.info 'Performing infrastructure path resolution.'
+        if(manifest.infrastructure == false)
+          ui.ask 'Current manifest is resolved single path. Convert to infrastructure?'
+        end
         run_action 'Writing infrastructure manifest file' do
           File.open(manifest.path, 'w') do |file|
-            manifest = Manifest.new(:cookbook => solv.world.units.values.flatten)
+            manifest = Manifest.new(
+              :cookbook => solv.world.units.values.flatten,
+              :infrastructure => true
+            )
             file.write MultiJson.dump(manifest, :pretty => true)
             nil
           end
