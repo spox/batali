@@ -34,7 +34,9 @@ module Batali
       def cache_directory
         memoize(:cache_directory) do
           path = File.join(cache, identifier)
-          FileUtils.mkdir_p(path)
+          ['entitystore', 'metastore', path].each do |leaf|
+            FileUtils.mkdir_p(leaf)
+          end
           path
         end
       end
@@ -83,7 +85,10 @@ module Batali
         if(do_fetch)
           t_uni = "#{universe_path}.#{SecureRandom.urlsafe_base64}"
           File.open(t_uni, 'w') do |file|
-            file.write HTTP.get(URI.join(endpoint, 'universe')).body.to_s
+            file.write HTTP.with_cache(
+              :metastore => File.join(cache, 'metastore'),
+              :entitystore => File.join(cache, 'entitystore')
+            ).get(URI.join(endpoint, 'universe')).body.to_s
           end
           FileUtils.mv(t_uni, universe_path)
         end

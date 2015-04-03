@@ -47,7 +47,7 @@ module Batali
       klass.class_eval do
         attribute :url, String, :required => true
         attribute :ref, String, :required => true
-        attribute :cache, String
+        attribute :cache, String, :default => File.expand_path('~/.batali/cache/remote_site')
       end
     end
 
