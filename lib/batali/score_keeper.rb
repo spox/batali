@@ -29,7 +29,7 @@ module Batali
         # should be _the_ preferred version
         if(manifest_unit.version == unit.version)
           multiplier = 10000000
-        elsif(opts[:solver].new_world)
+        elsif(opts[:solver] && opts[:solver].new_world)
           new_world_unit = opts[:solver].new_world.units.detect do |n_unit|
             n_unit.name == unit.name &&
               n_unit.version == unit.version
@@ -57,7 +57,7 @@ module Batali
           end
         end
       else
-        if(opts[:solver].new_world)
+        if(opts[:solver] && opts[:solver].new_world)
           new_world_unit = opts[:solver].new_world.units.detect do |n_unit|
             n_unit.name == unit.name &&
               n_unit.version == unit.version
