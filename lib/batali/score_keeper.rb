@@ -18,7 +18,8 @@ module Batali
     # @param unit [Unit] unit to score
     # @param idx [Integer] current index location
     # @return [Numeric, NilClass]
-    def score_for(unit, idx=0)
+    def score_for(unit, *args)
+      opts = args.detect{|a| a.is_a?(Hash)} || {}
       multiplier = 1
       manifest_unit = manifest.cookbook.detect do |m_unit|
         m_unit.name == unit.name
@@ -28,6 +29,12 @@ module Batali
         # should be _the_ preferred version
         if(manifest_unit.version == unit.version)
           multiplier = 10000000
+        elsif(opts[:solver].new_world)
+          new_world_unit = opts[:solver].new_world.units.detect do |n_unit|
+            n_unit.name == unit.name &&
+              n_unit.version == unit.version
+          end
+          multiplier = 10000000 if new_world_unit
         else
           # If the unit version satisfies within the patch segment of
           # the manifest version score those versions highest for upgrade
@@ -48,6 +55,14 @@ module Batali
             end
             multiplier = multi_val + (multi_val * distance)
           end
+        end
+      else
+        if(opts[:solver].new_world)
+          new_world_unit = opts[:solver].new_world.units.detect do |n_unit|
+            n_unit.name == unit.name &&
+              n_unit.version == unit.version
+          end
+          multiplier = 10000000 if new_world_unit
         end
       end
       score = []
