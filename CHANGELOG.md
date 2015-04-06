@@ -1,3 +1,6 @@
+# v0.2.4
+* Fix caching support
+
 # v0.2.2
 * Add guard when switching resolution types (#14)
 * Cache HTTP requests (#20)

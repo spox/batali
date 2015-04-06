@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'http', '~> 0.8.2'
   s.add_runtime_dependency 'rack-cache'
   s.add_runtime_dependency 'git'
-  s.add_runtime_dependency 'http'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'pry'
   s.executables << 'batali'
