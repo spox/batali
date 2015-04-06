@@ -33,11 +33,10 @@ module Batali
       # @return [String] cache directory path
       def cache_directory
         memoize(:cache_directory) do
-          path = File.join(cache, identifier)
-          ['entitystore', 'metastore', path].each do |leaf|
-            FileUtils.mkdir_p(leaf)
+          ['entitystore', 'metastore', identifier].each do |leaf|
+            FileUtils.mkdir_p(File.join(cache, leaf))
           end
-          path
+          File.join(cache, leaf)
         end
       end
 
