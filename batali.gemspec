@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'bogo-cli', '~> 0.1.12'
   s.add_runtime_dependency 'bogo-config', '~> 0.1.10'
   s.add_runtime_dependency 'bogo-ui', '~> 0.1.6'
+  s.add_runtime_dependency 'http', '~> 0.8.2'
+  s.add_runtime_dependency 'rack-cache'
   s.add_runtime_dependency 'git'
   s.add_runtime_dependency 'http'
   s.add_development_dependency 'minitest'
