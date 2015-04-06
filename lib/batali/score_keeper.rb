@@ -56,6 +56,14 @@ module Batali
             multiplier = multi_val + (multi_val * distance)
           end
         end
+      else
+        if(opts[:solver].new_world)
+          new_world_unit = opts[:solver].new_world.units.detect do |n_unit|
+            n_unit.name == unit.name &&
+              n_unit.version == unit.version
+          end
+          multiplier = 10000000 if new_world_unit
+        end
       end
       score = []
       # Generate a "value" for each segment of the version with
