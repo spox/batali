@@ -38,14 +38,33 @@ module Batali
         deps.to_a
       end
 
+      # @return [String] path to cache
+      def cache_directory
+        memoize(:cache_directory) do
+          unless(@cache)
+            @cache = File.expand_path('~/.batali/cache/remote_site')
+          end
+          ['entitystore', 'metastore'].each do |leaf|
+            FileUtils.mkdir_p(File.join(cache, leaf))
+          end
+          cache
+        end
+      end
+
       # @return [String] directory
       def asset
-        path = File.join(cache, Base64.urlsafe_encode64(url))
+        path = File.join(cache_directory, Base64.urlsafe_encode64(url))
         unless(File.directory?(path))
           FileUtils.mkdir_p(path)
-          result = HTTP.get(url)
+          result = HTTP.with_cache(
+            :metastore => File.join(cache_directory, 'metastore'),
+            :entitystore => File.join(cache_directory, 'entitystore')
+          ).get(url)
           while(result.code == 302)
-            result = HTTP.get(result.headers['Location'])
+            result = HTTP.with_cache(
+              :metastore => File.join(cache_directory, 'metastore'),
+              :entitystore => File.join(cache_directory, 'entitystore')
+            ).get(result.headers['Location'])
           end
           File.open(a_path = File.join(path, 'asset'), 'w') do |file|
             while(content = result.body.readpartial(2048))
