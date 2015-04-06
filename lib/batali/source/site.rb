@@ -9,6 +9,8 @@ module Batali
     # Site based source
     class Site < Source
 
+      include Bogo::Memoization
+
       # @return [Array<Hash>] dependency strings
       attr_reader :dependencies
       # @return [String] version
@@ -57,13 +59,13 @@ module Batali
         unless(File.directory?(path))
           FileUtils.mkdir_p(path)
           result = HTTP.with_cache(
-            :metastore => File.join(cache_directory, 'metastore'),
-            :entitystore => File.join(cache_directory, 'entitystore')
+            :metastore => "file:#{File.join(cache_directory, 'metastore')}",
+            :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
           ).get(url)
           while(result.code == 302)
             result = HTTP.with_cache(
-              :metastore => File.join(cache_directory, 'metastore'),
-              :entitystore => File.join(cache_directory, 'entitystore')
+              :metastore => "file:#{File.join(cache_directory, 'metastore')}",
+              :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
             ).get(result.headers['Location'])
           end
           File.open(a_path = File.join(path, 'asset'), 'w') do |file|

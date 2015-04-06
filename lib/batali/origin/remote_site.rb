@@ -36,7 +36,7 @@ module Batali
           ['entitystore', 'metastore', identifier].each do |leaf|
             FileUtils.mkdir_p(File.join(cache, leaf))
           end
-          File.join(cache, leaf)
+          File.join(cache, identifier)
         end
       end
 
@@ -75,6 +75,7 @@ module Batali
       # @return [String] path to universe file
       def fetch
         do_fetch = true
+        cache_directory # init directory creation
         if(File.exists?(universe_path))
           age = Time.now - File.mtime(universe_path)
           if(age < update_interval)
@@ -85,8 +86,8 @@ module Batali
           t_uni = "#{universe_path}.#{SecureRandom.urlsafe_base64}"
           File.open(t_uni, 'w') do |file|
             file.write HTTP.with_cache(
-              :metastore => File.join(cache, 'metastore'),
-              :entitystore => File.join(cache, 'entitystore')
+              :metastore => "file:#{File.join(cache, 'metastore')}",
+              :entitystore => "file:#{File.join(cache, 'entitystore')}"
             ).get(URI.join(endpoint, 'universe')).body.to_s
           end
           FileUtils.mv(t_uni, universe_path)
