@@ -1,3 +1,9 @@
+# v0.2.2
+* Add guard when switching resolution types (#14)
+* Cache HTTP requests (#20)
+* Prune cookbook results for infrastructure resolution (#21)
+* Provide least impact behavior when resolving infrastructure (#19)
+
 # v0.2.0
 * Add proxy support (#18)
 * Transition to "beta" state
