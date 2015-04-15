@@ -208,6 +208,15 @@ Batali can be used with [Test Kitchen](https://github.com/test-kitchen/test-kitc
 
 * https://github.com/hw-labs/batali-tk
 
+## ChefSpec
+
+Batali can be used with [ChefSpec](https://github.com/sethvargo/chefspec). Add the following
+line to your `spec_helper.rb` file:
+
+```ruby
+require 'batali/chefspec'
+```
+
 # Info
 
 * Repository: https://github.com/hw-labs/batali
