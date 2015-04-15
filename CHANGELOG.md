@@ -1,3 +1,6 @@
+# v0.2.6
+* Add support for ChefSpec
+
 # v0.2.4
 * Fix caching support
 
