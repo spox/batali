@@ -21,12 +21,15 @@ module ChefSpec
       output = ''
       begin
         ::Batali::Command::Update.new(
-          :file => File.join(Dir.pwd, 'Batali'),
-          :path => @vendor_path,
-          :ui => Bogo::Ui.new(
-            :app_name => 'Batali',
-            :output_to => StringIO.new(output)
-          )
+          Smash.new(
+            :file => File.join(Dir.pwd, 'Batali'),
+            :path => @vendor_path,
+            :ui => Bogo::Ui.new(
+              :app_name => 'Batali',
+              :output_to => StringIO.new(output)
+            )
+          ),
+          []
         ).execute!
         RSpec.configure do |config|
           config.cookbook_path = @vendor_path
