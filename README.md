@@ -235,6 +235,89 @@ the dry run option to see what upgrades are available without actually changing 
 $ batali resolve --no-least-impact --dry-run
 ```
 
+## Configuration
+
+Batali can be configured via the `.batali` file. The contents of the file can be in YAML,
+JSON, XML, or Ruby. Every option displayed via the help call can be set within this file.
+The configuration can hold items isolated within a command's name, or defined at the top
+level of the configuration file. For example:
+
+```ruby
+Configuration.new do
+  debug true
+  resolve do
+    debug false
+  end
+end
+```
+
+This configuration turns debug output on for all commands _except_ the resolve command.
+This feature is handy in situations where multiple commands may have the same flag that
+should always be enabled, like the `infrastructure` flag:
+
+```ruby
+Configuration.new do
+  infrastructure true
+end
+```
+
+When flags on the CLI contain a dash, they are referenced within the configuration file
+as an underscore. For example the least impact flag on the CLI looks like:
+
+```
+--least-impact
+```
+
+and the key in the configuration looks like:
+
+```
+least_impact
+```
+
+### Example configurations
+
+#### Ruby
+
+```ruby
+Configuration.new do
+  infrastructure true
+  resolve do
+    least_impact false
+  end
+end
+```
+
+#### JSON
+
+```json
+{
+  "infrastructure": true,
+  "resolve": {
+    "least_impact": false
+  }
+}
+```
+
+#### YAML
+
+```yaml
+---
+:infrastructure: true
+:resolve:
+  :least_impact: false
+```
+
+#### XML
+
+```xml
+<configuration>
+  <infrastructure>true</infrastructure>
+  <resolve>
+    <least_impact>false</least_impact>
+  </resolve>
+</configuration>
+```
+
 ## Test Kitchen
 
 Batali can be used with [Test Kitchen](https://github.com/test-kitchen/test-kitchen):
