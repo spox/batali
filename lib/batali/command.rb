@@ -5,6 +5,8 @@ module Batali
   # Customized command base for Batali
   class Command < Bogo::Cli::Command
 
+    DEFAULT_CONFIGURATION_FILES = ['.batali']
+
     include Bogo::Memoization
 
     autoload :Configure, 'batali/command/configure'
