@@ -1,3 +1,8 @@
+# v0.2.8
+* Include missing infrastructure configuration flag on install command
+* Default the cache directory to home directory to isolate users
+* Add support for configuration file
+
 # v0.2.6
 * Add support for ChefSpec
 
