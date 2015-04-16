@@ -29,7 +29,7 @@ module Batali
           :system => system,
           :score_keeper => score_keeper
         )
-        if(opts[:infrastructure])
+        if(config[:infrastructure])
           infrastructure_resolution(solv)
         else
           single_path_resolution(solv)
@@ -40,7 +40,7 @@ module Batali
       def score_keeper
         memoize(:score_keeper) do
           sk_manifest = Manifest.new(:cookbook => manifest.cookbook)
-          unless(opts[:least_impact])
+          unless(config[:least_impact])
             sk_manifest.cookbook.clear
           end
           sk_manifest.cookbook.delete_if do |unit|
@@ -62,7 +62,7 @@ module Batali
         ]
         ui.info 'Performing single path resolution.'
         if(manifest.infrastructure)
-          ui.ask 'Current manifest is resolved for infrastucture. Convert to single path?'
+          ui.confirm 'Current manifest is resolved for infrastucture. Convert to single path?'
         end
         results = []
         run_action 'Resolving dependency constraints' do
