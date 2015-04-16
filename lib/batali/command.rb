@@ -44,7 +44,7 @@ module Batali
     # @return [String] path to local cache
     def cache_directory(*args)
       memoize(['cache_directory', *args].join('_')) do
-        directory = config.fetch(:cache_directory, '/tmp/batali-cache')
+        directory = config.fetch(:cache_directory, File.expand_path('~/.batali/cache'))
         ui.debug "Cache directory to persist cookbooks: #{directory}"
         unless(args.empty?)
           directory = File.join(directory, *args.map(&:to_s))
