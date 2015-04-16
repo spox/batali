@@ -21,6 +21,7 @@ Bogo::Cli::Setup.define do
     self.instance_exec(&global_opts)
     on :d, 'dry-run', 'Print changes'
     on :p, 'path', 'Cookbook install path'
+    on :I, 'infrastructure', 'Resolve infrastructure cookbooks'
     run do |opts, args|
       Batali::Command::Install.new({:install => opts.to_hash}, args).execute!
     end
