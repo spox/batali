@@ -202,6 +202,30 @@ $ batali resolve --infrastructure
 
 _NOTE: Depending on constraints defined within the Batali file, this can be a very large manifest_
 
+#### Uploading infrastructure cookbooks
+
+When the infrastructure cookbooks are installed locally, the cookbook directories will have
+the version number as a suffix. This can cause a problem when attempting to run:
+
+```
+$ knife cookbook upload --all
+```
+
+due to knife using the directory name as the actual cookbook name. To get around this problem
+the `upload` command can be used directly with the correct options enabled. These options must
+be defined within the config file as the options are not accessible via CLI flags. Assuming
+a `.chef/knife.rb` file exists:
+
+```ruby
+# .chef/knife.rb
+
+versioned_cookbooks true
+```
+
+```
+$ knife upload cookbooks
+```
+
 ## Test Kitchen
 
 Batali can be used with [Test Kitchen](https://github.com/test-kitchen/test-kitchen):
