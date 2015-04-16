@@ -226,6 +226,15 @@ versioned_cookbooks true
 $ knife upload cookbooks
 ```
 
+### Display outdated cookbooks
+
+Want to see what cookbooks have newer versions available within the defined constraints? Use
+the dry run option to see what upgrades are available without actually changing the manifest:
+
+```
+$ batali resolve --no-least-impact --dry-run
+```
+
 ## Test Kitchen
 
 Batali can be used with [Test Kitchen](https://github.com/test-kitchen/test-kitchen):
