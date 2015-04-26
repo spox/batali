@@ -7,6 +7,17 @@ module Batali
 
       class Metadata < AttributeStruct
 
+        # Perform constant lookup if required
+        #
+        # @return [Constant]
+        def self.const_missing(const)
+          [::Object, ::ObjectSpace].map do |root|
+            if(root.const_defined?(const))
+              root.const_get(const)
+            end
+          end.compact.first || super
+        end
+
         def depends(*args)
           set!(:depends, args)
           self
@@ -67,13 +78,7 @@ module Batali
           elsif(File.exists?(rb = File.join(path, 'metadata.rb')))
             struct = Metadata.new
             struct.set_state!(:value_collapse => true)
-            File.readlines(rb).find_all do |line|
-              line.start_with?('name') ||
-                line.start_with?('version') ||
-                line.start_with?('depends')
-            end.each do |line|
-              struct.instance_eval(line)
-            end
+            struct.instance_eval(File.read(rb), rb, 1)
             struct._dump.to_smash
           else
             raise Errno::ENOENT.new("Failed to locate metadata file in cookbook directory! (path: #{path})")
