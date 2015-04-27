@@ -1,3 +1,9 @@
+# v0.2.10
+* Parse full metadata file on path sources to properly discover all deps (#26)
+* Allow source to be optionally defined for Units
+* Provide better handling when encountering Units with no possible solution
+* Include `no_proxy` environment variable support
+
 # v0.2.8
 * Include missing infrastructure configuration flag on install command
 * Default the cache directory to home directory to isolate users
