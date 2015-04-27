@@ -39,6 +39,32 @@ module Batali
       end
     end
 
+    # @return [TrueClass, FalseClass]
+    def ==(s)
+      s.is_a?(Source) && attributes.map do |key, attr|
+        key if attr[:equivalent]
+      end.compact.all? do |key|
+        attributes[key] == s.attributes[key]
+      end
+    end
+
+    # Detect differences in equivalency
+    #
+    # @param s [Source]
+    # @return [Smash]
+    def diff(s)
+      Smash.new.tap do |_diff|
+        self.class.attributes.each do |k,v|
+          if(v[:equivalent])
+            s_attrs = s.respond_to?(:attributes) ? s.attributes : {}
+            unless(attributes[k] == s_attrs[k])
+              _diff[k] = [attributes[k], s_attrs[k]]
+            end
+          end
+        end
+      end
+    end
+
     # Build a source
     #
     # @param args [Hash]

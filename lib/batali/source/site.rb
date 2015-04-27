@@ -18,8 +18,8 @@ module Batali
       # @return [String] local cache path
       attr_accessor :cache
 
-      attribute :url, String, :required => true
-      attribute :version, String, :required => true
+      attribute :url, String, :required => true, :equivalent => true
+      attribute :version, String, :required => true, :equivalent => true
 
       # Extract extra info before allowing super to load data
       #

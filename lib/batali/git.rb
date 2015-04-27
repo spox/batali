@@ -45,9 +45,9 @@ module Batali
     # Load attributes into class
     def self.included(klass)
       klass.class_eval do
-        attribute :url, String, :required => true
-        attribute :ref, String, :required => true
-        attribute :cache, String, :default => File.expand_path('~/.batali/cache/remote_site')
+        attribute :url, String, :required => true, :equivalent => true
+        attribute :ref, String, :required => true, :equivalent => true
+        attribute :cache, String, :default => File.expand_path('~/.batali/cache/git')
       end
     end
 

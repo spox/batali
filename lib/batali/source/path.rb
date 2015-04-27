@@ -10,7 +10,7 @@ module Batali
 
       include Bogo::Memoization
 
-      attribute :path, String, :required => true
+      attribute :path, String, :required => true, :equivalent => true
 
       # @return [String] directory containing contents
       def asset
