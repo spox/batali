@@ -87,20 +87,27 @@ module Batali
           end
           # ui.info "Number of solutions collected for defined requirements: #{results.size + 1}"
           ui.info 'Ideal solution:'
-          solution = Smash[ideal_solution.units.map{|unit| [unit.name, unit.version]}]
-          (original_units.keys + solution.keys).compact.uniq.sort.each do |unit_name|
-            if(original_units[unit_name])
-              if(solution[unit_name])
-                if(solution[unit_name] == original_units[unit_name])
-                  ui.puts "#{unit_name} <#{solution[unit_name]}>"
+          solution_units = Smash[ideal_solution.units.map{|unit| [unit.name, unit]}]
+          manifest_units = Smash[manifest.cookbook.map{|unit| [unit.name, unit]}]
+          (solution_units.keys + manifest_units.keys).compact.uniq.sort.each do |unit_name|
+            if(manifest_units[unit_name])
+              if(solution_units[unit_name])
+                if(solution_units[unit_name].same?(manifest_units[unit_name]))
+                  ui.puts "#{unit_name} <#{solution_units[unit_name].version}>"
                 else
-                  ui.puts ui.color("#{unit_name} <#{original_units[unit_name]} -> #{solution[unit_name]}>", :yellow)
+                  u_diff = manifest_units[unit_name].diff(solution_units[unit_name])
+                  version_output = u_diff[:version] ? u_diff[:version].join(' -> ') : solution_units[unit_name].version
+                  u_diff.delete(:version)
+                  unless(u_diff.empty?)
+                    diff_output = "[#{u_diff.values.map{|v| v.join(' -> ')}.join(' | ')}]"
+                  end
+                  ui.puts ui.color("#{unit_name} <#{version_output}> #{diff_output}" , :yellow)
                 end
               else
-                ui.puts ui.color("#{unit_name} <#{original_units[unit_name]}>", :red)
+                ui.puts ui.color("#{unit_name} <#{manifest_units[unit_name].version}>", :red)
               end
             else
-              ui.puts ui.color("#{unit_name} <#{solution[unit_name]}>", :green)
+              ui.puts ui.color("#{unit_name} <#{solution_units[unit_name].version}>", :green)
             end
           end
         end
