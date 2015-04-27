@@ -31,10 +31,33 @@ describe Batali do
 
   end
 
-  describe 'No proxy support' do
+  describe 'No proxy defined' do
     it 'should not proxy request' do
-      HTTP.get('https://www.google.com').code.must_equal 200
-      HTTP.get('http://www.google.com').code.must_equal 200
+      HTTP.get('https://www.google.com').code.wont_equal 404
+      HTTP.get('http://www.google.com').code.wont_equal 404
+    end
+  end
+
+  describe 'no_proxy environment variable' do
+    before do
+      ENV['http_proxy'] = 'http://example.com'
+      ENV['no_proxy'] = '*google.com, yahoo.com'
+    end
+    after do
+      ENV.delete('http_proxy')
+      ENV.delete('no_proxy')
+    end
+
+    it 'should proxy when no match is defined within no_proxy' do
+      HTTP.get('http://www.amazon.com').code.wont_equal 200
+    end
+
+    it 'should not proxy when direct match is found' do
+      HTTP.get('http://yahoo.com').code.wont_equal 404
+    end
+
+    it 'should not proxy when glob match is found' do
+      HTTP.get('http://maps.google.com').code.wont_equal 404
     end
   end
 

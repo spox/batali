@@ -1,4 +1,5 @@
 require 'batali'
+require 'bogo/http_proxy'
 
 module Batali
   # Simple stubs mostly for naming
@@ -15,26 +16,4 @@ module Batali
       MultiJson.dump(result, *args)
     end
   end
-end
-
-require 'resolv'
-require 'http'
-require 'http/request'
-
-class HTTP::Request
-
-  def proxy
-    if(_proxy_point = ENV["#{uri.scheme}_proxy"])
-      _proxy = URI.parse(_proxy_point)
-      Hash.new.tap do |opts|
-        opts[:proxy_address] = _proxy.host
-        opts[:proxy_port] = _proxy.port
-        opts[:proxy_username] = _proxy.user if _proxy.user
-        opts[:proxy_password] = _proxy.password if _proxy.password
-      end
-    else
-      @proxy
-    end
-  end
-
 end
