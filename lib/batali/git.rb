@@ -47,7 +47,7 @@ module Batali
       klass.class_eval do
         attribute :url, String, :required => true, :equivalent => true
         attribute :ref, String, :required => true, :equivalent => true
-        attribute :cache, String, :default => File.expand_path('~/.batali/cache/git')
+        attribute :cache, String, :default => File.join(Dir.home, '.batali/cache/git')
       end
     end
 

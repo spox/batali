@@ -44,7 +44,7 @@ module Batali
       def cache_directory
         memoize(:cache_directory) do
           unless(@cache)
-            @cache = File.expand_path('~/.batali/cache/remote_site')
+            @cache = File.join(Dir.home, '.batali/cache/remote_site')
           end
           ['entitystore', 'metastore'].each do |leaf|
             FileUtils.mkdir_p(File.join(cache, leaf))
