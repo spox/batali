@@ -10,6 +10,8 @@ module Batali
 
       # @return [Array<String>] default ignore globs
       DEFAULT_IGNORE = ['.git*']
+      # @return [Array<String>] valid ignore file names
+      IGNORE_FILE = ['chefignore', '.chefignore']
 
       include Bogo::Memoization
 
@@ -19,8 +21,11 @@ module Batali
       def asset
         memoize(:asset) do
           dir = Dir.mktmpdir
-          chefignore = File.join(path, '.chefignore')
-          chefignore = File.exists?(chefignore) ? File.readlines(chefignore) : []
+          chefignore = IGNORE_FILE.map do |c_name|
+            c_path = File.join(path, c_name)
+            c_path if File.exists?(c_path)
+          end.compact.first
+          chefignore = chefignore ? File.readlines(chefignore) : []
           chefignore += DEFAULT_IGNORE
           chefignore.uniq!
           files_to_copy = Dir.glob(File.join(path, '{.[^.]*,**}', '**', '{*,*.*,.*}'))
