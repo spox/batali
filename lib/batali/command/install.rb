@@ -28,7 +28,7 @@ module Batali
                 end
                 asset_path = unit.source.asset
                 final_path = File.join(install_path, unit.name)
-                if(config[:infrastructure])
+                if(config[:infrastructure] || (config[:infrastructure].nil? && manifest.infrastructure))
                   final_path << "-#{unit.version}"
                 end
                 begin

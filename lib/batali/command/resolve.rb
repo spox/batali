@@ -29,7 +29,7 @@ module Batali
           :system => system,
           :score_keeper => score_keeper
         )
-        if(config[:infrastructure])
+        if(config[:infrastructure] || (config[:infrastructure].nil? && manifest.infrastructure))
           infrastructure_resolution(solv)
         else
           single_path_resolution(solv)
