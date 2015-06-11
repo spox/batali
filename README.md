@@ -235,6 +235,28 @@ the dry run option to see what upgrades are available without actually changing 
 $ batali resolve --no-least-impact --dry-run
 ```
 
+### Automatic cookbook discovery
+
+Tired of tracking constraints in multiple places when using Chef Environment `cookbook_versions`
+for environment specific constraints? Let Batali manage it for you! Define your `Batali` file
+to enable automatic discovery:
+
+```ruby
+Batali.define do
+  source 'https://example.com'
+  discover true
+end
+```
+
+That's it! Now you can resolve for the infrastructure:
+
+```
+$ batali resolve --infrastructure
+```
+
+which will generate a resulting manifest that includes all required cookbook versions to
+satisfiy constraints defined by all environments.
+
 ## Configuration
 
 Batali can be configured via the `.batali` file. The contents of the file can be in YAML,
