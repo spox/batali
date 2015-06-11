@@ -1,3 +1,9 @@
+# v0.2.12
+* Update home directory path generation to use `Dir.home`
+* Detect resolution type from manifest files
+* Add support for chefignore file (also allows `.chefignore`)
+* Introduce automatic cookbook constraint detection
+
 # v0.2.10
 * Parse full metadata file on path sources to properly discover all deps (#26)
 * Allow source to be optionally defined for Units
