@@ -84,6 +84,7 @@ module Batali
       attribute :cookbook, Cookbook, :multiple => true, :required => true, :coerce => BFile.cookbook_coerce
     end
 
+    attribute :discover, [TrueClass, FalseClass], :required => true, :default => false
     attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v|
       Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
     }
@@ -103,6 +104,155 @@ module Batali
       b_file.cookbook.push ckbk
       ckbk
     }
+
+    # Search roles and environments for cookbooks and restraints
+    #
+    # @return [TrueClass]
+    def auto_discover!(environment=nil)
+      debug 'Starting cookbook auto-discovery'
+      unless(discover)
+        raise 'Attempting to perform auto-discovery but auto-discovery is not enabled!'
+      end
+      environment_items = Dir.glob(File.join(File.dirname(path), 'environments', '*.{json,rb}')).map do |e_path|
+        result = parse_environment(e_path)
+        if(result[:name] && result[:cookbooks])
+          Smash.new(
+            result[:name] => result[:cookbooks]
+          )
+        end
+      end.compact.inject(Smash.new){|m,n| m.merge(n)}
+      environment_items.each do |e_name, items|
+        debug "Discovery processing of environment: #{e_name}"
+        items.each do |ckbk_name, constraints|
+          ckbk = cookbook.detect do |c|
+            c.name == ckbk_name
+          end
+          if(ckbk)
+            new_constraints = ckbk.constraint.dup
+            new_constraints += constraints
+            requirement = UnitRequirement.new(*new_constraints)
+            new_constraints = flatten_constraints(requirement.requirements)
+            debug "Discovery merged constraints for #{ckbk.name}: #{new_constraints.inspect}"
+            ckbk.constraint.replace(new_constraints)
+          else
+            debug "Discovery added cookbook #{ckbk_name}: #{constraints.inspect}"
+            cookbook.push(
+              Cookbook.new(
+                :name => ckbk_name,
+                :constraint => constraints
+              )
+            )
+          end
+        end
+      end
+      debug 'Completed cookbook auto-discovery'
+      true
+    end
+
+    protected
+
+    # Convert constraint for merging
+    #
+    # @param constraint [String]
+    # @param [Array<String>]
+    def convert_constraint(constraint)
+      comp, ver = constraint.split(' ', 2).map(&:strip)
+      if(comp == '~>')
+        ver = UnitVersion.new(ver)
+        [">= #{ver}", "< #{ver.bump}"]
+      else
+        [constraint]
+      end
+    end
+
+    # Consume list of constraints and generate compressed list that
+    # satisfies all defined constraints.
+    #
+    # @param constraints [Array<Array<String, UnitVersion>>]
+    # @return [Array<Array<String, UnitVersion>>]
+    # @note if an explict constraint is provided, only it will be
+    # returned
+    def flatten_constraints(constraints)
+      grouped = constraints.group_by(&:first)
+      grouped = Smash[
+        grouped.map do |comp, items|
+          versions = items.map(&:last)
+          if(comp.start_with?('>'))
+            [comp, [versions.min]]
+          elsif(comp.start_with?('<'))
+            [comp, [versions.max]]
+          else
+            [comp, versions]
+          end
+        end
+      ]
+      if(grouped['='])
+        grouped['>='] ||= []
+        grouped['<='] ||= []
+        grouped['='].each do |ver|
+          grouped['>='] << ver
+          grouped['<='] << ver
+        end
+        grouped.delete('=')
+      end
+      if(grouped['>'] || grouped['>='])
+        if(grouped['>='] && (grouped['>'].nil? || grouped['>='].min <= grouped['>'].min))
+          grouped['>='] = [grouped['>='].min]
+          grouped.delete('>')
+        else
+          grouped['>'] = [grouped['>'].min]
+          grouped.delete('>=')
+        end
+      end
+      if(grouped['<'] || grouped['<='])
+        if(grouped['<='] && (grouped['<'].nil? || grouped['<='].max >= grouped['<'].max))
+          grouped['<='] = [grouped['<='].max]
+          grouped.delete('<')
+        else
+          grouped['<'] = [grouped['<'].max]
+          grouped.delete('<=')
+        end
+      end
+      grouped.map do |comp, vers|
+        vers.map do |version|
+          "#{comp} #{version}"
+        end
+      end.flatten
+    end
+
+    # Read environment file and return defined cookbook constraints
+    #
+    # @param path [String] path to environment
+    # @return [Smash]
+    def parse_environment(path)
+      case File.extname(path)
+      when '.json'
+        env = MultiJson.load(
+          File.read(path)
+        ).to_smash
+      when '.rb'
+        struct = Struct.new
+        struct.set_state!(:value_collapse => true)
+        struct.instance_eval(File.read(path), path, 1)
+        env = struct._dump.to_smash
+      else
+        raise "Unexpected file format encountered! (#{File.extname(path)})"
+      end
+      Smash.new(
+        :name => env[:name],
+        :cookbooks => Smash[
+          env.fetch(
+            :cookbook_versions,
+            Smash.new
+          ).map{|k,v| [k, v.to_s.split(',')]}
+        ]
+      )
+    end
+
+    # Proxy debug output
+    def debug(s)
+      Batali.debug(s)
+    end
 
   end
 
