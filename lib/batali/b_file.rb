@@ -105,7 +105,7 @@ module Batali
       ckbk
     }
 
-    # Search roles and environments for cookbooks and restraints
+    # Search environments for cookbooks and restraints
     #
     # @return [TrueClass]
     def auto_discover!(environment=nil)
@@ -122,6 +122,7 @@ module Batali
         end
       end.compact.inject(Smash.new){|m,n| m.merge(n)}
       environment_items.each do |e_name, items|
+        next if environment && e_name != environment
         debug "Discovery processing of environment: #{e_name}"
         items.each do |ckbk_name, constraints|
           ckbk = cookbook.detect do |c|
