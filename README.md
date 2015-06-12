@@ -1,3 +1,5 @@
+![Batali](img/batali-logo.png)
+
 # Batali
 
 Batali is a light weight cookbook resolver. It is now in
