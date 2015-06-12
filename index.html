@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Batali by hw-labs</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Batali</h1>
+        <h2>Light weight cookbook resolver</h2>
+        <a href="https://github.com/hw-labs/batali" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="batali" class="anchor" href="#batali" aria-hidden="true"><span class="octicon octicon-link"></span></a>Batali</h1>
+
+<p>Batali is a light weight cookbook resolver. It is now in
+a beta state, moving quickly towards a proper stable release.</p>
+
+<h2>
+<a id="what-is-batali" class="anchor" href="#what-is-batali" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is Batali?</h2>
+
+<p>Batali is a cookbook resolver. It's built to be light weight
+but feature rich. Batali helps to manage your cookbooks and
+stay out of your way.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Provide a <code>Batali</code> file:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">Batali</span>.define <span class="pl-k">do</span>
+  source <span class="pl-s"><span class="pl-pds">'</span>https://supermarket.chef.io<span class="pl-pds">'</span></span>
+  cookbook <span class="pl-s"><span class="pl-pds">'</span>postgresql<span class="pl-pds">'</span></span>
+<span class="pl-k">end</span></pre></div>
+
+<p>and then run:</p>
+
+<pre><code>$ batali update
+</code></pre>
+
+<p>in the same directory. It will destroy your <code>cookbooks</code> directory
+by default.</p>
+
+<p><em>IT WILL DESTROY YOUR COOKBOOKS DIRECTORY BY DEFAULT</em></p>
+
+<p>You can make it not destroy your cookbooks directory by providing
+a different path. A better idea is to not use the cookbooks directory.
+Just ignore that sucker and let Batali do its thing.</p>
+
+<h2>
+<a id="commands" class="anchor" href="#commands" aria-hidden="true"><span class="octicon octicon-link"></span></a>Commands</h2>
+
+<ul>
+<li>
+<code>batali resolve</code> - Resolve dependencies and produce <code>batali.manifest</code>
+</li>
+<li>
+<code>batali install</code> - Install entries from the <code>batali.manifest</code>
+</li>
+<li>
+<code>batali update</code>  - Perform <code>resolve</code> and then <code>install</code>
+</li>
+</ul>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<h3>
+<a id="origins" class="anchor" href="#origins" aria-hidden="true"><span class="octicon octicon-link"></span></a>Origins</h3>
+
+<p>Currently supported "origins":</p>
+
+<ul>
+<li>RemoteSite</li>
+<li>Path</li>
+<li>Git</li>
+</ul>
+
+<h4>
+<a id="remotesite" class="anchor" href="#remotesite" aria-hidden="true"><span class="octicon octicon-link"></span></a>RemoteSite</h4>
+
+<p>This is simply a supermarket endpoint:</p>
+
+<div class="highlight highlight-ruby"><pre>source <span class="pl-s"><span class="pl-pds">'</span>https://supermarket.chef.io<span class="pl-pds">'</span></span></pre></div>
+
+<p>Multiple endpoints can be provided by specifying multiple
+<code>source</code> lines. They can also be named:</p>
+
+<div class="highlight highlight-ruby"><pre>source <span class="pl-s"><span class="pl-pds">'</span>https://supermarket.chef.io<span class="pl-pds">'</span></span>, <span class="pl-c1">:name</span> =&gt; <span class="pl-s"><span class="pl-pds">'</span>opscode<span class="pl-pds">'</span></span>
+source <span class="pl-s"><span class="pl-pds">'</span>https://cookbooks.example.com<span class="pl-pds">'</span></span>, <span class="pl-c1">:name</span> =&gt; <span class="pl-s"><span class="pl-pds">'</span>example<span class="pl-pds">'</span></span></pre></div>
+
+<h5>
+<a id="path" class="anchor" href="#path" aria-hidden="true"><span class="octicon octicon-link"></span></a>Path</h5>
+
+<p>Paths are defined via cookbook entries:</p>
+
+<div class="highlight highlight-ruby"><pre>cookbook <span class="pl-s"><span class="pl-pds">'</span>example<span class="pl-pds">'</span></span>, <span class="pl-c1">path:</span> <span class="pl-s"><span class="pl-pds">'</span>/path/to/example<span class="pl-pds">'</span></span></pre></div>
+
+<h5>
+<a id="git" class="anchor" href="#git" aria-hidden="true"><span class="octicon octicon-link"></span></a>Git</h5>
+
+<p>Git sources are defined via cookbook entries:</p>
+
+<div class="highlight highlight-ruby"><pre>cookbook <span class="pl-s"><span class="pl-pds">'</span>example<span class="pl-pds">'</span></span>, <span class="pl-c1">git:</span> <span class="pl-s"><span class="pl-pds">'</span>git://git.example.com/example-repo.git<span class="pl-pds">'</span></span>, <span class="pl-c1">ref:</span> <span class="pl-s"><span class="pl-pds">'</span>master<span class="pl-pds">'</span></span></pre></div>
+
+<h3>
+<a id="least-impact-updates" class="anchor" href="#least-impact-updates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Least Impact Updates</h3>
+
+<p>After a <code>batali.manifest</code> file has been generated, subsequent <code>resolve</code> requests
+will update cookbook versions using a "least impact" approach. This means that
+by default if the <code>Batali</code> file has not changed, running a <code>batali resolve</code> will
+be a noop, even if new versions of cookbooks may be available. This helps to reduce
+unintended upgrades that may break things due to a required cookbook update. Allowing
+a cookbook to be updated is done simply by adding it to the request:</p>
+
+<pre><code>$ batali resolve example
+</code></pre>
+
+<p>This will only update the version of the example cookbook, and any dependency cookbooks
+that <em>must</em> be updated to provide resolution. Dependency cookbooks that require an upgrade
+based on constraints will attempt to upgrade with the <em>least impact possible</em> by attempting
+to satisfy constraints within the minimum version segement possible. For example, if our
+Batali file contains the following:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">Batali</span>.define <span class="pl-k">do</span>
+  source <span class="pl-s"><span class="pl-pds">'</span>https://example.com<span class="pl-pds">'</span></span>
+  cookbook <span class="pl-s"><span class="pl-pds">'</span>soup<span class="pl-pds">'</span></span>
+<span class="pl-k">end</span></pre></div>
+
+<p>and after resolving we have two cookbooks in our manifest:</p>
+
+<pre><code>soup &lt;1.0.0&gt;
+salad &lt;0.1.4&gt;
+</code></pre>
+
+<p>Some time passes and a new version of <code>soup</code> is released, version 1.0.2. In that time
+multiple new versions of the <code>salad</code> cookbook have been released, with new features and
+with some breaking changes. For this example, lets assume available versions of the <code>salad</code>
+cookbook are:</p>
+
+<pre><code>&lt;0.1.4&gt;
+&lt;0.1.6&gt;
+&lt;0.1.8&gt;
+&lt;0.2.0&gt;
+&lt;0.2.2&gt;
+&lt;0.3.0&gt;
+&lt;1.0.0&gt;
+</code></pre>
+
+<p>and the <code>soup</code> cookbook has updated its <code>salad</code> dependency:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c"># soup metadata.rb</span>
+depends <span class="pl-s"><span class="pl-pds">'</span>salad<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&gt; 0.2<span class="pl-pds">'</span></span></pre></div>
+
+<p>Due to the behavior of existing solvers, we may expect the resolved manifest to include
+<code>salad</code> at the latest possible version: <code>1.0.0</code>. This is a valid solution, since the
+dependency is simply stating the constraint requires <code>salad</code> be <em>greater</em> than <code>0.2</code> and
+nothing more. However, this is a very large jump from what we currently have defined
+within our manifest, and jumps a major and minor version. The possibility of breaking
+changes being introduced is extremely high.</p>
+
+<p>Since Batali has the <strong>least impact</strong> feature enabled by default, it will only upgrade
+<code>salad</code> to the <code>0.2.2</code> version. This is due to the fact that the <strong>least impact</strong> feature
+prefers the <em>latest</em> cookbook available within the <em>closest</em> version segement of the cookbook
+version currently defined within the manifest. Since thew new <code>soup</code> dependency contraint
+requires versions <code>&gt; 0.2</code>, no <code>&gt; 0.1</code> versions are acceptable. Batali then looks to the
+next available segment <code>0.2</code> and attempts to use the latest version: <code>0.2.2</code>. This solves the
+constraint, and is used for the new solution.</p>
+
+<p>Multiple cookbooks can be listed for upgrade:</p>
+
+<pre><code>$ batali resolve example ipsum lorem
+</code></pre>
+
+<p>or this feature can be disabled to allow everything to be updated to the latest
+possible versions:</p>
+
+<pre><code>$ batali resolve --no-least-impact
+</code></pre>
+
+<h3>
+<a id="light-weight" class="anchor" href="#light-weight" aria-hidden="true"><span class="octicon octicon-link"></span></a>Light weight</h3>
+
+<p>One of the goals for batali was being light weight resolver, in the same vein as
+the <a href="https://rubygems.org/gems/librarian" title="A Framework for Bundlers">librarian</a> project. This means it does nothing more than manage local cookbooks. This
+includes dependency and constraint resolution, as well as providing a local installation
+of assets defined within the generated manifest. It provides no extra features outside of
+that scope.</p>
+
+<h3>
+<a id="multiple-platform-support" class="anchor" href="#multiple-platform-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple platform support</h3>
+
+<p>Batali does not rely on the <a href="https://rubygems.org/gems/chef" title="A systems integration framework">chef</a> gem to function. This removes any dependencies on
+gems that may be incompatible outside the MRI platform.</p>
+
+<h3>
+<a id="isolated-manifest-files" class="anchor" href="#isolated-manifest-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Isolated manifest files</h3>
+
+<p>Manifest files are fully isolated. The resolver does not need to perform any actions
+for installing cookbooks defined within the manifest. This allows for easy transmission
+and direct installation of a manifest without the requirement of re-pulling information
+from sources.</p>
+
+<h3>
+<a id="infrastructure-manifests" class="anchor" href="#infrastructure-manifests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Infrastructure manifests</h3>
+
+<p>Batali aims to solve the issue of full infrastructure resolution: resolving dependencies
+from an infrastructure repository. Resolving a single dependency path will not provide
+a correct resolution. This is because environments or run lists can provide extra constraints
+that will result in unsolvable resolutions on individual nodes. In this case we want
+to know what cookbooks are <em>allowed</em> within a solution, and ensure all those cookbooks
+are available. Batali provides infrastructure level manifests by setting the <code>infrastructure</code>
+flag:</p>
+
+<pre><code>$ batali resolve --infrastructure
+</code></pre>
+
+<p><em>NOTE: Depending on constraints defined within the Batali file, this can be a very large manifest</em></p>
+
+<h4>
+<a id="uploading-infrastructure-cookbooks" class="anchor" href="#uploading-infrastructure-cookbooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Uploading infrastructure cookbooks</h4>
+
+<p>When the infrastructure cookbooks are installed locally, the cookbook directories will have
+the version number as a suffix. This can cause a problem when attempting to run:</p>
+
+<pre><code>$ knife cookbook upload --all
+</code></pre>
+
+<p>due to knife using the directory name as the actual cookbook name. To get around this problem
+the <code>upload</code> command can be used directly with the correct options enabled. These options must
+be defined within the config file as the options are not accessible via CLI flags. Assuming
+a <code>.chef/knife.rb</code> file exists:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c"># .chef/knife.rb</span>
+
+versioned_cookbooks <span class="pl-c1">true</span></pre></div>
+
+<pre><code>$ knife upload cookbooks
+</code></pre>
+
+<h3>
+<a id="display-outdated-cookbooks" class="anchor" href="#display-outdated-cookbooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Display outdated cookbooks</h3>
+
+<p>Want to see what cookbooks have newer versions available within the defined constraints? Use
+the dry run option to see what upgrades are available without actually changing the manifest:</p>
+
+<pre><code>$ batali resolve --no-least-impact --dry-run
+</code></pre>
+
+<h3>
+<a id="automatic-cookbook-discovery" class="anchor" href="#automatic-cookbook-discovery" aria-hidden="true"><span class="octicon octicon-link"></span></a>Automatic cookbook discovery</h3>
+
+<p>Tired of tracking constraints in multiple places when using Chef Environment <code>cookbook_versions</code>
+for environment specific constraints? Let Batali manage it for you! Define your <code>Batali</code> file
+to enable automatic discovery:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">Batali</span>.define <span class="pl-k">do</span>
+  source <span class="pl-s"><span class="pl-pds">'</span>https://example.com<span class="pl-pds">'</span></span>
+  discover <span class="pl-c1">true</span>
+<span class="pl-k">end</span></pre></div>
+
+<p>That's it! Now you can resolve for the infrastructure:</p>
+
+<pre><code>$ batali resolve --infrastructure
+</code></pre>
+
+<p>which will generate a resulting manifest that includes all required cookbook versions to
+satisfiy constraints defined by all environments.</p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Batali can be configured via the <code>.batali</code> file. The contents of the file can be in YAML,
+JSON, XML, or Ruby. Every option displayed via the help call can be set within this file.
+The configuration can hold items isolated within a command's name, or defined at the top
+level of the configuration file. For example:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">Configuration</span>.<span class="pl-k">new</span> <span class="pl-k">do</span>
+  debug <span class="pl-c1">true</span>
+  resolve <span class="pl-k">do</span>
+    debug <span class="pl-c1">false</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<p>This configuration turns debug output on for all commands <em>except</em> the resolve command.
+This feature is handy in situations where multiple commands may have the same flag that
+should always be enabled, like the <code>infrastructure</code> flag:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">Configuration</span>.<span class="pl-k">new</span> <span class="pl-k">do</span>
+  infrastructure <span class="pl-c1">true</span>
+<span class="pl-k">end</span></pre></div>
+
+<p>When flags on the CLI contain a dash, they are referenced within the configuration file
+as an underscore. For example the least impact flag on the CLI looks like:</p>
+
+<pre><code>--least-impact
+</code></pre>
+
+<p>and the key in the configuration looks like:</p>
+
+<pre><code>least_impact
+</code></pre>
+
+<h3>
+<a id="example-configurations" class="anchor" href="#example-configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example configurations</h3>
+
+<h4>
+<a id="ruby" class="anchor" href="#ruby" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ruby</h4>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-c1">Configuration</span>.<span class="pl-k">new</span> <span class="pl-k">do</span>
+  infrastructure <span class="pl-c1">true</span>
+  resolve <span class="pl-k">do</span>
+    least_impact <span class="pl-c1">false</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<h4>
+<a id="json" class="anchor" href="#json" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSON</h4>
+
+<div class="highlight highlight-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>infrastructure<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>resolve<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>least_impact<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
+  }
+}</pre></div>
+
+<h4>
+<a id="yaml" class="anchor" href="#yaml" aria-hidden="true"><span class="octicon octicon-link"></span></a>YAML</h4>
+
+<div class="highlight highlight-yaml"><pre><span class="pl-s">-<span class="pl-s">--</span></span>
+<span class="pl-s"><span class="pl-ent">:infrastructure:</span> <span class="pl-s">true</span></span>
+<span class="pl-s"><span class="pl-ent">:resolve:</span></span>
+  <span class="pl-s"><span class="pl-ent">:least_impact:</span> <span class="pl-s">false</span></span></pre></div>
+
+<h4>
+<a id="xml" class="anchor" href="#xml" aria-hidden="true"><span class="octicon octicon-link"></span></a>XML</h4>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">configuration</span>&gt;
+  &lt;<span class="pl-ent">infrastructure</span>&gt;true&lt;/<span class="pl-ent">infrastructure</span>&gt;
+  &lt;<span class="pl-ent">resolve</span>&gt;
+    &lt;<span class="pl-ent">least_impact</span>&gt;false&lt;/<span class="pl-ent">least_impact</span>&gt;
+  &lt;/<span class="pl-ent">resolve</span>&gt;
+&lt;/<span class="pl-ent">configuration</span>&gt;</pre></div>
+
+<h2>
+<a id="test-kitchen" class="anchor" href="#test-kitchen" aria-hidden="true"><span class="octicon octicon-link"></span></a>Test Kitchen</h2>
+
+<p>Batali can be used with <a href="https://github.com/test-kitchen/test-kitchen">Test Kitchen</a>:</p>
+
+<ul>
+<li><a href="https://github.com/hw-labs/batali-tk">https://github.com/hw-labs/batali-tk</a></li>
+</ul>
+
+<h2>
+<a id="chefspec" class="anchor" href="#chefspec" aria-hidden="true"><span class="octicon octicon-link"></span></a>ChefSpec</h2>
+
+<p>Batali can be used with <a href="https://github.com/sethvargo/chefspec">ChefSpec</a>. Add the following
+line to your <code>spec_helper.rb</code> file:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>batali/chefspec<span class="pl-pds">'</span></span></pre></div>
+
+<h1>
+<a id="info" class="anchor" href="#info" aria-hidden="true"><span class="octicon octicon-link"></span></a>Info</h1>
+
+<ul>
+<li>Repository: <a href="https://github.com/hw-labs/batali">https://github.com/hw-labs/batali</a>
+</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/hw-labs/batali/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/hw-labs/batali/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/hw-labs/batali"></a> is maintained by <a href="https://github.com/hw-labs">hw-labs</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
