@@ -52,6 +52,7 @@ Currently supported "origins":
 * RemoteSite
 * Path
 * Git
+* ChefServer
 
 #### RemoteSite
 
@@ -67,6 +68,23 @@ Multiple endpoints can be provided by specifying multiple
 ```ruby
 source 'https://supermarket.chef.io', :name => 'opscode'
 source 'https://cookbooks.example.com', :name => 'example'
+```
+
+##### ChefServer
+
+This is a Chef Server endpoint:
+
+```ruby
+chef_server 'https://chef-server.example.com'
+```
+
+It will use the `node_name` and `client_key` defined within the
+`.chef/knife.rb` configuration by default. To use the Chef Server
+URL defined within the configuration, just declare it with no
+arguments:
+
+```ruby
+chef_server
 ```
 
 ##### Path

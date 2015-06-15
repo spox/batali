@@ -15,7 +15,7 @@ module Batali
     # @return [self]
     def populate!
       memoize(:populate) do
-        file.source.each do |src|
+        (file.source + file.chef_server).each do |src|
           src.units.find_all do |unit|
             if(restrictions[unit.name])
               restrictions[unit.name] == src.identifier

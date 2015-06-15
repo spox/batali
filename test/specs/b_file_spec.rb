@@ -234,4 +234,51 @@ describe Batali::BFile do
 
   end
 
+  describe 'Batali.8' do
+
+    before do
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.8'))
+    end
+    let(:bfile){ @bfile }
+
+    it 'should have source and default chef server' do
+      bfile.chef_server.size.must_equal 1
+      bfile.source.size.must_equal 1
+      bfile.chef_server.first.endpoint.must_equal 'https://localhost:443'
+    end
+
+  end
+
+  describe 'Batali.9' do
+
+    before do
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.9'))
+    end
+    let(:bfile){ @bfile }
+
+    it 'should have source and custom chef server' do
+      bfile.chef_server.size.must_equal 1
+      bfile.source.size.must_equal 1
+      bfile.chef_server.first.endpoint.must_equal 'https://example.com'
+    end
+
+  end
+
+  describe 'Batali.10' do
+
+    before do
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.10'))
+    end
+    let(:bfile){ @bfile }
+
+    it 'should have source and two chef servers' do
+      bfile.chef_server.size.must_equal 2
+      bfile.source.size.must_equal 1
+      bfile.chef_server.first.endpoint.must_equal 'https://example.com'
+      bfile.chef_server.last.endpoint.must_equal 'https://srv.example.com'
+    end
+
+  end
+
+
 end
