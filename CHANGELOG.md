@@ -1,3 +1,6 @@
+# v0.2.14
+* Add support for using the Chef Server as a source
+
 # v0.2.12
 * Update home directory path generation to use `Dir.home`
 * Detect resolution type from manifest files
