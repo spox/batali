@@ -4,6 +4,7 @@ module  Batali
   # Cookbook source origin
   class Origin < Utility
 
+    autoload :ChefServer, 'batali/origin/chef_server'
     autoload :RemoteSite, 'batali/origin/remote_site'
     autoload :Git, 'batali/origin/git'
     autoload :Path, 'batali/origin/path'

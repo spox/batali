@@ -7,6 +7,7 @@ module Batali
     autoload :Path, 'batali/source/path'
     autoload :Site, 'batali/source/site'
     autoload :Git, 'batali/source/git'
+    autoload :ChefServer, 'batali/source/chef_server'
 
     attribute :type, String, :required => true, :default => lambda{ self.name }
 

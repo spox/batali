@@ -1,0 +1,6 @@
+Batali.define do
+  source 'http://other.example.com'
+  chef_server 'https://example.com'
+  chef_server 'https://srv.example.com'
+  cookbook 'users'
+end

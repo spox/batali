@@ -22,6 +22,15 @@ module Batali
       self
     end
 
+    def chef_server(*args)
+      unless(self[:chef_server])
+        set!(:chef_server, ::AttributeStruct::CollapseArray.new.push(args))
+      else
+        self[:chef_server].push(args)
+      end
+      self
+    end
+
     def restrict(*args)
       unless(self[:restrict])
         set!(:restrict, ::AttributeStruct::CollapseArray.new.push(args))
@@ -88,12 +97,19 @@ module Batali
     attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v|
       Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
     }
-    attribute :source, Origin::RemoteSite, :multiple => true, :coerce => lambda{|v|
+    attribute :source, Origin::RemoteSite, :multiple => true, :default => [], :coerce => lambda{|v|
       args = Smash.new(:endpoint => v.first)
       if(v.last.is_a?(Hash))
         args.merge!(v.last)
       end
       Origin::RemoteSite.new(args)
+    }
+    attribute :chef_server, Origin::ChefServer, :multiple => true, :default => [], :coerce => lambda{|v|
+      args = Smash.new(:endpoint => v.first)
+      if(v.last.is_a?(Hash))
+        args.merge!(v.last)
+      end
+      Origin::ChefServer.new(args)
     }
     attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []

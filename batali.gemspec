@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'git'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'chef'
   s.executables << 'batali'
   s.files = Dir['{lib,bin}/**/**/*'] + %w(batali.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
 end
