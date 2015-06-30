@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'attribute_struct', '~> 0.2.14'
   s.add_runtime_dependency 'grimoire', '~> 0.2.6'
   s.add_runtime_dependency 'bogo', '~> 0.1.20'
-  s.add_runtime_dependency 'bogo-cli', '~> 0.1.18'
+  s.add_runtime_dependency 'bogo-cli', '~> 0.1.23'
   s.add_runtime_dependency 'bogo-config', '~> 0.1.10'
   s.add_runtime_dependency 'bogo-ui', '~> 0.1.6'
   s.add_runtime_dependency 'http', '~> 0.8.2'
