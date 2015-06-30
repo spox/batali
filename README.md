@@ -95,6 +95,16 @@ Paths are defined via cookbook entries:
 cookbook 'example', path: '/path/to/example'
 ```
 
+A short cut is also available when you're Batali file is
+located at the root of the cookbook you want to add:
+
+```ruby
+metadata
+```
+
+This will extract the name from the `metadata` file and automatically
+set the path `'.'`.
+
 ##### Git
 
 Git sources are defined via cookbook entries:
