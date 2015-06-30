@@ -95,7 +95,7 @@ Paths are defined via cookbook entries:
 cookbook 'example', path: '/path/to/example'
 ```
 
-A short cut is also available when you're Batali file is
+A short cut is also available when your Batali file is
 located at the root of the cookbook you want to add:
 
 ```ruby
