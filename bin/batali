@@ -10,10 +10,10 @@ Bogo::Cli::Setup.define do
   end
 
   global_opts = lambda do
-    on :c, :config, 'Configuration file path'
+    on :c, :config=, 'Configuration file path'
     on :V, :verbose, 'Enable verbose output'
     on :D, :debug, 'Enable debug mode'
-    on :f, :file, 'Path to Batali file'
+    on :f, :file=, 'Path to Batali file'
   end
 
   command 'display' do
@@ -28,7 +28,7 @@ Bogo::Cli::Setup.define do
     description 'Install cookbooks from manifest'
     self.instance_exec(&global_opts)
     on :d, 'dry-run', 'Print changes'
-    on :p, 'path', 'Cookbook install path'
+    on :p, 'path=', 'Cookbook install path'
     on :I, 'infrastructure', 'Resolve infrastructure cookbooks'
     run do |opts, args|
       Batali::Command::Install.new({:install => opts.to_hash}, args).execute!
@@ -41,6 +41,7 @@ Bogo::Cli::Setup.define do
     on :d, 'dry-run', 'Print changes'
     on :l, 'least-impact', 'Update cookbooks with minimal version impact', :default => true
     on :i, 'install', 'Install cookbooks after update', :default => true
+    on :p, 'path=', 'Cookbook install path'
     on :I, 'infrastructure', 'Resolve infrastructure cookbooks'
 
     run do |opts, args|
