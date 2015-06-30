@@ -10,6 +10,7 @@ module Batali
     include Bogo::Memoization
 
     autoload :Configure, 'batali/command/configure'
+    autoload :Display, 'batali/command/display'
     autoload :Install, 'batali/command/install'
     autoload :Resolve, 'batali/command/resolve'
     autoload :Update, 'batali/command/update'
@@ -70,6 +71,14 @@ module Batali
       else
         yield
       end
+    end
+
+    # @return [TrueClass, FalseClass] infrastructure mode
+    def infrastructure?
+      config[:infrastructure] || (
+        config[:infrastructure].nil? &&
+        manifest.infrastructure
+      )
     end
 
   end
