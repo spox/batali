@@ -42,6 +42,7 @@ Just ignore that sucker and let Batali do its thing.
 * `batali resolve` - Resolve dependencies and produce `batali.manifest`
 * `batali install` - Install entries from the `batali.manifest`
 * `batali update`  - Perform `resolve` and then `install`
+* `batali display` - Show manifest information (cookbook names, versions, etc.)
 
 ## Features
 
