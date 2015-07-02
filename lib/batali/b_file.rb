@@ -44,6 +44,15 @@ module Batali
       set!(:metadata, *(args.empty? ? [true] : args))
     end
 
+    def _dump(*_)
+      _keys.each do |k|
+        if(_data[k].nil? && _data[k].is_a?(::AttributeStruct))
+          _data[k] = true
+        end
+      end
+      super
+    end
+
   end
 
   # Create a new file

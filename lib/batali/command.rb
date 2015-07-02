@@ -31,6 +31,11 @@ module Batali
         if(bfile.discover)
           bfile.auto_discover!
         end
+        bfile.data.keys.each do |key|
+          unless(bfile.respond_to?(key))
+            ui.warn "Unknown keyword used within Batali file: #{key.inspect}"
+          end
+        end
         bfile
       end
     end
