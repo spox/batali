@@ -1,3 +1,6 @@
+# v0.2.18
+* Add warning when unknown keywords used within Batali file
+
 # v0.2.16
 * Add `display` command for inspect manifest
 * [fix] Update bogo-cli constraint to provide configuration merge fix
