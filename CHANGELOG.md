@@ -1,3 +1,6 @@
+# v0.2.20
+* [fix] Use `config` for command merge when running update
+
 # v0.2.18
 * Add warning when unknown keywords used within Batali file
 
