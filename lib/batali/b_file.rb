@@ -1,4 +1,5 @@
 require 'batali'
+require 'pathname'
 
 module Batali
 
@@ -123,10 +124,12 @@ module Batali
     attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []
     attribute :metadata, Cookbook, :coerce => lambda{ |v, b_file|
-      dir = File.dirname(b_file.path)
+      dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
       m_unit = Origin::Path.new(:name => 'metadata', :path => dir).units.first
       ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
-      b_file.cookbook.push ckbk
+      unless(b_file.cookbook.map(&:name).include?(ckbk.name))
+        b_file.cookbook.push ckbk
+      end
       ckbk
     }
 

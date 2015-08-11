@@ -204,6 +204,11 @@ describe Batali::BFile do
       bfile.cookbook.first.path.wont_be :nil?
     end
 
+    it 'should use relative path for metadata directory' do
+      bfile.cookbook.size.must_equal 1
+      Pathname.new(bfile.cookbook.first.path).must_be :relative?
+    end
+
   end
 
   describe 'Batali.6' do
