@@ -1,3 +1,6 @@
+# v0.2.22
+* [fix] Update chefspec integration to properly install cookbooks
+
 # v0.2.20
 * [fix] Use `config` for command merge when running update
 
