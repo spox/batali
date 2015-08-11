@@ -18,6 +18,8 @@ module Batali
   autoload :UnitLoader, 'batali/unit_loader'
   autoload :Utility, 'batali/utility'
 
+  autoload :TAG_LINES, 'batali/tag_lines'
+
   class << self
     # @return [Bogo::Ui]
     attr_reader :ui
