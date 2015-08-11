@@ -24,6 +24,9 @@ module ChefSpec
           Smash.new(
             :file => File.join(Dir.pwd, 'Batali'),
             :path => @vendor_path,
+            :update => {
+              :install => true
+            },
             :ui => Bogo::Ui.new(
               :app_name => 'Batali',
               :output_to => StringIO.new(output)
