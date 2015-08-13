@@ -6,6 +6,7 @@ Bogo::Cli::Setup.define do
 
   on :v, :version, 'Print version' do
     puts "batali - Cookbook Collection Manager - [Version: #{Batali::VERSION}]"
+    puts "  - #{Batali::TAG_LINES.sample}"
     exit
   end
 
