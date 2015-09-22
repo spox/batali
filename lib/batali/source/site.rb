@@ -57,37 +57,48 @@ module Batali
       def asset
         path = File.join(cache_directory, Base64.urlsafe_encode64(url))
         unless(File.directory?(path))
-          FileUtils.mkdir_p(path)
-          result = HTTP.with_cache(
-            :metastore => "file:#{File.join(cache_directory, 'metastore')}",
-            :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
-          ).get(url)
-          while(result.code == 302)
+          retried = false
+          begin
+            FileUtils.mkdir_p(path)
             result = HTTP.with_cache(
               :metastore => "file:#{File.join(cache_directory, 'metastore')}",
               :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
-            ).get(result.headers['Location'])
-          end
-          File.open(a_path = File.join(path, 'asset'), 'w') do |file|
-            while(content = result.body.readpartial(2048))
-              file.write content
+            ).get(url)
+            while(result.code == 302)
+              result = HTTP.with_cache(
+                :metastore => "file:#{File.join(cache_directory, 'metastore')}",
+                :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
+              ).get(result.headers['Location'])
             end
-          end
-          ext = Gem::Package::TarReader.new(
-            Zlib::GzipReader.open(a_path)
-          )
-          ext.rewind
-          ext.each do |entry|
-            next unless entry.file?
-            n_path = File.join(path, entry.full_name)
-            FileUtils.mkdir_p(File.dirname(n_path))
-            File.open(n_path, 'w') do |file|
-              while(content = entry.read(2048))
-                file.write(content)
+            File.open(a_path = File.join(path, 'asset'), 'w') do |file|
+              while(content = result.body.readpartial(2048))
+                file.write content
               end
             end
+            ext = Gem::Package::TarReader.new(
+              Zlib::GzipReader.open(a_path)
+            )
+            ext.rewind
+            ext.each do |entry|
+              next unless entry.file?
+              n_path = File.join(path, entry.full_name)
+              FileUtils.mkdir_p(File.dirname(n_path))
+              File.open(n_path, 'w') do |file|
+                while(content = entry.read(2048))
+                  file.write(content)
+                end
+              end
+            end
+            FileUtils.rm(a_path)
+          rescue => e
+            FileUtils.rm_rf(path)
+            unless(retried)
+              FileUtils.mkdir_p(path)
+              retried = true
+              retry
+            end
+            raise
           end
-          FileUtils.rm(a_path)
         end
         Dir.glob(File.join(path, '*')).first
       end
