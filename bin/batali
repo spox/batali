@@ -62,6 +62,15 @@ Bogo::Cli::Setup.define do
     end
   end
 
+  command 'cache' do
+    description 'Local cache management and information'
+    self.instance_exec(&global_opts)
+    on :s, 'scrub', 'Delete local cache contents'
+    run do |opts, args|
+      Batali::Command::Cache.new({:cache => opts.to_hash}, args).execute!
+    end
+  end
+
   command 'configure' do
     self.instance_exec(&global_opts)
     run do |opts, args|
