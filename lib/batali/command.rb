@@ -9,6 +9,7 @@ module Batali
 
     include Bogo::Memoization
 
+    autoload :Cache, 'batali/command/cache'
     autoload :Configure, 'batali/command/configure'
     autoload :Display, 'batali/command/display'
     autoload :Install, 'batali/command/install'
