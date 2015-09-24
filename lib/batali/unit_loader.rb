@@ -27,17 +27,18 @@ module Batali
           end
         end
         file.cookbook.each do |ckbk|
-          if(ckbk.path)
-            source = Origin::Path.new(
-              :name => ckbk.name,
-              :path => ckbk.path
-            )
-          elsif(ckbk.git)
+          if(ckbk.git)
             source = Origin::Git.new(
               :name => ckbk.name,
               :url => ckbk.git,
+              :subdirectory => ckbk.path,
               :ref => ckbk.ref || 'master',
               :cache => cache
+            )
+          elsif(ckbk.path)
+            source = Origin::Path.new(
+              :name => ckbk.name,
+              :path => ckbk.path
             )
           end
           if(source)
