@@ -1,3 +1,6 @@
+# v0.2.26
+* [feature] Add subdirectory support for git repository sources
+
 # v0.2.24
 * [enhancement] Add cache command for inspection and removal
 * [fix] Automatically destroy and retry failed asset unpack
