@@ -11,12 +11,13 @@ module Batali
       include Bogo::Memoization
       include Batali::Git
 
+      attribute :subdirectory, String
       attribute :path, String
 
       # @return [String] directory containing contents
       def asset
         clone_repository
-        self.path = ref_dup
+        self.path = File.join(*[ref_dup, subdirectory].compact)
         super
       end
 

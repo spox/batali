@@ -114,6 +114,13 @@ Git sources are defined via cookbook entries:
 cookbook 'example', git: 'git://git.example.com/example-repo.git', ref: 'master'
 ```
 
+In some crazy instances, you may have a cookbook located in the subdirectory of
+a git repository:
+
+```ruby
+cookbook 'example', git: 'git://git.example.com/example-repo.git', ref: 'master', path: 'my-cookbook'
+```
+
 ### Least Impact Updates
 
 After a `batali.manifest` file has been generated, subsequent `resolve` requests

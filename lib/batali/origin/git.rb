@@ -7,11 +7,10 @@ module Batali
     class Git < Path
 
       include Batali::Git
+      attribute :path, String, :required => false
+      attribute :subdirectory, String
 
       def initialize(args={})
-        unless(args[:path])
-          args[:path] = '/dev/null'
-        end
         super
         self.identifier = Smash.new(
           :url => url,
@@ -29,7 +28,7 @@ module Batali
           items.first.source = Source::Git.new(
             :url => url,
             :ref => ref,
-            :path => path
+            :subdirectory => subdirectory
           )
           items
         end
@@ -38,7 +37,11 @@ module Batali
       # @return [Smash] metadata information
       def load_metadata
         fetch_repo
-        super
+        original_path = path.dup
+        self.path = File.join(*[path, subdirectory].compact)
+        result = super
+        self.path = original_path
+        result
       end
 
       # @return [String] path to repository
