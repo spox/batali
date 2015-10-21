@@ -122,6 +122,10 @@ module Batali
         if(manifest.infrastructure == false)
           ui.ask 'Current manifest is resolved single path. Convert to infrastructure?'
         end
+        run_action 'Resolving dependency constraints' do
+          solv.prune_world!
+          nil
+        end
         run_action 'Writing infrastructure manifest file' do
           File.open(manifest.path, 'w') do |file|
             manifest = Manifest.new(
@@ -132,7 +136,6 @@ module Batali
             nil
           end
         end
-        solv.prune_world!
         ui.info 'Infrastructure manifest solution:'
         solv.world.units.sort_by(&:first).each do |name, units|
           ui.puts "#{name} <#{units.map(&:version).sort.map(&:to_s).join(', ')}>"
