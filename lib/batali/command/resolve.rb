@@ -126,19 +126,64 @@ module Batali
           solv.prune_world!
           nil
         end
-        run_action 'Writing infrastructure manifest file' do
-          File.open(manifest.path, 'w') do |file|
-            manifest = Manifest.new(
-              :cookbook => solv.world.units.values.flatten,
-              :infrastructure => true
-            )
-            file.write MultiJson.dump(manifest, :pretty => true)
-            nil
+        dry_run('manifest file write') do
+          run_action 'Writing infrastructure manifest file' do
+            File.open(manifest.path, 'w') do |file|
+              manifest = Manifest.new(
+                :cookbook => solv.world.units.values.flatten,
+                :infrastructure => true
+              )
+              file.write MultiJson.dump(manifest, :pretty => true)
+              nil
+            end
           end
         end
         ui.info 'Infrastructure manifest solution:'
-        solv.world.units.sort_by(&:first).each do |name, units|
-          ui.puts "#{name} <#{units.map(&:version).sort.map(&:to_s).join(', ')}>"
+
+        solution_units = Smash.new.tap do |su|
+          solv.world.units.each do |unit|
+            su[unit.name] ||= []
+            su[unit.name] << unit
+          end
+        end
+        manifest_units = Smash.new.tap do |mu|
+          manifest.cookbook.each do |unit|
+            mu[unit.name] ||= []
+            mu[unit.name] << unit
+          end
+        end
+        (solution_units.keys + manifest_units.keys).compact.uniq.sort.each do |unit_name|
+          if(manifest_units[unit_name])
+            if(solution_units[unit_name])
+              removed = manifest_units[unit_name].find_all do |m_unit|
+                solution_units[unit_name].none? do |s_unit|
+                  m_unit.same?(s_unit)
+                end
+              end.map{|u| [u.version, :red] }
+              added = solution_units[unit_name].find_all do |s_unit|
+                manifest_units[unit_name].none? do |m_unit|
+                  s_unit.same?(m_unit)
+                end
+              end.map{|u| [u.version, :green]}
+              persisted = solution_units[unit_name].find_all do |s_unit|
+                manifest_units[unit_name].any? do |m_unit|
+                  s_unit.same?(m_unit)
+                end
+              end.map{|u| [u.version, nil]}
+              unit_versions = (removed + added + persisted).sort_by(&:first).map do |uv|
+                uv.last ? ui.color(uv.first.to_s, uv.last) : uv.first.to_s
+              end
+              unless(added.empty? && removed.empty?)
+                ui.puts ui.color("#{unit_name} <#{unit_versions.join(', ')}>", :yellow)
+              else
+                ui.puts "#{unit_name} <#{unit_versions.join(', ')}>"
+              end
+            else
+              ui.puts ui.color("#{unit_name} <#{manifest_units[unit_name].map(&:version).sort.map(&:to_s).join(', ')}>", :red)
+            end
+          else
+            ui.puts ui.color("#{unit_name} <#{solution_units[unit_name].map(&:version).sort.map(&:to_s).join(', ')}>", :green)
+          end
         end
       end
 
