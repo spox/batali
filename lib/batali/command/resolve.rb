@@ -140,12 +140,7 @@ module Batali
         end
         ui.info 'Infrastructure manifest solution:'
 
-        solution_units = Smash.new.tap do |su|
-          solv.world.units.each do |unit|
-            su[unit.name] ||= []
-            su[unit.name] << unit
-          end
-        end
+        solution_units = solv.world.units
         manifest_units = Smash.new.tap do |mu|
           manifest.cookbook.each do |unit|
             mu[unit.name] ||= []
@@ -174,7 +169,7 @@ module Batali
                 uv.last ? ui.color(uv.first.to_s, uv.last) : uv.first.to_s
               end
               unless(added.empty? && removed.empty?)
-                ui.puts ui.color("#{unit_name} <#{unit_versions.join(', ')}>", :yellow)
+                ui.puts "#{ui.color(unit_name, :yellow)} #{ui.color('<', :yellow)}#{unit_versions.join(ui.color(', '), :yellow)}#{ui.color('>', :yellow)}"
               else
                 ui.puts "#{unit_name} <#{unit_versions.join(', ')}>"
               end
