@@ -14,7 +14,8 @@ module Batali
         super
         self.identifier = Smash.new(
           :url => url,
-          :ref => ref
+          :ref => ref,
+          :subdirectory => subdirectory
         ).checksum
         unless(name?)
           self.name = self.identifier
