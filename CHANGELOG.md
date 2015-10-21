@@ -1,3 +1,8 @@
+# v0.2.32
+* [fix] Skip constraint merging when entry is non-site sourced
+* [enhancement] Support dry run in infrastructure resolve
+* [enhancement] Provide colorized diff on infrastructure manifest updates via resolve
+
 # v0.2.30
 * [fix] Run world pruner prior to manifest output
 * [enhancement] Provider UI context when pruning world
