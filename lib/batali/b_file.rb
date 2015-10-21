@@ -54,6 +54,22 @@ module Batali
       super
     end
 
+    ::Object.constants.each do |const_name|
+      const_set(const_name, ::Object.const_get(const_name))
+    end
+
+    def require(*args)
+      result = ::Kernel.require(*args)
+      instance_exec do
+        class << self
+          ::Object.constants.each do |const_name|
+            const_set(const_name, ::Object.const_get(const_name))
+          end
+        end
+      end
+      result
+    end
+
   end
 
   # Create a new file
@@ -157,6 +173,10 @@ module Batali
             c.name == ckbk_name
           end
           if(ckbk)
+            unless(ckbk.constraint)
+              debug "Skipping constraint merging due to lack of original constraints: #{ckbk.inspect}"
+              next
+            end
             new_constraints = ckbk.constraint.dup
             new_constraints += constraints
             requirement = UnitRequirement.new(*new_constraints)
