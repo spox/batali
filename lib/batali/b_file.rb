@@ -55,6 +55,7 @@ module Batali
     end
 
     ::Object.constants.each do |const_name|
+      next if const_name == :Config
       const_set(const_name, ::Object.const_get(const_name))
     end
 
@@ -63,6 +64,7 @@ module Batali
       instance_exec do
         class << self
           ::Object.constants.each do |const_name|
+            next if const_name == :Config
             const_set(const_name, ::Object.const_get(const_name))
           end
         end
