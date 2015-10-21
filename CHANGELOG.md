@@ -1,3 +1,7 @@
+# v0.2.30
+* [fix] Run world pruner prior to manifest output
+* [enhancement] Provider UI context when pruning world
+
 # v0.2.28
 * [fix] Properly install subdirectory when path defined on git source
 
