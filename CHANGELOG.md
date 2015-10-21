@@ -1,3 +1,6 @@
+# v0.2.28
+* [fix] Properly install subdirectory when path defined on git source
+
 # v0.2.26
 * [feature] Add subdirectory support for git repository sources
 
