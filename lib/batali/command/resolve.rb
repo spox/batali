@@ -169,7 +169,7 @@ module Batali
                 uv.last ? ui.color(uv.first.to_s, uv.last) : uv.first.to_s
               end
               unless(added.empty? && removed.empty?)
-                ui.puts "#{ui.color(unit_name, :yellow)} #{ui.color('<', :yellow)}#{unit_versions.join(ui.color(', '), :yellow)}#{ui.color('>', :yellow)}"
+                ui.puts "#{ui.color(unit_name, :yellow)} #{ui.color('<', :yellow)}#{unit_versions.join(ui.color(', ', :yellow))}#{ui.color('>', :yellow)}"
               else
                 ui.puts "#{unit_name} <#{unit_versions.join(', ')}>"
               end
