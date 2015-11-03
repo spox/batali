@@ -30,7 +30,7 @@ module Batali
         ui.verbose "Loading Batali file from: #{path}"
         bfile = BFile.new(path)
         if(bfile.discover)
-          bfile.auto_discover!
+          bfile.auto_discover!(config[:environment])
         end
         bfile.data.keys.each do |key|
           unless(bfile.respond_to?(key))
