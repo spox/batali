@@ -1,3 +1,7 @@
+# v0.3.0
+* [enhancement] Properly restore BFile from serialized data
+* [enhancement] Provide access to environment specific constraint usage
+
 # v0.2.32
 * [fix] Skip constraint merging when entry is non-site sourced
 * [enhancement] Support dry run in infrastructure resolve
