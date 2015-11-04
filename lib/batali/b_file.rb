@@ -91,15 +91,19 @@ module Batali
     def self.cookbook_coerce
       proc do |v|
         v = [v].flatten.compact
-        name, args = v.first, v.slice(1, v.size)
-        if(args.empty?)
-          args = Smash.new
-        elsif(args.size == 1 && args.first.is_a?(Hash))
-          args = args.first
+        if(v.size == 1 && v.first.is_a?(Hash))
+          Cookbook.new(v.first)
         else
-          args = Smash.new(:constraint => args.map(&:to_s))
+          name, args = v.first, v.slice(1, v.size)
+          if(args.empty?)
+            args = Smash.new
+          elsif(args.size == 1 && args.first.is_a?(Hash))
+            args = args.first
+          else
+            args = Smash.new(:constraint => args.map(&:to_s))
+          end
+          Cookbook.new(Smash.new(:name => name).merge(args))
         end
-        Cookbook.new(Smash.new(:name => name).merge(args))
       end
     end
 
@@ -123,28 +127,44 @@ module Batali
 
     attribute :discover, [TrueClass, FalseClass], :required => true, :default => false
     attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v|
-      Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
+      if(v.is_a?(Hash))
+        Restriction.new(v)
+      else
+        Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
+      end
     }
     attribute :source, Origin::RemoteSite, :multiple => true, :default => [], :coerce => lambda{|v|
-      args = Smash.new(:endpoint => v.first)
-      if(v.last.is_a?(Hash))
-        args.merge!(v.last)
+      if(v.is_a?(Hash))
+        args = v
+      else
+        args = Smash.new(:endpoint => v.first)
+        if(v.last.is_a?(Hash))
+          args.merge!(v.last)
+        end
       end
       Origin::RemoteSite.new(args)
     }
     attribute :chef_server, Origin::ChefServer, :multiple => true, :default => [], :coerce => lambda{|v|
-      args = Smash.new(:endpoint => v.first)
-      if(v.last.is_a?(Hash))
-        args.merge!(v.last)
+      if(v.is_a?(Hash))
+        args = v
+      else
+        args = Smash.new(:endpoint => v.first)
+        if(v.last.is_a?(Hash))
+          args.merge!(v.last)
+        end
       end
       Origin::ChefServer.new(args)
     }
-    attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new()}
+    attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new(v)}
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []
     attribute :metadata, Cookbook, :coerce => lambda{ |v, b_file|
-      dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
-      m_unit = Origin::Path.new(:name => 'metadata', :path => dir).units.first
-      ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
+      if(v.is_a?(Hash))
+        ckbk = Cookbook.new(v)
+      else
+        dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
+        m_unit = Origin::Path.new(:name => 'metadata', :path => dir).units.first
+        ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
+      end
       unless(b_file.cookbook.map(&:name).include?(ckbk.name))
         b_file.cookbook.push ckbk
       end

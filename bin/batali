@@ -44,6 +44,7 @@ Bogo::Cli::Setup.define do
     on :i, 'install', 'Install cookbooks after update', :default => true
     on :p, 'path=', 'Cookbook install path'
     on :I, 'infrastructure', 'Resolve infrastructure cookbooks'
+    on :e, 'environment=', 'Restrict auto-discovery to named environment'
 
     run do |opts, args|
       Batali::Command::Update.new({:update => opts.to_hash}, args).execute!
@@ -56,6 +57,7 @@ Bogo::Cli::Setup.define do
     on :d, 'dry-run', 'Print changes'
     on :l, 'least-impact', 'Update cookbooks with minimal version impact', :default => true
     on :I, 'infrastructure', 'Resolve infrastructure cookbooks'
+    on :e, 'environment=', 'Restrict auto-discovery to named environment'
 
     run do |opts, args|
       Batali::Command::Resolve.new({:resolve => opts.to_hash}, args).execute!
