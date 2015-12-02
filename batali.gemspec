@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.license = 'Apache 2.0'
   s.add_runtime_dependency 'attribute_struct', '~> 0.2.14'
-  s.add_runtime_dependency 'grimoire', '~> 0.2.8'
+  s.add_runtime_dependency 'grimoire', '~> 0.2.12'
   s.add_runtime_dependency 'bogo', '~> 0.1.20'
   s.add_runtime_dependency 'bogo-cli', '~> 0.1.23'
   s.add_runtime_dependency 'bogo-config', '~> 0.1.10'
