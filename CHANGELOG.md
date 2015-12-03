@@ -1,3 +1,6 @@
+# v0.3.2
+* [enhancement] Error on infrastructure resolution if full requirement list isn't available
+
 # v0.3.0
 * [enhancement] Properly restore BFile from serialized data
 * [enhancement] Provide access to environment specific constraint usage
