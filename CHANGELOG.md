@@ -1,3 +1,6 @@
+# v0.3.4
+* [fix] Open file as binary when storing compressed asset (#60 and #61 thanks @kenny-evitt!)
+
 # v0.3.2
 * [enhancement] Error on infrastructure resolution if full requirement list isn't available
 
