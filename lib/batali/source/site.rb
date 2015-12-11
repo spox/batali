@@ -70,7 +70,7 @@ module Batali
                 :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
               ).get(result.headers['Location'])
             end
-            File.open(a_path = File.join(path, 'asset'), 'w') do |file|
+            File.open(a_path = File.join(path, 'asset'), 'wb') do |file|
               while(content = result.body.readpartial(2048))
                 file.write content
               end
@@ -83,7 +83,7 @@ module Batali
               next unless entry.file?
               n_path = File.join(path, entry.full_name)
               FileUtils.mkdir_p(File.dirname(n_path))
-              File.open(n_path, 'w') do |file|
+              File.open(n_path, 'wb') do |file|
                 while(content = entry.read(2048))
                   file.write(content)
                 end
