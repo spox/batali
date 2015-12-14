@@ -46,9 +46,6 @@ module Batali
           unless(@cache)
             @cache = File.join(Dir.home, '.batali/cache/remote_site')
           end
-          ['entitystore', 'metastore'].each do |leaf|
-            FileUtils.mkdir_p(File.join(cache, leaf))
-          end
           cache
         end
       end
@@ -60,15 +57,9 @@ module Batali
           retried = false
           begin
             FileUtils.mkdir_p(path)
-            result = HTTP.with_cache(
-              :metastore => "file:#{File.join(cache_directory, 'metastore')}",
-              :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
-            ).get(url)
+            result = HTTP.get(url)
             while(result.code == 302)
-              result = HTTP.with_cache(
-                :metastore => "file:#{File.join(cache_directory, 'metastore')}",
-                :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
-              ).get(result.headers['Location'])
+              result = HTTP.get(result.headers['Location'])
             end
             File.open(a_path = File.join(path, 'asset'), 'wb') do |file|
               while(content = result.body.readpartial(2048))
