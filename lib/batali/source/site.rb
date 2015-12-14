@@ -80,7 +80,7 @@ module Batali
                 end
               end
             end
-            FileUtils.rm(a_path)
+            FileUtils.rm(a_path) if File.writable?(a_path)
           rescue => e
             FileUtils.rm_rf(path)
             unless(retried)
@@ -91,7 +91,7 @@ module Batali
             raise
           end
         end
-        Dir.glob(File.join(path, '*')).first
+        Dir.glob(File.join(path, '*')).reject{|i| i.end_with?('/asset') }.first
       end
 
       # @return [TrueClass, FalseClass]
