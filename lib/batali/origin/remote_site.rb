@@ -19,7 +19,7 @@ module Batali
       attribute :endpoint, String, :required => true
       attribute :force_update, [TrueClass, FalseClass], :required => true, :default => false
       attribute :update_interval, Integer, :required => true, :default => 60
-      attribute :cache, String, :default => File.join(Dir.home, '.batali/cache/remote_site'), :required => true
+      attribute :cache, String, :default => File.join(Dir.home, '.batali', 'cache', 'remote_site'), :required => true
 
       def initialize(*_)
         super
