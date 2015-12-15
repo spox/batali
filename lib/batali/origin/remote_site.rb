@@ -19,7 +19,7 @@ module Batali
       attribute :endpoint, String, :required => true
       attribute :force_update, [TrueClass, FalseClass], :required => true, :default => false
       attribute :update_interval, Integer, :required => true, :default => 60
-      attribute :cache, String, :default => File.join(Dir.home, '.batali/cache/remote_site'), :required => true
+      attribute :cache, String, :default => File.join(Dir.home, '.batali', 'cache', 'remote_site'), :required => true
 
       def initialize(*_)
         super
@@ -33,10 +33,9 @@ module Batali
       # @return [String] cache directory path
       def cache_directory
         memoize(:cache_directory) do
-          ['entitystore', 'metastore', identifier].each do |leaf|
-            FileUtils.mkdir_p(File.join(cache, leaf))
-          end
-          File.join(cache, identifier)
+          c_path = File.join(cache, identifier)
+          FileUtils.mkdir_p(c_path)
+          c_path
         end
       end
 
@@ -84,11 +83,11 @@ module Batali
         end
         if(do_fetch)
           t_uni = "#{universe_path}.#{SecureRandom.urlsafe_base64}"
+          result = HTTP.get(URI.join(endpoint, 'universe'))
           File.open(t_uni, 'w') do |file|
-            file.write HTTP.with_cache(
-              :metastore => "file:#{File.join(cache, 'metastore')}",
-              :entitystore => "file:#{File.join(cache, 'entitystore')}"
-            ).get(URI.join(endpoint, 'universe')).body.to_s
+            while(content = result.body.readpartial(2048))
+              file.write content
+            end
           end
           FileUtils.mv(t_uni, universe_path)
         end

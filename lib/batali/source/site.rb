@@ -44,10 +44,7 @@ module Batali
       def cache_directory
         memoize(:cache_directory) do
           unless(@cache)
-            @cache = File.join(Dir.home, '.batali/cache/remote_site')
-          end
-          ['entitystore', 'metastore'].each do |leaf|
-            FileUtils.mkdir_p(File.join(cache, leaf))
+            @cache = File.join(Dir.home, '.batali', 'cache', 'remote_site')
           end
           cache
         end
@@ -60,15 +57,9 @@ module Batali
           retried = false
           begin
             FileUtils.mkdir_p(path)
-            result = HTTP.with_cache(
-              :metastore => "file:#{File.join(cache_directory, 'metastore')}",
-              :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
-            ).get(url)
+            result = HTTP.get(url)
             while(result.code == 302)
-              result = HTTP.with_cache(
-                :metastore => "file:#{File.join(cache_directory, 'metastore')}",
-                :entitystore => "file:#{File.join(cache_directory, 'entitystore')}"
-              ).get(result.headers['Location'])
+              result = HTTP.get(result.headers['Location'])
             end
             File.open(a_path = File.join(path, 'asset'), 'wb') do |file|
               while(content = result.body.readpartial(2048))
@@ -89,7 +80,11 @@ module Batali
                 end
               end
             end
-            FileUtils.rm(a_path)
+            begin
+              FileUtils.rm(a_path)
+            rescue Errno::EACCES
+              # windows is dumb some times
+            end
           rescue => e
             FileUtils.rm_rf(path)
             unless(retried)
@@ -100,7 +95,7 @@ module Batali
             raise
           end
         end
-        Dir.glob(File.join(path, '*')).first
+        Dir.glob(File.join(path, '*')).reject{|i| i.end_with?('/asset') }.first
       end
 
       # @return [TrueClass, FalseClass]

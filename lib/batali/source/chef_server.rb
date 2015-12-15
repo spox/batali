@@ -49,7 +49,7 @@ module Batali
       def cache_directory
         memoize(:cache_directory) do
           unless(@cache)
-            @cache = File.join(Dir.home, '.batali/cache/chef_server', endpoint)
+            @cache = File.join(Dir.home, '.batali', 'cache', 'chef_server', endpoint)
           end
           cache
         end
