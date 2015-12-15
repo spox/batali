@@ -1,3 +1,8 @@
+# v0.3.6
+* [task] Removed http cache usage due to support removal
+* [fix] Fixed file system issues on windows (#62 and #63)
+ * Thanks to @kenny-evitt and @webframp for helping to chase down the windows issues
+
 # v0.3.4
 * [fix] Open file as binary when storing compressed asset (#60 and #61 thanks @kenny-evitt!)
 
