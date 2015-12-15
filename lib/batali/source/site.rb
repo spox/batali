@@ -80,7 +80,11 @@ module Batali
                 end
               end
             end
-            FileUtils.rm(a_path) if File.writable?(a_path)
+            begin
+              FileUtils.rm(a_path)
+            rescue Errno::EACCES
+              # windows is dumb some times
+            end
           rescue => e
             FileUtils.rm_rf(path)
             unless(retried)
