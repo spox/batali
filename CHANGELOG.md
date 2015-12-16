@@ -1,3 +1,6 @@
+# v0.3.8
+* [fix] Generate JSON properly under old implementations
+
 # v0.3.6
 * [task] Removed http cache usage due to support removal
 * [fix] Fixed file system issues on windows (#62 and #63)
