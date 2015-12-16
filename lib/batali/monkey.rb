@@ -13,6 +13,9 @@ module Batali
           req.join(' ')
         end
       ]
+      # Prevent stupid conversion errors of
+      # JSON::Ext::Generator::State into Hash
+      args.map!{|v| v.respond_to?(:to_h) ? v.to_h : v}
       MultiJson.dump(result, *args)
     end
   end
