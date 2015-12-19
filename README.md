@@ -393,6 +393,20 @@ line to your `spec_helper.rb` file:
 require 'batali/chefspec'
 ```
 
+## Chef Server Sync
+
+Batali includes a knife plugin to sync cookbooks defined within the local
+`batali.manifest` file with the cookbooks available from on the Chef server.
+
+```
+$ knife batali sync
+```
+
+This command will remove any cookbooks on the Chef server that are not found
+within the `batali.manifest` file. If cookbooks are defined within the
+`batali.manifest` file that have not been uploaded to the Chef server, those
+cookbooks will be uploaded.
+
 # Info
 
 * Repository: https://github.com/hw-labs/batali
