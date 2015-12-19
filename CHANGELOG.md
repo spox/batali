@@ -1,3 +1,6 @@
+# v0.3.10
+* [feature] Chef server manifest sync knife plugin
+
 # v0.3.8
 * [fix] Generate JSON properly under old implementations
 
