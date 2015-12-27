@@ -113,6 +113,7 @@ module Batali
       attribute :git, String
       attribute :ref, String
       attribute :path, String
+      attribute :restrict, [TrueClass, FalseClass], :default => false
     end
 
     class Restriction < Utility
