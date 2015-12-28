@@ -1,7 +1,16 @@
 require 'batali'
+require 'tmpdir'
 require 'minitest/autorun'
 
 describe Batali::Struct do
+
+  before do
+    @cache = Dir.mktmpdir('batali-test')
+  end
+
+  after do
+    FileUtils.rm_rf(@cache)
+  end
 
   describe 'Cookbook entries' do
     it 'should accept single cookbook' do
@@ -90,7 +99,7 @@ describe Batali::BFile do
   describe 'Batali.1' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.1'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.1'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -111,7 +120,7 @@ describe Batali::BFile do
   describe 'Batali.2' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.2'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.2'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -150,7 +159,7 @@ describe Batali::BFile do
   describe 'Batali.3' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.3'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.3'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -178,7 +187,7 @@ describe Batali::BFile do
   describe 'Batali.4' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.4'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.4'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -194,7 +203,7 @@ describe Batali::BFile do
   describe 'Batali.5' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.5'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.5'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -214,7 +223,7 @@ describe Batali::BFile do
   describe 'Batali.6' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.6'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.6'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -228,7 +237,7 @@ describe Batali::BFile do
   describe 'Batali.7' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.7'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.7'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -242,7 +251,7 @@ describe Batali::BFile do
   describe 'Batali.8' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.8'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.8'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -257,7 +266,7 @@ describe Batali::BFile do
   describe 'Batali.9' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.9'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.9'), @cache)
     end
     let(:bfile){ @bfile }
 
@@ -272,7 +281,7 @@ describe Batali::BFile do
   describe 'Batali.10' do
 
     before do
-      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.10'))
+      @bfile = Batali::BFile.new(File.join(base_path, 'Batali.10'), @cache)
     end
     let(:bfile){ @bfile }
 
