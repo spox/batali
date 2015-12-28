@@ -9,6 +9,7 @@ module Batali
     attribute :file, BFile, :required => true
     attribute :system, Grimoire::System, :required => true
     attribute :cache, String, :required => true
+    attribute :auto_path_restrict, [TrueClass, FalseClass], :default => true
 
     # Populate the system with units
     #
@@ -53,13 +54,15 @@ module Batali
       memoize(:restrictions) do
         rest = (file.restrict || Smash.new).to_smash
         file.cookbook.each do |ckbk|
-          if(ckbk.path)
-            rest[ckbk.name] = Smash.new(:path => ckbk.path).checksum
-          elsif(ckbk.git)
-            rest[ckbk.name] = Smash.new(
-              :url => ckbk.git,
-              :ref => ckbk.ref
-            ).checksum
+          if(auto_path_restrict || ckbk.restrict)
+            if(ckbk.path)
+              rest[ckbk.name] = Smash.new(:path => ckbk.path).checksum
+            elsif(ckbk.git)
+              rest[ckbk.name] = Smash.new(
+                :url => ckbk.git,
+                :ref => ckbk.ref
+              ).checksum
+            end
           end
         end
         rest

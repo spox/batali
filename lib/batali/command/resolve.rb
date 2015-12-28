@@ -14,7 +14,8 @@ module Batali
           UnitLoader.new(
             :file => batali_file,
             :system => system,
-            :cache => cache_directory(:git)
+            :cache => cache_directory(:git),
+            :auto_path_restrict => !infrastructure?
           ).populate!
           nil
         end
