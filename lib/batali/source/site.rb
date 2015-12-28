@@ -43,9 +43,7 @@ module Batali
       # @return [String] path to cache
       def cache_directory
         memoize(:cache_directory) do
-          unless(@cache)
-            @cache = File.join(Dir.home, '.batali', 'cache', 'remote_site')
-          end
+          @cache ||= File.join(cache_path, 'remote_site')
           cache
         end
       end

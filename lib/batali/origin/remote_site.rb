@@ -19,7 +19,6 @@ module Batali
       attribute :endpoint, String, :required => true
       attribute :force_update, [TrueClass, FalseClass], :required => true, :default => false
       attribute :update_interval, Integer, :required => true, :default => 60
-      attribute :cache, String, :default => File.join(Dir.home, '.batali', 'cache', 'remote_site'), :required => true
 
       def initialize(*_)
         super
@@ -33,7 +32,7 @@ module Batali
       # @return [String] cache directory path
       def cache_directory
         memoize(:cache_directory) do
-          c_path = File.join(cache, identifier)
+          c_path = File.join(cache_path, 'remote_site', identifier)
           FileUtils.mkdir_p(c_path)
           c_path
         end
@@ -52,7 +51,8 @@ module Batali
                   :type => :site,
                   :url => info[:download_url],
                   :version => version,
-                  :dependencies => info[:dependencies]
+                  :dependencies => info[:dependencies],
+                  :cache_path => cache_path
                 )
               )
             end

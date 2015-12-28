@@ -8,7 +8,7 @@ module Batali
 
     # @return [String] path to repository clone
     def base_path
-      File.join(cache, Base64.urlsafe_encode64(url))
+      File.join(cache_path, Base64.urlsafe_encode64(url))
     end
 
     # Clone the repository to the local machine
@@ -35,7 +35,7 @@ module Batali
       git.checkout(ref)
       git.pull('origin', ref)
       self.ref = git.log.first.sha
-      self.path = File.join(cache, ref)
+      self.path = File.join(cache_path, 'git', ref)
       unless(File.directory?(path))
         FileUtils.mkdir_p(path)
         FileUtils.cp_r(File.join(base_path, '.'), path)
@@ -49,7 +49,6 @@ module Batali
       klass.class_eval do
         attribute :url, String, :required => true, :equivalent => true
         attribute :ref, String, :required => true, :equivalent => true
-        attribute :cache, String, :default => File.join(Dir.home, '.batali', 'cache', 'git')
       end
     end
 

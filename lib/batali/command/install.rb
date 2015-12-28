@@ -21,8 +21,8 @@ module Batali
           else
             run_action('Installing cookbooks') do
               manifest.cookbook.each do |unit|
-                if(unit.source.respond_to?(:cache))
-                  unit.source.cache = cache_directory(
+                if(unit.source.respond_to?(:cache_path))
+                  unit.source.cache_path = cache_directory(
                     Bogo::Utility.snake(unit.source.class.name.split('::').last)
                   )
                 end

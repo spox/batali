@@ -36,12 +36,13 @@ module Batali
               :url => ckbk.git,
               :subdirectory => ckbk.path,
               :ref => ckbk.ref || 'master',
-              :cache => cache
+              :cache_path => cache
             )
           elsif(ckbk.path)
             source = Origin::Path.new(
               :name => ckbk.name,
-              :path => ckbk.path
+              :path => ckbk.path,
+              :cache_path => cache
             )
           end
           if(source)

@@ -48,7 +48,8 @@ module Batali
                 :dependencies => c_deps,
                 :endpoint => endpoint,
                 :client_key => client_key,
-                :client_name => client_name
+                :client_name => client_name,
+                :cache_path => cache_path
               )
             )
           end.flatten

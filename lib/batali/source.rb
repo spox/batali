@@ -9,7 +9,15 @@ module Batali
     autoload :Git, 'batali/source/git'
     autoload :ChefServer, 'batali/source/chef_server'
 
+    # @return [String] path to local cache
+    attr_accessor :cache_path
+
     attribute :type, String, :required => true, :default => lambda{ self.name } # rubocop:disable Style/RedundantSelf
+
+    def initialize(args={})
+      @cache_path = args.delete(:cache_path)
+      super
+    end
 
     # @return [String]
     def unit_version
@@ -28,15 +36,11 @@ module Batali
 
     # @return [TrueClass, FalseClass]
     def clean_asset(asset_path)
-      if(self.respond_to?(:cache))
-        false
+      if(cache_path && asset_path.include?(cache_path) && File.exist?(asset_path))
+        FileUtils.rm_rf(asset_path)
+        true
       else
-        if(File.exist?(asset_path))
-          FileUtils.rm_rf(asset_path)
-          true
-        else
-          false
-        end
+        false
       end
     end
 
