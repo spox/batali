@@ -90,6 +90,19 @@ module Batali
   # Custom file loading class
   class BFile < Bogo::Config
 
+    # @return [String] path to cache
+    attr_reader :cache
+
+    # Create a new BFile instance
+    #
+    # @param b_file [String] path to file
+    # @param cache_path [String] path to cache directory
+    # @return [self]
+    def initialize(b_file, cache_path)
+      @cache = cache_path
+      super(b_file)
+    end
+
     # @return [Proc] cookbook convert
     def self.cookbook_coerce
       proc do |v|
@@ -140,7 +153,7 @@ module Batali
         Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
       end
     }
-    attribute :source, Origin::RemoteSite, :multiple => true, :default => [], :coerce => lambda{|v|
+    attribute :source, Origin::RemoteSite, :multiple => true, :default => [], :coerce => lambda{|v, b_file|
       if(v.is_a?(Hash))
         args = v
       else
@@ -149,9 +162,9 @@ module Batali
           args.merge!(v.last)
         end
       end
-      Origin::RemoteSite.new(args)
+      Origin::RemoteSite.new(args.merge(:cache_path => b_file.cache))
     }
-    attribute :chef_server, Origin::ChefServer, :multiple => true, :default => [], :coerce => lambda{|v|
+    attribute :chef_server, Origin::ChefServer, :multiple => true, :default => [], :coerce => lambda{|v, b_file|
       if(v.is_a?(Hash))
         args = v
       else
@@ -160,7 +173,7 @@ module Batali
           args.merge!(v.last)
         end
       end
-      Origin::ChefServer.new(args)
+      Origin::ChefServer.new(args.merge(:cache_path => b_file.cache))
     }
     attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new(v)}
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []
@@ -169,7 +182,7 @@ module Batali
         ckbk = Cookbook.new(v)
       else
         dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
-        m_unit = Origin::Path.new(:name => 'metadata', :path => dir).units.first
+        m_unit = Origin::Path.new(:name => 'metadata', :path => dir, :cache_path => b_file.cache).units.first
         ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
       end
       unless(b_file.cookbook.map(&:name).include?(ckbk.name))

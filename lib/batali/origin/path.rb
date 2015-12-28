@@ -64,7 +64,8 @@ module Batali
                 :type => :path,
                 :version => info[:version],
                 :path => path,
-                :dependencies => info.fetch(:depends, [])
+                :dependencies => info.fetch(:depends, []),
+                :cache_path => cache_path
               )
             )
           ]

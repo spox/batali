@@ -1,23 +1,30 @@
 require 'stringio'
 require 'batali'
+require 'tmpdir'
 require 'minitest/autorun'
 
 describe Batali::Command do
 
   before do
+    @cache = Dir.mktmpdir('batali-test')
     @command = Batali::Command.new(
       Smash.new(
         :file => File.join(
           File.dirname(__FILE__),
           'b_files/set1/Batali'
         ),
-        :cache_directory => '/fubar',
+        :cache_directory => @cache,
         :dry_run => true,
         :ui => Bogo::Ui.new(:output_to => StringIO.new(''))
       ),
       []
     )
   end
+
+  after do
+    FileUtils.rm_rf(@cache)
+  end
+
   let(:command){ @command }
 
   it 'should load a Batali file with given path' do
@@ -32,7 +39,7 @@ describe Batali::Command do
   end
 
   it 'should provide custom cache directory' do
-    command.options[:cache_directory].must_equal '/fubar'
+    command.options[:cache_directory].must_equal @cache
   end
 
   it 'should provide not execute dry run block when dry run is enabled' do

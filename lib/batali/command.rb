@@ -28,7 +28,7 @@ module Batali
         # TODO: Add directory traverse searching
         path = config.fetch(:file, File.join(Dir.pwd, 'Batali'))
         ui.verbose "Loading Batali file from: #{path}"
-        bfile = BFile.new(path)
+        bfile = BFile.new(path, cache_directory)
         if(bfile.discover)
           bfile.auto_discover!(config[:environment])
         end

@@ -10,6 +10,7 @@ module  Batali
     autoload :Path, 'batali/origin/path'
 
     attribute :name, String, :required => true
+    attribute :cache_path, String, :required => true
     attribute :identifier, String
 
     # @return [Array<Unit>] all units

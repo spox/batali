@@ -29,7 +29,8 @@ module Batali
           items.first.source = Source::Git.new(
             :url => url,
             :ref => ref,
-            :subdirectory => subdirectory
+            :subdirectory => subdirectory,
+            :cache_path => cache_path
           )
           items
         end
