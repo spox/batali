@@ -32,12 +32,14 @@ module Batali
           :c_name => :node_name,
           :c_key => :client_key
         ).each do |local_attr, config_key|
-          unless(self.send(local_attr))
+          unless(self.send(local_attr)) # rubocop:disable Style/RedundantSelf
             memoize(:knife_configure, :global) do
               require 'chef/knife'
               ::Chef::Knife.new.configure_chef
             end
+            # rubocop:disable Style/RedundantSelf
             debug "Settting #{config_key} from knife configuration file for #{self.class} <#{endpoint}>"
+            # rubocop:disable Style/RedundantSelf
             self.send("#{local_attr}=", ::Chef::Config[config_key])
           end
         end

@@ -9,7 +9,7 @@ module Batali
     autoload :Git, 'batali/source/git'
     autoload :ChefServer, 'batali/source/chef_server'
 
-    attribute :type, String, :required => true, :default => lambda{ self.name }
+    attribute :type, String, :required => true, :default => lambda{ self.name } # rubocop:disable Style/RedundantSelf
 
     # @return [String]
     def unit_version
@@ -31,7 +31,7 @@ module Batali
       if(self.respond_to?(:cache))
         false
       else
-        if(File.exists?(asset_path))
+        if(File.exist?(asset_path))
           FileUtils.rm_rf(asset_path)
           true
         else
@@ -55,7 +55,7 @@ module Batali
     # @return [Smash]
     def diff(s)
       Smash.new.tap do |_diff|
-        self.class.attributes.each do |k,v|
+        self.class.attributes.each do |k, v|
           if(v[:equivalent])
             s_attrs = s.respond_to?(:attributes) ? s.attributes : {}
             unless(attributes[k] == s_attrs[k])
@@ -77,7 +77,7 @@ module Batali
         raise ArgumentError.new 'Missing required option `:type`!'
       end
       unless(type.to_s.include?('::'))
-        type = [self.name, Bogo::Utility.camel(type)].join('::')
+        type = [name, Bogo::Utility.camel(type)].join('::')
       end
       klass = Bogo::Utility.constantize(type)
       unless(klass)

@@ -63,7 +63,7 @@ module Batali
           cookbook = rest.get_rest("cookbooks/#{name}/#{version}")
           manifest = cookbook.manifest
           Chef::CookbookVersion::COOKBOOK_SEGMENTS.each do |segement|
-            if(manifest.has_key?(segment))
+            if(manifest.key?(segment))
               manifest[segement].each do |s_file|
                 new_path = File.join(path, s_file['path'].gsub('/', File::SEPARATOR))
                 FileUtils.mkdir_p(File.dirname(new_path))

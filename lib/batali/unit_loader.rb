@@ -1,7 +1,9 @@
 require 'batali'
 
+# Batali namespace
 module Batali
 
+  # Load cookbook units
   class UnitLoader < Utility
 
     include Bogo::Memoization

@@ -3,7 +3,9 @@ require 'stringio'
 require 'fileutils'
 require 'tmpdir'
 
+# ChefSpec namespace
 module ChefSpec
+  # Batali integration class
   class Batali
 
     class << self
@@ -13,10 +15,12 @@ module ChefSpec
 
     include Singleton
 
+    # Create new instance
     def initialize
       @vendor_path = Dir.mktmpdir
     end
 
+    # Setup the environment (load cookbooks)
     def setup!
       output = ''
       begin
@@ -44,6 +48,7 @@ module ChefSpec
       end
     end
 
+    # Clean up after complete
     def teardown!
       if(File.directory?(@vendor_path))
         FileUtils.rm_rf(@vendor_path)

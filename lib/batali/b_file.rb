@@ -1,8 +1,10 @@
 require 'batali'
 require 'pathname'
 
+# Batali namespace
 module Batali
 
+  # Custom struct class for file processing
   class Struct < AttributeStruct
 
     def cookbook(*args)
@@ -85,6 +87,7 @@ module Batali
     struct
   end
 
+  # Custom file loading class
   class BFile < Bogo::Config
 
     # @return [Proc] cookbook convert
@@ -107,6 +110,7 @@ module Batali
       end
     end
 
+    # Cookbook entry
     class Cookbook < Utility
       attribute :name, String, :required => true
       attribute :constraint, String, :multiple => true
@@ -116,11 +120,13 @@ module Batali
       attribute :restrict, [TrueClass, FalseClass], :default => false
     end
 
+    # Restriction entry
     class Restriction < Utility
       attribute :cookbook, String, :required => true
       attribute :source, String, :required => true
     end
 
+    # Group entry
     class Group < Utility
       attribute :name, String, :required => true
       attribute :cookbook, Cookbook, :multiple => true, :required => true, :coerce => BFile.cookbook_coerce
@@ -187,7 +193,7 @@ module Batali
             result[:name] => result[:cookbooks]
           )
         end
-      end.compact.inject(Smash.new){|m,n| m.merge(n)}
+      end.compact.inject(Smash.new){|m, n| m.merge(n)}
       environment_items.each do |e_name, items|
         next if environment && e_name != environment
         debug "Discovery processing of environment: #{e_name}"
@@ -316,7 +322,7 @@ module Batali
           env.fetch(
             :cookbook_versions,
             Smash.new
-          ).map{|k,v| [k, v.to_s.split(',')]}
+          ).map{|k, v| [k, v.to_s.split(',')]}
         ]
       )
     end

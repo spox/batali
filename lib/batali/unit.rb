@@ -1,11 +1,23 @@
 require 'batali'
 
+# Batali namespace
 module Batali
   # Customized Unit
   class Unit < Grimoire::Unit
     attribute :source, Source, :coerce => lambda{|v| Batali::Source.build(v)}
-    attribute :dependencies, [Batali::UnitDependency, Grimoire::DEPENDENCY_CLASS], :multiple => true, :default => [], :coerce => lambda{|val| Batali::UnitDependency.new(val.first, *val.last)}
-    attribute :version, [Batali::UnitVersion, Grimoire::VERSION_CLASS], :required => true, :coerce => lambda{|val| Batali::UnitVersion.new(val)}
+    attribute(:dependencies, [Batali::UnitDependency, Grimoire::DEPENDENCY_CLASS],
+      :multiple => true,
+      :default => [],
+      :coerce => lambda{ |val|
+        Batali::UnitDependency.new(val.first, *val.last)
+      }
+    )
+    attribute(:version, [Batali::UnitVersion, Grimoire::VERSION_CLASS],
+      :required => true,
+      :coerce => lambda{ |val|
+        Batali::UnitVersion.new(val)
+      }
+    )
 
     # @return [TrueClass, FalseClass]
     def diff?(u)
@@ -21,8 +33,8 @@ module Batali
     def diff(u)
       Smash.new.tap do |_diff|
         [:name, :version].each do |k|
-          unless(self.send(k) == u.send(k))
-            _diff[k] = [self.send(k), u.send(k)]
+          unless(send(k) == u.send(k))
+            _diff[k] = [send(k), u.send(k)]
           end
         end
         if(source)

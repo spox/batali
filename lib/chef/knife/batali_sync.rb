@@ -2,6 +2,7 @@ require 'batali'
 
 class Chef
   class Knife
+    # Batali manifest to chef server sync
     class BataliSync < Knife
 
       banner 'knife batali sync'
@@ -63,7 +64,7 @@ class Chef
           )
         end
         if(to_add.empty? && to_remove.empty?)
-          ui.info "#{ui.color('[Batali]', :green, :bold)}: Chef Server Batali Manifest Sync - #{ui.color('No Changes Detected!', :green, :bold)}"
+          ui.info "#{ui.color('[Batali]', :green, :bold)}: Chef Server Batali Manifest Sync - #{ui.color('No Changes Detected!', :green, :bold)}" # rubocop:disable Metrics/LineLength
         else
           display_sync_info(
             :additions => to_add,
@@ -74,7 +75,7 @@ class Chef
             ui.confirm 'Sync remote cookbooks with Batali manifest'
             remove_cookbooks(to_remove) unless to_remove.empty?
             add_cookbooks(to_add) unless to_add.empty?
-            ui.info "#{ui.color('[Batali]', :green, :bold)}: Chef Server Batali Manifest Sync - #{ui.color('Sync Complete!', :green, :bold)}"
+            ui.info "#{ui.color('[Batali]', :green, :bold)}: Chef Server Batali Manifest Sync - #{ui.color('Sync Complete!', :green, :bold)}" # rubocop:disable Metrics/LineLength
           else
             ui.warn 'Dry run requested. No action taken.'
           end
@@ -143,7 +144,7 @@ class Chef
             end
           end
           if(Chef::Config[:knife][:batali_show_remaining])
-            ui.info "#{ui.color('[Batali]', :green, :bold)}: Final list of cookbooks to be available on the chef server:"
+            ui.info "#{ui.color('[Batali]', :green, :bold)}: Final list of cookbooks to be available on the chef server:" # rubocop:disable Metrics/LineLength
             opts[:manifest].sort.each do |name, versions|
               vers = versions.map do |v|
                 Gem::Version.new(v)
@@ -178,7 +179,7 @@ class Chef
 
       def generate_manifest_cookbooks
         path = File.join(Dir.pwd, 'batali.manifest')
-        unless(File.exists?(path))
+        unless(File.exist?(path))
           raise "Failed to locate batali manifest at: #{path}"
         end
         manifest = Batali::Manifest.build(path)

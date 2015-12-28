@@ -2,6 +2,7 @@ require 'bogo-cli'
 require 'grimoire'
 require 'batali/monkey'
 
+# Batali namespace
 module Batali
 
   autoload :BFile, 'batali/b_file'

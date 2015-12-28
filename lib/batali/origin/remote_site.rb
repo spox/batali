@@ -26,7 +26,7 @@ module Batali
         endpoint = URI.join(self.endpoint, COOKBOOK_API_SUFFIX).to_s
         self.identifier = Digest::SHA256.hexdigest(endpoint)
         unless(name?)
-          self.name = self.identifier
+          self.name = identifier
         end
       end
 
@@ -75,7 +75,7 @@ module Batali
       def fetch
         do_fetch = true
         cache_directory # init directory creation
-        if(File.exists?(universe_path))
+        if(File.exist?(universe_path))
           age = Time.now - File.mtime(universe_path)
           if(age < update_interval)
             do_fetch = false

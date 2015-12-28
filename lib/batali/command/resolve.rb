@@ -102,7 +102,7 @@ module Batali
                   unless(u_diff.empty?)
                     diff_output = "[#{u_diff.values.map{|v| v.join(' -> ')}.join(' | ')}]"
                   end
-                  ui.puts ui.color("#{unit_name} <#{version_output}> #{diff_output}" , :yellow)
+                  ui.puts ui.color("#{unit_name} <#{version_output}> #{diff_output}", :yellow)
                 end
               else
                 ui.puts ui.color("#{unit_name} <#{manifest_units[unit_name].version}>", :red)
@@ -170,15 +170,15 @@ module Batali
                 uv.last ? ui.color(uv.first.to_s, uv.last) : uv.first.to_s
               end
               unless(added.empty? && removed.empty?)
-                ui.puts "#{ui.color(unit_name, :yellow)} #{ui.color('<', :yellow)}#{unit_versions.join(ui.color(', ', :yellow))}#{ui.color('>', :yellow)}"
+                ui.puts "#{ui.color(unit_name, :yellow)} #{ui.color('<', :yellow)}#{unit_versions.join(ui.color(', ', :yellow))}#{ui.color('>', :yellow)}" # rubocop:disable Metrics/LineLength
               else
                 ui.puts "#{unit_name} <#{unit_versions.join(', ')}>"
               end
             else
-              ui.puts ui.color("#{unit_name} <#{manifest_units[unit_name].map(&:version).sort.map(&:to_s).join(', ')}>", :red)
+              ui.puts ui.color("#{unit_name} <#{manifest_units[unit_name].map(&:version).sort.map(&:to_s).join(', ')}>", :red) # rubocop:disable Metrics/LineLength
             end
           else
-            ui.puts ui.color("#{unit_name} <#{solution_units[unit_name].map(&:version).sort.map(&:to_s).join(', ')}>", :green)
+            ui.puts ui.color("#{unit_name} <#{solution_units[unit_name].map(&:version).sort.map(&:to_s).join(', ')}>", :green) # rubocop:disable Metrics/LineLength
           end
         end
       end

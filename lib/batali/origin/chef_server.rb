@@ -20,7 +20,7 @@ module Batali
         init_chef!
         self.identifier = Digest::SHA256.hexdigest(endpoint)
         unless(name?)
-          self.name = self.identifier
+          self.name = identifier
         end
       end
 

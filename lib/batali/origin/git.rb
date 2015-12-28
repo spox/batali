@@ -18,7 +18,7 @@ module Batali
           :subdirectory => subdirectory
         ).checksum
         unless(name?)
-          self.name = self.identifier
+          self.name = identifier
         end
       end
 

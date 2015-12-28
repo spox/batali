@@ -1,11 +1,15 @@
 require 'batali'
 require 'bogo/http_proxy'
 
+# Batali namespace
 module Batali
-  # Simple stubs mostly for naming
+  # Custom named unit version
   class UnitVersion < Grimoire::VERSION_CLASS; end
+  # Custom named unit requirement
   class UnitRequirement < Grimoire::REQUIREMENT_CLASS; end
+  # Custom named unit dependency
   class UnitDependency < Grimoire::DEPENDENCY_CLASS
+    # Override to properly convert to JSON
     def to_json(*args)
       result = [
         name,

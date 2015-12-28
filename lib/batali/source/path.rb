@@ -23,7 +23,7 @@ module Batali
           dir = Dir.mktmpdir
           chefignore = IGNORE_FILE.map do |c_name|
             c_path = File.join(path, c_name)
-            c_path if File.exists?(c_path)
+            c_path if File.exist?(c_path)
           end.compact.first
           chefignore = chefignore ? File.readlines(chefignore) : []
           chefignore += DEFAULT_IGNORE

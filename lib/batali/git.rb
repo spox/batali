@@ -1,7 +1,9 @@
 require 'git'
 require 'batali'
 
+# Batali namespace
 module Batali
+  # Helper module for git interactions
   module Git
 
     # @return [String] path to repository clone
@@ -39,7 +41,7 @@ module Batali
         FileUtils.cp_r(File.join(base_path, '.'), path)
         FileUtils.rm_rf(File.join(path, '.git'))
       end
-      self.path
+      path
     end
 
     # Load attributes into class

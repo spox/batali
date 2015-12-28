@@ -17,7 +17,7 @@ module Batali
             nil
           end
           if(manifest.cookbook.nil? || manifest.cookbook.empty?)
-            ui.error "No cookbooks defined within manifest! Try resolving first. (`batali resolve`)"
+            ui.error 'No cookbooks defined within manifest! Try resolving first. (`batali resolve`)'
           else
             run_action('Installing cookbooks') do
               manifest.cookbook.each do |unit|

@@ -5,6 +5,7 @@ module Batali
     # Fetch unit from local path
     class Path < Origin
 
+      # Helper class for loading metadata ruby files
       class Metadata < AttributeStruct
 
         # Perform constant lookup if required
@@ -33,7 +34,7 @@ module Batali
         super
         self.identifier = Smash.new(:path => path).checksum
         unless(name?)
-          self.name = self.identifier
+          self.name = identifier
         end
       end
 
@@ -73,9 +74,9 @@ module Batali
       # @return [Smash] metadata information
       def load_metadata
         memoize(:metadata) do
-          if(File.exists?(json = File.join(path, 'metadata.json')))
+          if(File.exist?(json = File.join(path, 'metadata.json')))
             MultiJson.load(json).to_smash
-          elsif(File.exists?(rb = File.join(path, 'metadata.rb')))
+          elsif(File.exist?(rb = File.join(path, 'metadata.rb')))
             struct = Metadata.new
             struct.set_state!(:value_collapse => true)
             struct.instance_eval(File.read(rb), rb, 1)

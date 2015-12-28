@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'bogo-ui', '~> 0.1.6'
   s.add_runtime_dependency 'http', '>= 0.8.2', '< 1.0.0'
   s.add_runtime_dependency 'git'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rubocop'
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'chef'
