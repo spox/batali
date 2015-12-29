@@ -240,6 +240,24 @@ $ batali resolve --infrastructure
 
 _NOTE: Depending on constraints defined within the Batali file, this can be a very large manifest_
 
+#### Single cookbook, multiple sources
+
+When running in infrastructure mode, Batali supports single cookbooks being loaded from
+multiple sources. For example, if all the `users` cookbooks greater than version `1.0` should
+be available _and_ an unreleased development version that lives in a git repository, Batali
+will properly include all versions:
+
+```ruby
+Batali.define do
+  source 'https://supermarket.chef.io'
+  cookbook 'users', '> 1.0'
+  cookbook 'users', :git => 'git://example.com/org/users.git', :ref => 'development'
+end
+```
+
+The resulting Batali manifest file will include all available versions greater than `1.0`
+from the supermarket source _and_ the version defined at the specified git end point.
+
 #### Uploading infrastructure cookbooks
 
 When the infrastructure cookbooks are installed locally, the cookbook directories will have
