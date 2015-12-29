@@ -251,7 +251,7 @@ will properly include all versions:
 Batali.define do
   source 'https://supermarket.chef.io'
   cookbook 'users', '> 1.0'
-  cookbook 'users', :git => 'git://example.com/org/users.git', :ref => 'development'
+  cookbook 'users', git: 'git://example.com/org/users.git', ref: 'development'
 end
 ```
 
