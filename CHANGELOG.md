@@ -1,3 +1,7 @@
+# v0.3.12
+* [feature] Support multiple sources for single cookbook in infra-mode
+* [fix] Make cache directory usage consistent in all commands
+
 # v0.3.10
 * [feature] Chef server manifest sync knife plugin
 
