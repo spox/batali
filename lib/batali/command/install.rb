@@ -20,30 +20,30 @@ module Batali
             ui.error 'No cookbooks defined within manifest! Try resolving first. (`batali resolve`)'
           else
             run_action('Installing cookbooks') do
-              threads = []
-              manifest.cookbook.each do |unit|
-                threads << Thread.new do
-                if(unit.source.respond_to?(:cache_path))
-                  unit.source.cache_path = cache_directory(
-                    Bogo::Utility.snake(unit.source.class.name.split('::').last)
-                  )
-                end
-                asset_path = unit.source.asset
-                final_path = File.join(install_path, unit.name)
-                if(infrastructure?)
-                  final_path << "-#{unit.version}"
-                end
-                begin
-                  FileUtils.cp_r(
-                    File.join(asset_path, '.'),
-                    final_path
-                  )
-                ensure
-                  unit.source.clean_asset(asset_path)
-                end
-               end
+              manifest.cookbook.each_slice(100) do |units_slice|
+                units_slice.map do |unit|
+                  Thread.new do
+                    if(unit.source.respond_to?(:cache_path))
+                      unit.source.cache_path = cache_directory(
+                        Bogo::Utility.snake(unit.source.class.name.split('::').last)
+                      )
+                    end
+                    asset_path = unit.source.asset
+                    final_path = File.join(install_path, unit.name)
+                    if(infrastructure?)
+                      final_path << "-#{unit.version}"
+                    end
+                    begin
+                      FileUtils.cp_r(
+                        File.join(asset_path, '.'),
+                        final_path
+                      )
+                    ensure
+                      unit.source.clean_asset(asset_path)
+                    end
+                  end
+                end.map(&:join)
               end
-              threads.each { |t| t.join }
               nil
             end
           end
