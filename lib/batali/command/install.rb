@@ -20,7 +20,9 @@ module Batali
             ui.error 'No cookbooks defined within manifest! Try resolving first. (`batali resolve`)'
           else
             run_action('Installing cookbooks') do
+              threads = []
               manifest.cookbook.each do |unit|
+                threads << Thread.new do
                 if(unit.source.respond_to?(:cache_path))
                   unit.source.cache_path = cache_directory(
                     Bogo::Utility.snake(unit.source.class.name.split('::').last)
@@ -39,7 +41,9 @@ module Batali
                 ensure
                   unit.source.clean_asset(asset_path)
                 end
+               end
               end
+              threads.each { |t| t.join }
               nil
             end
           end
