@@ -10,7 +10,7 @@ module Batali
     class RemoteSite < Origin
 
       # Site suffix for API endpoint
-      COOKBOOK_API_SUFFIX = 'api/v1/cookbooks'
+      API_SUFFIX = 'api/v1/'
 
       include Bogo::Memoization
 
@@ -22,7 +22,8 @@ module Batali
 
       def initialize(*_)
         super
-        endpoint = URI.join(self.endpoint, COOKBOOK_API_SUFFIX).to_s
+        # NOTE: We currently don't require API_SUFFIX information
+        # self.endpoint = URI.join(endpoint, API_SUFFIX).to_s
         self.identifier = Digest::SHA256.hexdigest(endpoint)
         unless(name?)
           self.name = identifier

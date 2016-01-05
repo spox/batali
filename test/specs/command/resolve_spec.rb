@@ -1,19 +1,6 @@
-require 'batali'
-require 'tmpdir'
-require 'stringio'
-require 'minitest/autorun'
+require_relative 'command_helper'
 
-def quiet_in_directory(dir)
-  o_out = $stdout
-  output = StringIO.new('')
-  $stdout = output
-  Dir.chdir(dir) do
-    yield
-  end
-  $stdout = o_out
-  output.rewind
-  output
-end
+REMOTE_SITE_CACHE_ID = '7402ae8bc051165aced4c70ce76dcced8e79d22436f11d43e322111ab2445737'
 
 describe Batali::Command::Resolve do
 
@@ -22,14 +9,14 @@ describe Batali::Command::Resolve do
     FileUtils.mkdir_p(
       File.join(
         @cache, 'remote_site',
-        '970d5cda31bf188b52605436a209bb4062e9afef693530b05c029831cf0084e6'
+        REMOTE_SITE_CACHE_ID
       )
     )
     FileUtils.cp(
       File.join(File.dirname(__FILE__), 'data', 'universe.json'),
       File.join(
         @cache, 'remote_site',
-        '970d5cda31bf188b52605436a209bb4062e9afef693530b05c029831cf0084e6',
+        REMOTE_SITE_CACHE_ID,
         'universe.json'
       )
     )
@@ -105,10 +92,12 @@ EOF
         )
         contents['cookbook'].size.must_equal expected.size
         expected.each do |name, version|
-          contents['cookbook'].any? do |cook|
+          result = contents['cookbook'].detect do |cook|
             cook['name'] == name &&
               cook['version'] == version
-          end.must_equal true
+          end || {}
+          result['name'].must_equal name
+          result['version'].must_equal version
         end
       end
 

@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'https://supermarket.getchef.com/api/v1'
+
+cookbook 'chef-server-populator', :path => '.'
+cookbook 'test', :path => 'test/fixtures/cookbooks'
+

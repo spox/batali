@@ -1,0 +1,306 @@
+{
+  "infrastructure": true,
+  "cookbook": [
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          "~> 4.0"
+        ]
+      ],
+      "version": "2.0.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/2.0.0/download",
+        "version": "2.0.0"
+      }
+    },
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          ">= 3.1.0"
+        ]
+      ],
+      "version": "1.2.2",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/1.2.2/download",
+        "version": "1.2.2"
+      }
+    },
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          ">= 3.1.0"
+        ]
+      ],
+      "version": "1.2.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/1.2.0/download",
+        "version": "1.2.0"
+      }
+    },
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          ">= 3.1.0"
+        ]
+      ],
+      "version": "1.1.4",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/1.1.4/download",
+        "version": "1.1.4"
+      }
+    },
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          ">= 3.1.0"
+        ]
+      ],
+      "version": "1.1.2",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/1.1.2/download",
+        "version": "1.1.2"
+      }
+    },
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          ">= 3.1.0"
+        ]
+      ],
+      "version": "1.1.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/1.1.0/download",
+        "version": "1.1.0"
+      }
+    },
+    {
+      "name": "chef-server-populator",
+      "dependencies": [
+        [
+          "chef-server",
+          ">= 3.1.0"
+        ]
+      ],
+      "version": "1.0.2",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server-populator/versions/1.0.2/download",
+        "version": "1.0.2"
+      }
+    },
+    {
+      "name": "chef-server",
+      "dependencies": [
+        [
+          "chef-ingredient",
+          ">= 0.11.0"
+        ]
+      ],
+      "version": "4.1.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-server/versions/4.1.0/download",
+        "version": "4.1.0"
+      }
+    },
+    {
+      "name": "chef-ingredient",
+      "dependencies": [
+        [
+          "apt-chef",
+          ">= 0.2.0"
+        ],
+        [
+          "yum-chef",
+          ">= 0.2.0"
+        ]
+      ],
+      "version": "0.16.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-ingredient/versions/0.16.0/download",
+        "version": "0.16.0"
+      }
+    },
+    {
+      "name": "apt-chef",
+      "dependencies": [
+        [
+          "apt",
+          ">= 0.0.0"
+        ]
+      ],
+      "version": "0.2.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/apt-chef/versions/0.2.0/download",
+        "version": "0.2.0"
+      }
+    },
+    {
+      "name": "apt",
+      "dependencies": [
+
+      ],
+      "version": "2.9.2",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/apt/versions/2.9.2/download",
+        "version": "2.9.2"
+      }
+    },
+    {
+      "name": "yum-chef",
+      "dependencies": [
+        [
+          "yum",
+          ">= 3.2"
+        ]
+      ],
+      "version": "0.2.2",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/yum-chef/versions/0.2.2/download",
+        "version": "0.2.2"
+      }
+    },
+    {
+      "name": "yum",
+      "dependencies": [
+
+      ],
+      "version": "3.8.2",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/yum/versions/3.8.2/download",
+        "version": "3.8.2"
+      }
+    },
+    {
+      "name": "postgresql",
+      "dependencies": [
+        [
+          "apt",
+          ">= 1.9.0"
+        ],
+        [
+          "build-essential",
+          ">= 0.0.0"
+        ],
+        [
+          "openssl",
+          "~> 4.0"
+        ]
+      ],
+      "version": "4.0.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/postgresql/versions/4.0.0/download",
+        "version": "4.0.0"
+      }
+    },
+    {
+      "name": "postgresql",
+      "dependencies": [
+        [
+          "apt",
+          ">= 1.9.0"
+        ],
+        [
+          "build-essential",
+          ">= 0.0.0"
+        ],
+        [
+          "openssl",
+          "~> 4.0"
+        ]
+      ],
+      "version": "3.4.24",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/postgresql/versions/3.4.24/download",
+        "version": "3.4.24"
+      }
+    },
+    {
+      "name": "postgresql",
+      "dependencies": [
+        [
+          "apt",
+          ">= 1.9.0"
+        ],
+        [
+          "build-essential",
+          ">= 0.0.0"
+        ],
+        [
+          "openssl",
+          "~> 4.0"
+        ]
+      ],
+      "version": "3.4.21",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/postgresql/versions/3.4.21/download",
+        "version": "3.4.21"
+      }
+    },
+    {
+      "name": "build-essential",
+      "dependencies": [
+
+      ],
+      "version": "2.2.4",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/build-essential/versions/2.2.4/download",
+        "version": "2.2.4"
+      }
+    },
+    {
+      "name": "openssl",
+      "dependencies": [
+        [
+          "chef-sugar",
+          ">= 3.1.1"
+        ]
+      ],
+      "version": "4.4.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/openssl/versions/4.4.0/download",
+        "version": "4.4.0"
+      }
+    },
+    {
+      "name": "chef-sugar",
+      "dependencies": [
+
+      ],
+      "version": "3.2.0",
+      "source": {
+        "type": "Batali::Source::Site",
+        "url": "https://supermarket.chef.io:443/api/v1/cookbooks/chef-sugar/versions/3.2.0/download",
+        "version": "3.2.0"
+      }
+    }
+  ]
+}

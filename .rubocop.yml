@@ -71,6 +71,8 @@ Style/OpMethod:
   Enabled: false
 Style/FormatString:
   Enabled: false
+Style/WhileUntilModifier:
+  Enabled: false
 
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
