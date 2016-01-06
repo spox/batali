@@ -1,3 +1,6 @@
+# v0.4.0
+* [feature] Add `supermarket` command for static repository generation
+
 # v0.3.14
 * [enhancement] Use threads when installing cookbooks (#72 thanks @sawanoboly!)
 
