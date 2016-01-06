@@ -1,0 +1,30 @@
+{
+  "name": "apt-chef",
+  "version": "0.2.0",
+  "description": "Configures apt repository for Chef Software, Inc. products",
+  "long_description": "",
+  "maintainer": "Chef Software, Inc.",
+  "maintainer_email": "cookbooks@chef.io",
+  "license": "apache 2.0",
+  "platforms": {
+  },
+  "dependencies": {
+    "apt": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "chef-server",
+  "version": "4.1.0",
+  "description": "Installs and configures Chef Server 12",
+  "long_description": "",
+  "maintainer": "Chef Software, Inc.",
+  "maintainer_email": "cookbooks@chef.io",
+  "license": "Apache 2.0",
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+    "chef-ingredient": ">= 0.11.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  }
+}

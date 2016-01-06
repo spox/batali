@@ -80,4 +80,24 @@ Bogo::Cli::Setup.define do
     end
   end
 
+  command 'supermarket' do
+    description 'Generate a supermarket'
+    self.instance_exec(&global_opts)
+    on :p, 'path=', 'Cookbook install path'
+    on :I, 'infrastructure', 'Resolve infrastructure cookbooks'
+    on :s, 'skip-install', 'Skip cookbook installation'
+    on :S, 'supermarket-path=', 'Supermarket output directory', :default => 'supermarket'
+    on :A, 'assets-path=', 'Supermarket assets storage path', :default => File.join('supermarket', 'assets')
+    on :R, 'remote-supermarket-url=', 'Custom remote supermarket URL (https://myhost.com:443/supermarket)', :default => 'http://localhost'
+    on :D, 'download-prefix=', 'Remote location prefixed to asset name', :default => '/assets'
+    on :T, 'location-type=', 'Name of location type', :default => 'batali'
+    on :P, 'pretty-universe', 'Output formatted universe JSON'
+    on :U, 'universe-only', 'Only generate the supermarket universe.json file'
+    on :C, 'clean-assets', 'Replace any existing compressed assets'
+
+    run do |opts, args|
+      Batali::Command::Supermarket.new(opts, args).execute!
+    end
+  end
+
 end

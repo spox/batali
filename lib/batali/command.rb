@@ -14,6 +14,7 @@ module Batali
     autoload :Display, 'batali/command/display'
     autoload :Install, 'batali/command/install'
     autoload :Resolve, 'batali/command/resolve'
+    autoload :Supermarket, 'batali/command/supermarket'
     autoload :Update, 'batali/command/update'
 
     # Set UI when loading via command

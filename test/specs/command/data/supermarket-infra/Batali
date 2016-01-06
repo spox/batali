@@ -1,0 +1,6 @@
+Batali.define do
+  source 'https://supermarket.chef.io'
+#source 'http://localhost'
+  cookbook 'chef-server-populator', '> 1'
+  cookbook 'postgresql', '> 3.4.20'
+end

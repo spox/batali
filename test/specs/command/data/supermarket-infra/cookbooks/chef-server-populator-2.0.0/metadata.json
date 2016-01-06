@@ -1,0 +1,39 @@
+{
+  "name": "chef-server-populator",
+  "description": "Populate chef server with stuff you want",
+  "long_description": "",
+  "maintainer": "Heavywater",
+  "maintainer_email": "support@hw-ops.com",
+  "license": "none",
+  "platforms": {
+
+  },
+  "dependencies": {
+    "chef-server": "~> 4.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "2.0.0"
+}
