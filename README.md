@@ -425,6 +425,31 @@ within the `batali.manifest` file. If cookbooks are defined within the
 `batali.manifest` file that have not been uploaded to the Chef server, those
 cookbooks will be uploaded.
 
+## Supermarket
+
+Batali can generate a static supermarket repository from a `batali.manifest`. The resultant
+directory can then be hosted with an httpd of choice. To generate a supermarket repository,
+first run `resolve`:
+
+```
+$ batali resolve
+```
+
+Next, run the `supermarket` command to generate the repository:
+
+```
+$ batali supermarket
+```
+
+A new directory will be created (`./supermarket`) which contains the newly generated
+supermarket respository. The generated `universe` file will contain URLs pointing
+to `localhost`, which is the default behavior. In practice, it will be desirable to
+update the URL to provide the customized location:
+
+```
+$ batali supermarket --remote-supermarket-url="http://supermarket.example.com"
+```
+
 # Info
 
 * Repository: https://github.com/hw-labs/batali
