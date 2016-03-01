@@ -1,3 +1,6 @@
+# v0.4.2
+* [fix] Loosen dependency constraints
+
 # v0.4.0
 * [feature] Add `supermarket` command for static repository generation
 
