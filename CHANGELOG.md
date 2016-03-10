@@ -1,3 +1,6 @@
+# v0.4.4
+* [fix] Explicit chef/rest require (#77)
+
 # v0.4.2
 * [fix] Loosen dependency constraints
 
