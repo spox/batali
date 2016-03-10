@@ -22,6 +22,7 @@ module Batali
         debug 'Loading chef into the runtime'
         begin
           require 'chef'
+          require 'chef/rest'
           debug 'Successfully loaded chef into the runtime'
         rescue LoadError => e
           debug "Failed to load the chef gem: #{e.class}: #{e}"
