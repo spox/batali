@@ -1,4 +1,5 @@
 require 'batali'
+require 'tempfile'
 require 'rubygems/package'
 require 'zlib'
 
