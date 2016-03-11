@@ -1,4 +1,3 @@
-require 'batali'
 require 'bogo/http_proxy'
 
 # Batali namespace
