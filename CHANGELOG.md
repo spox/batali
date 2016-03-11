@@ -1,3 +1,7 @@
+# v0.4.8
+* [task] Pin rubocop to make less annoying
+* [fix] Explicitly load tempfile
+
 # v0.4.6
 * [enhancement] Update grimoire dependency constraint to relax bogo constraints
 
