@@ -1,3 +1,6 @@
+# v0.4.6
+* [enhancement] Update grimoire dependency constraint to relax bogo constraints
+
 # v0.4.4
 * [fix] Explicit chef/rest require (#77)
 
