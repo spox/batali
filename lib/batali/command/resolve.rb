@@ -74,6 +74,10 @@ module Batali
           ui.error 'No solutions found defined requirements!'
         else
           ideal_solution = results.pop
+          debug 'Full solution raw contents:'
+          ideal_solution.units.each do |unit|
+            debug [unit.name, unit.version].join(' -> ')
+          end
           dry_run('manifest file write') do
             run_action 'Writing manifest' do
               manifest = Manifest.new(
