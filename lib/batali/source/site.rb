@@ -98,7 +98,11 @@ module Batali
 
       # @return [TrueClass, FalseClass]
       def clean_asset(asset_path)
-        super File.dirname(asset_path)
+        if(asset_path)
+          super File.dirname(asset_path)
+        else
+          false
+        end
       end
 
     end
