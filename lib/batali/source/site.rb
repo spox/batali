@@ -51,7 +51,13 @@ module Batali
       # @return [String] directory
       def asset
         path = File.join(cache_directory, Base64.urlsafe_encode64(url))
-        unless(File.directory?(path))
+        if(File.directory?(path))
+          discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
+            i.end_with?("#{File::SEPARATOR}asset")
+          end.first
+          FileUtils.rm_rf(path)
+        end
+        unless(discovered_path)
           retried = false
           begin
             FileUtils.mkdir_p(path)
@@ -92,10 +98,10 @@ module Batali
             end
             raise
           end
+          discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
+            i.end_with?("#{File::SEPARATOR}asset")
+          end.first
         end
-        discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
-          i.end_with?("#{File::SEPARATOR}asset")
-        end.first
         unless(discovered_path)
           raise Errno::ENOENT.new "Failed to locate asset within `#{path}`"
         end
