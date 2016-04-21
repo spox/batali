@@ -93,7 +93,13 @@ module Batali
             raise
           end
         end
-        Dir.glob(File.join(path, '*')).reject{|i| i.end_with?('/asset') }.first
+        discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
+          i.end_with?("#{File::SEPARATOR}asset")
+        end.first
+        unless(discovered_path)
+          raise Errno::ENOENT.new "Failed to locate asset within `#{path}`"
+        end
+        discovered_path
       end
 
       # @return [TrueClass, FalseClass]
