@@ -31,7 +31,7 @@ module Batali
           files_to_copy = Dir.glob(File.join(path, '{.[^.]*,**}', '**', '{*,*.*,.*}'))
           files_to_copy = files_to_copy.map do |file_path|
             next unless File.file?(file_path)
-            relative_path = file_path.sub("#{path}/", '')
+            relative_path = file_path.sub("#{path}#{File::SEPARATOR}", '')
             relative_path unless chefignore.detect{|ig| File.fnmatch(ig, relative_path)}
           end.compact
           files_to_copy.each do |relative_path|
