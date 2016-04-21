@@ -1,3 +1,6 @@
+# v0.4.10
+* [fix] Cookbook installation errors on windows (#82)
+
 # v0.4.8
 * [task] Pin rubocop to make less annoying
 * [fix] Explicitly load tempfile
