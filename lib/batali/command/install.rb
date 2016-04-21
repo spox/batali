@@ -23,6 +23,7 @@ module Batali
               manifest.cookbook.each_slice(100) do |units_slice|
                 units_slice.map do |unit|
                   Thread.new do
+                    ui.debug "Starting unit install for: #{unit.name}<#{unit.version}>"
                     if(unit.source.respond_to?(:cache_path))
                       unit.source.cache_path = cache_directory(
                         Bogo::Utility.snake(unit.source.class.name.split('::').last)
@@ -38,6 +39,10 @@ module Batali
                         File.join(asset_path, '.'),
                         final_path
                       )
+                      ui.debug "Completed unit install for: #{unit.name}<#{unit.version}>"
+                    rescue => e
+                      ui.debug "Failed unit install for: #{unit.name}<#{unit.version}> - #{e.class}: #{e}"
+                      raise
                     ensure
                       unit.source.clean_asset(asset_path)
                     end
