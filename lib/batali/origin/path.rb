@@ -76,7 +76,7 @@ module Batali
       def load_metadata
         memoize(:metadata) do
           if(File.exist?(json = File.join(path, 'metadata.json')))
-            MultiJson.load(json).to_smash
+            MultiJson.load(File.read(json)).to_smash
           elsif(File.exist?(rb = File.join(path, 'metadata.rb')))
             struct = Metadata.new
             struct.set_state!(:value_collapse => true)
