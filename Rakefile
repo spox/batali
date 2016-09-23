@@ -6,7 +6,8 @@ RuboCop::RakeTask.new
 
 Rake::TestTask.new do |test|
   test.pattern = 'test/**/*_spec.rb'
-  test.verbose = true
+  test.verbose = false
+  test.warning = false
 end
 
 task :default => [] do
