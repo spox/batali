@@ -58,7 +58,7 @@ module Batali
     # @return [String] correct user home location for platform
     def user_home
       if RUBY_PLATFORM =~ /mswin|mingw|windows/
-        ENV['LOCALAPPDATA']
+        ENV.fetch('LOCALAPPDATA', Dir.home)
       else
         Dir.home
       end
