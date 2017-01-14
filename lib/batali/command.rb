@@ -55,10 +55,19 @@ module Batali
       end
     end
 
+    # @return [String] correct user home location for platform
+    def user_home
+      if RUBY_PLATFORM =~ /mswin|mingw|windows/
+        ENV.fetch('LOCALAPPDATA', Dir.home)
+      else
+        Dir.home
+      end
+    end
+
     # @return [String] path to local cache
     def cache_directory(*args)
       memoize(['cache_directory', *args].join('_')) do
-        directory = config.fetch(:cache_directory, File.join(Dir.home, '.batali', 'cache'))
+        directory = config.fetch(:cache_directory, File.join(user_home, '.batali', 'cache'))
         ui.debug "Cache directory to persist cookbooks: #{directory}"
         unless(args.empty?)
           directory = File.join(directory, *args.map(&:to_s))
