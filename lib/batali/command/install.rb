@@ -35,16 +35,19 @@ module Batali
                       final_path << "-#{unit.version}"
                     end
                     begin
-                      FileUtils.cp_r(
-                        File.join(asset_path, '.'),
-                        final_path
-                      )
+                      ui.debug "Copying assets from `#{asset_path}` to `#{final_path}`"
+                      Dir.glob(File.join(asset_path, '**', '**', '*')).each do |asset_item|
+                        if(File.file?(asset_item))
+                          target_path = File.join(final_path, asset_item.sub(asset_path, ''))
+                          FileUtils.mkdir_p(File.dirname(target_path))
+                          FileUtils.copy(asset_item, target_path)
+                        end
+                      end
                       ui.debug "Completed unit install for: #{unit.name}<#{unit.version}>"
                     rescue => e
                       ui.debug "Failed unit install for: #{unit.name}<#{unit.version}> - #{e.class}: #{e}"
-                      raise
-                    ensure
                       unit.source.clean_asset(asset_path)
+                      raise
                     end
                   end
                 end.map(&:join)
