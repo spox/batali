@@ -53,7 +53,7 @@ module Batali
         path = File.join(cache_directory, Base64.urlsafe_encode64(url))
         if(File.directory?(path))
           discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
-            i.end_with?("#{File::SEPARATOR}asset")
+            i.end_with?('.batali-asset-file')
           end.first
           FileUtils.rm_rf(path)
         end
@@ -65,7 +65,7 @@ module Batali
             while(result.code == 302)
               result = HTTP.get(result.headers['Location'])
             end
-            File.open(a_path = File.join(path, 'asset'), 'wb') do |file|
+            File.open(a_path = File.join(path, '.batali-asset-file'), 'wb') do |file|
               while(content = result.body.readpartial(2048))
                 file.write content
               end
@@ -99,7 +99,7 @@ module Batali
             raise
           end
           discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
-            i.end_with?("#{File::SEPARATOR}asset")
+            i.end_with?('.batali-asset-file')
           end.first
         end
         unless(discovered_path)
