@@ -42,16 +42,16 @@ module Batali
       # @return [String] path to cache
       def cache_directory
         memoize(:cache_directory) do
-          @cache ||= File.join(cache_path, "remote_site")
+          @cache ||= Utility.join_path(cache_path, "remote_site")
           cache
         end
       end
 
       # @return [String] directory
       def asset
-        path = File.join(cache_directory, Base64.urlsafe_encode64(url))
+        path = Utility.join_path(cache_directory, Base64.urlsafe_encode64(url))
         if File.directory?(path)
-          discovered_path = Dir.glob(File.join(path, "*")).reject do |i|
+          discovered_path = Dir.glob(Utility.join_path(path, "*")).reject do |i|
             i.end_with?("#{File::SEPARATOR}asset")
           end.first
           FileUtils.rm_rf(path)
@@ -64,8 +64,8 @@ module Batali
             while result.code == 302
               result = HTTP.get(result.headers["Location"])
             end
-            File.open(a_path = File.join(path, "asset"), "wb") do |file|
-              while content = result.body.readpartial(2048)
+            File.open(a_path = Utility.join_path(path, "asset"), "wb") do |file|
+              while(content = result.body.readpartial(2048))
                 file.write content
               end
             end
@@ -75,7 +75,7 @@ module Batali
             ext.rewind
             ext.each do |entry|
               next unless entry.file?
-              n_path = File.join(path, entry.full_name)
+              n_path = Utility.join_path(path, entry.full_name)
               FileUtils.mkdir_p(File.dirname(n_path))
               File.open(n_path, "wb") do |file|
                 while content = entry.read(2048)
@@ -97,7 +97,7 @@ module Batali
             end
             raise
           end
-          discovered_path = Dir.glob(File.join(path, "*")).reject do |i|
+          discovered_path = Dir.glob(Utility.join_path(path, "*")).reject do |i|
             i.end_with?("#{File::SEPARATOR}asset")
           end.first
         end

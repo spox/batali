@@ -15,6 +15,7 @@ module Batali
     # @param path [String] path to manifest
     # @return [Manifest]
     def self.build(path)
+      path = Utility.join_path(path)
       if File.exist?(path)
         new(Bogo::Config.new(path).data.merge(:path => path))
       else

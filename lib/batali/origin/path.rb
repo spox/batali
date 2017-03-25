@@ -31,6 +31,7 @@ module Batali
 
       def initialize(*_)
         super
+        self.path = Utility.clean_path(path)
         self.identifier = Smash.new(:path => path).checksum
         unless name?
           self.name = identifier

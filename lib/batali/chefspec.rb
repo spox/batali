@@ -16,7 +16,7 @@ module ChefSpec
 
     # Create new instance
     def initialize
-      @vendor_path = Dir.mktmpdir
+      @vendor_path = Utility.clean_path(Dir.mktmpdir)
     end
 
     # Setup the environment (load cookbooks)
@@ -25,7 +25,7 @@ module ChefSpec
       begin
         ::Batali::Command::Update.new(
           Smash.new(
-            :file => File.join(Dir.pwd, "Batali"),
+            :file => Utility.join_path(Dir.pwd, "Batali"),
             :path => @vendor_path,
             :update => {
               :install => true,

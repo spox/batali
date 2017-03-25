@@ -26,7 +26,7 @@ module Batali
 
       # Display local cache information
       def display
-        cache_size = Dir.glob(File.join(cache_directory, "**", "**", "*")).map do |path|
+        cache_size = Dir.glob(Utility.join_path(cache_directory, "**", "**", "*")).map do |path|
           File.size(path) if File.file?(path)
         end.compact.inject(&:+).to_i
         cache_size = "#{sprintf("%.2f", ((cache_size / 1024.to_f) / 1024))}M"

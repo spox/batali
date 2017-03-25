@@ -12,6 +12,11 @@ module Batali
     attribute :cache_path, String, :required => true
     attribute :identifier, String
 
+    def initialize(*_, &block)
+      super
+      self.cache_path = Utility.clean_path(cache_path)
+    end
+
     # @return [Array<Unit>] all units
     def units
       raise NotImplementedError.new "Abstract class"

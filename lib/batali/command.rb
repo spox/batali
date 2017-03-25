@@ -26,7 +26,7 @@ module Batali
     def batali_file
       memoize(:batali_file) do
         # TODO: Add directory traverse searching
-        path = config.fetch(:file, File.join(Dir.pwd, "Batali"))
+        path = Utility.clean_path(config.fetch(:file, File.join(Dir.pwd, "Batali")))
         ui.verbose "Loading Batali file from: #{path}"
         bfile = BFile.new(path, cache_directory)
         if bfile.discover
@@ -44,7 +44,7 @@ module Batali
     # @return [Manifest]
     def manifest
       memoize(:manifest) do
-        path = File.join(
+        path = Utility.join_path(
           File.dirname(
             config.fetch(:file, File.join(Dir.pwd, "batali.manifest"))
           ), "batali.manifest"
@@ -56,20 +56,20 @@ module Batali
 
     # @return [String] correct user home location for platform
     def user_home
-      if RUBY_PLATFORM =~ /mswin|mingw|windows/
-        ENV.fetch("LOCALAPPDATA", Dir.home)
+      if (RUBY_PLATFORM =~ /mswin|mingw|windows/)
+        Utility.clean_path(ENV.fetch("LOCALAPPDATA", Dir.home))
       else
-        Dir.home
+        Utility.clean_path(Dir.home)
       end
     end
 
     # @return [String] path to local cache
     def cache_directory(*args)
       memoize(["cache_directory", *args].join("_")) do
-        directory = config.fetch(:cache_directory, File.join(user_home, ".batali", "cache"))
+        directory = Utility.clean_path(config.fetch(:cache_directory, File.join(user_home, ".batali", "cache")))
         ui.debug "Cache directory to persist cookbooks: #{directory}"
         unless args.empty?
-          directory = File.join(directory, *args.map(&:to_s))
+          directory = Utility.join_path(directory, *args.map(&:to_s))
         end
         FileUtils.mkdir_p(directory)
         directory
