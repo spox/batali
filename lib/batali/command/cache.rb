@@ -17,7 +17,7 @@ module Batali
 
       # Remove all contents from local cache
       def scrub!
-        ui.confirm "Remove all contents from local cache (#{cache_directory})"
+        ui.confirm "Remove all contents from local cache (#{cache_directory})" unless opts[:yes]
         run_action 'Scrubbing local cache' do
           FileUtils.rm_rf(cache_directory)
           nil
