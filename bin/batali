@@ -15,6 +15,7 @@ Bogo::Cli::Setup.define do
     on :V, :verbose, 'Enable verbose output'
     on :D, :debug, 'Enable debug mode'
     on :f, :file=, 'Path to Batali file'
+    on :y, :yes, 'Answer yes to interactive prompts'
   end
 
   command 'display' do
