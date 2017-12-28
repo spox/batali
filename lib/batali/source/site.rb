@@ -60,7 +60,7 @@ module Batali
           retried = false
           begin
             FileUtils.mkdir_p(path)
-            result = HTTP.get(url)
+            result = HTTP.get(url.end_with?('/') ? url : url + '/')
             while result.code == 302
               result = HTTP.get(result.headers['Location'])
             end
