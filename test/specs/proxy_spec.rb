@@ -2,7 +2,6 @@ require 'batali'
 require 'minitest/autorun'
 
 describe Batali do
-
   describe 'HTTP proxy support' do
     before do
       ENV['http_proxy'] = 'http://example.com'
@@ -14,7 +13,6 @@ describe Batali do
     it 'should proxy HTTP request' do
       HTTP.get('http://www.google.com').code.wont_equal 200
     end
-
   end
 
   describe 'HTTPS proxy support' do
@@ -28,7 +26,6 @@ describe Batali do
     it 'should proxy HTTPS request' do
       HTTP.get('https://www.google.com').code.wont_equal 200
     end
-
   end
 
   describe 'No proxy defined' do
@@ -60,5 +57,4 @@ describe Batali do
       HTTP.get('http://maps.google.com').code.wont_equal 404
     end
   end
-
 end

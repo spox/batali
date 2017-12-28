@@ -5,19 +5,18 @@ module Batali
   class Origin
     # Fetch unit from local path
     class Git < Path
-
       include Batali::Git
       attribute :path, String, :required => false
       attribute :subdirectory, String
 
-      def initialize(args={})
+      def initialize(args = {})
         super
         self.identifier = Smash.new(
           :url => url,
           :ref => ref,
-          :subdirectory => subdirectory
+          :subdirectory => subdirectory,
         ).checksum
-        unless(name?)
+        unless name?
           self.name = identifier
         end
       end
@@ -30,7 +29,7 @@ module Batali
             :url => url,
             :ref => ref,
             :subdirectory => subdirectory,
-            :cache_path => cache_path
+            :cache_path => cache_path,
           )
           items
         end
@@ -53,7 +52,6 @@ module Batali
           ref_dup
         end
       end
-
     end
   end
 end

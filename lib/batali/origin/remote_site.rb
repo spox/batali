@@ -25,7 +25,7 @@ module Batali
         # NOTE: We currently don't require API_SUFFIX information
         # self.endpoint = URI.join(endpoint, API_SUFFIX).to_s
         self.identifier = Digest::SHA256.hexdigest(endpoint)
-        unless(name?)
+        unless name?
           self.name = identifier
         end
       end
@@ -53,8 +53,8 @@ module Batali
                   :url => info[:download_url],
                   :version => version,
                   :dependencies => info[:dependencies],
-                  :cache_path => cache_path
-                )
+                  :cache_path => cache_path,
+                ),
               )
             end
           end.flatten
@@ -76,17 +76,17 @@ module Batali
       def fetch
         do_fetch = true
         cache_directory # init directory creation
-        if(File.exist?(universe_path))
+        if File.exist?(universe_path)
           age = Time.now - File.mtime(universe_path)
-          if(age < update_interval)
+          if age < update_interval
             do_fetch = false
           end
         end
-        if(do_fetch)
+        if do_fetch
           t_uni = "#{universe_path}.#{SecureRandom.urlsafe_base64}"
           result = HTTP.get(URI.join(endpoint, 'universe'))
           File.open(t_uni, 'w') do |file|
-            while(content = result.body.readpartial(2048))
+            while content = result.body.readpartial(2048)
               file.write content
             end
           end
@@ -99,7 +99,6 @@ module Batali
       def universe_path
         File.join(cache_directory, 'universe.json')
       end
-
     end
   end
 end

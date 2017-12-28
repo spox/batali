@@ -5,7 +5,6 @@ module Batali
 
   # Load cookbook units
   class UnitLoader < Utility
-
     include Bogo::Memoization
 
     attribute :file, BFile, :required => true
@@ -20,7 +19,7 @@ module Batali
       memoize(:populate) do
         (file.source + file.chef_server).each do |src|
           src.units.find_all do |unit|
-            if(restrictions[unit.name])
+            if restrictions[unit.name]
               restrictions[unit.name] == src.identifier
             else
               true
@@ -30,22 +29,22 @@ module Batali
           end
         end
         file.cookbook.each do |ckbk|
-          if(ckbk.git)
+          if ckbk.git
             source = Origin::Git.new(
               :name => ckbk.name,
               :url => ckbk.git,
               :subdirectory => ckbk.path,
               :ref => ckbk.ref || 'master',
-              :cache_path => cache
+              :cache_path => cache,
             )
-          elsif(ckbk.path)
+          elsif ckbk.path
             source = Origin::Path.new(
               :name => ckbk.name,
               :path => ckbk.path,
-              :cache_path => cache
+              :cache_path => cache,
             )
           end
-          if(source)
+          if source
             system.add_unit(source.units.first)
           end
         end
@@ -57,13 +56,13 @@ module Batali
       memoize(:restrictions) do
         rest = (file.restrict || Smash.new).to_smash
         file.cookbook.each do |ckbk|
-          if(auto_path_restrict || ckbk.restrict)
-            if(ckbk.path)
+          if auto_path_restrict || ckbk.restrict
+            if ckbk.path
               rest[ckbk.name] = Smash.new(:path => ckbk.path).checksum
-            elsif(ckbk.git)
+            elsif ckbk.git
               rest[ckbk.name] = Smash.new(
                 :url => ckbk.git,
-                :ref => ckbk.ref
+                :ref => ckbk.ref,
               ).checksum
             end
           end
@@ -71,7 +70,5 @@ module Batali
         rest
       end
     end
-
   end
-
 end

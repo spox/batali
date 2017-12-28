@@ -8,7 +8,6 @@ module Batali
   class Origin
     # Fetch unit information from chef server
     class ChefServer < Origin
-
       include Bogo::Memoization
       include Utility::Chef
 
@@ -19,7 +18,7 @@ module Batali
         super
         init_chef!
         self.identifier = Digest::SHA256.hexdigest(endpoint)
-        unless(name?)
+        unless name?
           self.name = identifier
         end
       end
@@ -49,13 +48,12 @@ module Batali
                 :endpoint => endpoint,
                 :client_key => client_key,
                 :client_name => client_name,
-                :cache_path => cache_path
-              )
+                :cache_path => cache_path,
+              ),
             )
           end.flatten
         end
       end
-
     end
   end
 end

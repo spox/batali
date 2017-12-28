@@ -2,9 +2,7 @@ require 'webrick'
 require_relative 'command_helper'
 
 describe Batali::Command::Supermarket do
-
   describe 'Infrastructure supermarket generation' do
-
     before do
       @cwd = Dir.mktmpdir('batali-supermarket-cwd')
       FileUtils.mkdir(File.join(@cwd, 'cookbooks'))
@@ -25,7 +23,7 @@ describe Batali::Command::Supermarket do
             :assets_path => 'supermarket/assets',
             :location_type => 'batali-test',
             :remote_supermarket_url => 'http://localhost:8989',
-            :download_prefix => '/assets'
+            :download_prefix => '/assets',
           ),
           Array.new
         ).execute!
@@ -76,7 +74,6 @@ describe Batali::Command::Supermarket do
     end
 
     describe 'Generated supermarket usage' do
-
       before do
         @srv_thread = Thread.new do
           @webrick = WEBrick::HTTPServer.new(
@@ -94,8 +91,8 @@ describe Batali::Command::Supermarket do
             MultiJson.dump(
               :source => [['http://localhost:8989']],
               :cookbook => [
-                :name => 'postgresql'
-              ]
+                :name => 'postgresql',
+              ],
             )
           )
         end
@@ -104,8 +101,8 @@ describe Batali::Command::Supermarket do
             Smash.new(
               :cache_directory => @cache_dir,
               :update => {
-                :install => true
-              }
+                :install => true,
+              },
             ),
             Array.new
           ).execute!
@@ -128,8 +125,6 @@ describe Batali::Command::Supermarket do
         File.directory?(File.join(@usage_dir, 'cookbooks', 'postgresql')).must_equal true
         File.file?(File.join(@usage_dir, 'cookbooks', 'postgresql', 'metadata.rb')).must_equal true
       end
-
     end
-
   end
 end

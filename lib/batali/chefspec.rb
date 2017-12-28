@@ -7,7 +7,6 @@ require 'tmpdir'
 module ChefSpec
   # Batali integration class
   class Batali
-
     class << self
       extend Forwardable
       def_delegators :instance, :setup!, :teardown!
@@ -29,12 +28,12 @@ module ChefSpec
             :file => File.join(Dir.pwd, 'Batali'),
             :path => @vendor_path,
             :update => {
-              :install => true
+              :install => true,
             },
             :ui => Bogo::Ui.new(
               :app_name => 'Batali',
-              :output_to => StringIO.new(output)
-            )
+              :output_to => StringIO.new(output),
+            ),
           ),
           []
         ).execute!
@@ -50,15 +49,14 @@ module ChefSpec
 
     # Clean up after complete
     def teardown!
-      if(File.directory?(@vendor_path))
+      if File.directory?(@vendor_path)
         FileUtils.rm_rf(@vendor_path)
       end
     end
-
   end
 end
 
 RSpec.configure do |config|
-  config.before(:suite){ ChefSpec::Batali.setup! }
-  config.after(:suite){ ChefSpec::Batali.teardown! }
+  config.before(:suite) { ChefSpec::Batali.setup! }
+  config.after(:suite) { ChefSpec::Batali.teardown! }
 end

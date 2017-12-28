@@ -40,8 +40,6 @@ module Batali
           end
         end
       end
-
     end
-
   end
 end

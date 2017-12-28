@@ -22,7 +22,14 @@ module Batali
         debug 'Loading chef into the runtime'
         begin
           require 'chef'
-          require 'chef/rest'
+          begin
+            require 'chef/rest'
+            @_api_klass = ::Chef::REST
+          rescue LoadError
+            # Newer versions of chef do not include REST
+            require 'chef/server_api'
+            @_api_klass = ::Chef::ServerAPI
+          end
           debug 'Successfully loaded chef into the runtime'
         rescue LoadError => e
           debug "Failed to load the chef gem: #{e.class}: #{e}"
@@ -31,16 +38,14 @@ module Batali
         Smash.new(
           :endpoint => :chef_server_url,
           :c_name => :node_name,
-          :c_key => :client_key
+          :c_key => :client_key,
         ).each do |local_attr, config_key|
-          unless(self.send(local_attr)) # rubocop:disable Style/RedundantSelf
+          unless self.send(local_attr)
             memoize(:knife_configure, :global) do
               require 'chef/knife'
               ::Chef::Knife.new.configure_chef
             end
-            # rubocop:disable Style/RedundantSelf
             debug "Settting #{config_key} from knife configuration file for #{self.class} <#{endpoint}>"
-            # rubocop:disable Style/RedundantSelf
             self.send("#{local_attr}=", ::Chef::Config[config_key])
           end
         end
@@ -54,15 +59,13 @@ module Batali
       # @return [Object] result
       def api_service
         memoize(:api_service) do
-          ::Chef::REST.new(
+          @_api_klass.new(
             endpoint,
             c_name,
             c_key
           )
         end
       end
-
     end
-
   end
 end

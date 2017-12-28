@@ -9,7 +9,6 @@ module Batali
     'Solve the way you want, not the way you\'re told',
     'Build environments, not applications',
     'DRY should be the rule, not the exception',
-    'Solve for the forest, not just a tree'
+    'Solve for the forest, not just a tree',
   ]
-
 end

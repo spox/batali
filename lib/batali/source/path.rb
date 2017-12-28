@@ -32,7 +32,7 @@ module Batali
           files_to_copy = files_to_copy.map do |file_path|
             next unless File.file?(file_path)
             relative_path = file_path.sub("#{path}#{File::SEPARATOR}", '')
-            relative_path unless chefignore.detect{|ig| File.fnmatch(ig, relative_path)}
+            relative_path unless chefignore.detect { |ig| File.fnmatch(ig, relative_path) }
           end.compact
           files_to_copy.each do |relative_path|
             new_path = File.join(dir, relative_path)
@@ -42,7 +42,6 @@ module Batali
           dir
         end
       end
-
     end
   end
 end

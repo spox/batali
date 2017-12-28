@@ -2,26 +2,24 @@ require 'batali'
 require 'minitest/autorun'
 
 describe Batali::ScoreKeeper do
-
   it 'should require a manifest file' do
-    ->{ Batali::ScoreKeeper.new }.must_raise ArgumentError
-    ->{ Batali::ScoreKeeper.new(:manifest => Batali::Manifest.new); true }.call.must_equal true
+    -> { Batali::ScoreKeeper.new }.must_raise ArgumentError
+    -> { Batali::ScoreKeeper.new(:manifest => Batali::Manifest.new); true }.call.must_equal true
   end
 
   describe 'Scoring' do
-
     before do
       @score_keeper = Batali::ScoreKeeper.new(
         :manifest => Batali::Manifest.new(
           :cookbook => [
             :name => 'example',
             :version => '1.0.1',
-            :source => Batali::Source.new
-          ]
-        )
+            :source => Batali::Source.new,
+          ],
+        ),
       )
     end
-    let(:score_keeper){ @score_keeper }
+    let(:score_keeper) { @score_keeper }
 
     it 'should prefer a high score' do
       score_keeper.preferred_score.must_equal :highscore
@@ -43,7 +41,7 @@ describe Batali::ScoreKeeper do
         '1.1.2',
         '0.9.8',
         '0.8.2',
-        '0.8.0'
+        '0.8.0',
       ]
       scored = expected_order.map do |version|
         [
@@ -52,14 +50,12 @@ describe Batali::ScoreKeeper do
             Batali::Unit.new(
               :name => 'example',
               :version => version,
-              :source => Batali::Source.new
+              :source => Batali::Source.new,
             )
-          )
+          ),
         ]
       end.sort_by(&:last).reverse
       scored.map(&:first).must_equal expected_order
     end
-
   end
-
 end

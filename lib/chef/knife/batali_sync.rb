@@ -4,42 +4,37 @@ class Chef
   class Knife
     # Batali manifest to chef server sync
     class BataliSync < Knife
-
       banner 'knife batali sync'
 
       option(:blacklist,
-        :short => '-B COOKBOOK_NAME[,COOKBOOK_NAME]',
-        :long => '--blacklist COOKBOOK_NAME[,COOKBOOK_NAME]',
-        :description => 'Cookbooks to ignore from sync',
-        :proc => lambda{|val|
-          Chef::Config[:knife][:batali_blacklist] ||= []
-          Chef::Config[:knife][:batali_blacklist] += val.split(',')
-        }
-      )
+             :short => '-B COOKBOOK_NAME[,COOKBOOK_NAME]',
+             :long => '--blacklist COOKBOOK_NAME[,COOKBOOK_NAME]',
+             :description => 'Cookbooks to ignore from sync',
+             :proc => lambda { |val|
+               Chef::Config[:knife][:batali_blacklist] ||= []
+               Chef::Config[:knife][:batali_blacklist] += val.split(',')
+             })
 
       option(:details,
-        :long => '--[no-]details',
-        :boolean => true,
-        :default => true,
-        :description => 'Show details of cookbooks to be removed / added'
-      )
+             :long => '--[no-]details',
+             :boolean => true,
+             :default => true,
+             :description => 'Show details of cookbooks to be removed / added')
 
       option(:show_remaining,
-        :long => '--[no-]show-remaining',
-        :description => 'Display cookbook details of expected final server state',
-        :boolean => true,
-        :default => false,
-        :proc => lambda{|val|
-          Chef::Config[:knife][:batali_show_remaining] = val
-        }
-      )
+             :long => '--[no-]show-remaining',
+             :description => 'Display cookbook details of expected final server state',
+             :boolean => true,
+             :default => false,
+             :proc => lambda { |val|
+               Chef::Config[:knife][:batali_show_remaining] = val
+             })
 
       option(:dry_run,
-        :long => '--[no-]dry-run',
-        :description => 'Display information but perform no action',
-        :boolean => true,
-        :default => false
-      )
+             :long => '--[no-]dry-run',
+             :description => 'Display information but perform no action',
+             :boolean => true,
+             :default => false)
 
       def run
         Chef::Config[:knife][:batali_blacklist] ||= []
@@ -54,24 +49,24 @@ class Chef
         to_remove = run_task('Building cookbook removal list') do
           locate_removals(
             :manifest => valid_cookbooks,
-            :server => remote_cookbooks
+            :server => remote_cookbooks,
           )
         end
         to_add = run_task('Building cookbook upload list') do
           locate_additions(
             :manifest => valid_cookbooks,
-            :server => remote_cookbooks
+            :server => remote_cookbooks,
           )
         end
-        if(to_add.empty? && to_remove.empty?)
+        if to_add.empty? && to_remove.empty?
           ui.info "#{ui.color('[Batali]', :green, :bold)}: Chef Server Batali Manifest Sync - #{ui.color('No Changes Detected!', :green, :bold)}" # rubocop:disable Metrics/LineLength
         else
           display_sync_info(
             :additions => to_add,
             :removals => to_remove,
-            :manifest => valid_cookbooks
+            :manifest => valid_cookbooks,
           )
-          unless(config[:dry_run])
+          unless config[:dry_run]
             ui.confirm 'Sync remote cookbooks with Batali manifest'
             remove_cookbooks(to_remove) unless to_remove.empty?
             add_cookbooks(to_add) unless to_add.empty?
@@ -86,7 +81,7 @@ class Chef
         run_task('Removing cookbooks') do
           ckbks.each do |c_name, vers|
             vers.each do |version|
-              if(config[:verbose])
+              if config[:verbose]
                 ui.warn "Deleting cookbook #{c_name} @ #{version}"
               end
               rest.delete("/cookbooks/#{c_name}/#{version}")
@@ -103,7 +98,7 @@ class Chef
           vers.each do |version|
             c_path = [
               File.join('cookbooks', c_name),
-              File.join('cookbooks', "#{c_name}-#{version}")
+              File.join('cookbooks', "#{c_name}-#{version}"),
             ].detect do |_path|
               File.directory?(_path)
             end
@@ -111,7 +106,7 @@ class Chef
             uploader.configure_chef
             uploader.config = config
             uploader.name_args = [c_path]
-            if(config[:verbose])
+            if config[:verbose]
               ui.warn "Unloading cookbook #{c_name} @ #{version} - `#{c_path}`"
             end
             uploader.run
@@ -124,8 +119,8 @@ class Chef
         num_remove = ui.color(opts[:removals].size.to_s, :red, :bold)
         num_add = ui.color(opts[:additions].size.to_s, :green, :bold)
         ui.info "#{ui.color('[Batali]', :green, :bold)}: Removals - #{num_remove} Additions: #{num_add}"
-        if(config[:details])
-          unless(opts[:removals].empty?)
+        if config[:details]
+          unless opts[:removals].empty?
             ui.info "#{ui.color('[Batali]', :green, :bold)}: Cookbooks to be #{ui.color('removed', :red, :bold)}:"
             opts[:removals].sort.each do |name, versions|
               vers = versions.map do |v|
@@ -134,7 +129,7 @@ class Chef
               ui.info "  #{ui.color(name, :red, :bold)}: #{ui.color(vers, :red)}"
             end
           end
-          unless(opts[:additions].empty?)
+          unless opts[:additions].empty?
             ui.info "#{ui.color('[Batali]', :green, :bold)}: Cookbooks to be #{ui.color('added', :green, :bold)}:"
             opts[:additions].sort.each do |name, versions|
               vers = versions.map do |v|
@@ -143,7 +138,7 @@ class Chef
               ui.info "  #{ui.color(name, :green, :bold)}: #{ui.color(vers, :green)}"
             end
           end
-          if(Chef::Config[:knife][:batali_show_remaining])
+          if Chef::Config[:knife][:batali_show_remaining]
             ui.info "#{ui.color('[Batali]', :green, :bold)}: Final list of cookbooks to be available on the chef server:" # rubocop:disable Metrics/LineLength
             opts[:manifest].sort.each do |name, versions|
               vers = versions.map do |v|
@@ -159,7 +154,7 @@ class Chef
         Smash.new.tap do |rm|
           opts[:server].each do |c_name, c_versions|
             kills = c_versions - opts[:manifest].fetch(c_name, [])
-            unless(kills.empty?)
+            unless kills.empty?
               rm[c_name] = kills
             end
           end
@@ -170,7 +165,7 @@ class Chef
         Smash.new.tap do |add|
           opts[:manifest].each do |c_name, c_versions|
             adds = c_versions - opts[:server].fetch(c_name, [])
-            unless(adds.empty?)
+            unless adds.empty?
               add[c_name] = adds
             end
           end
@@ -179,7 +174,7 @@ class Chef
 
       def generate_manifest_cookbooks
         path = File.join(Dir.pwd, 'batali.manifest')
-        unless(File.exist?(path))
+        unless File.exist?(path)
           raise "Failed to locate batali manifest at: #{path}"
         end
         manifest = Batali::Manifest.build(path)
@@ -216,7 +211,6 @@ class Chef
           raise e
         end
       end
-
     end
   end
 end

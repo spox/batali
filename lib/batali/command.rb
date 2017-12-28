@@ -4,7 +4,6 @@ require 'fileutils'
 module Batali
   # Customized command base for Batali
   class Command < Bogo::Cli::Command
-
     DEFAULT_CONFIGURATION_FILES = ['.batali']
 
     include Bogo::Memoization
@@ -30,11 +29,11 @@ module Batali
         path = config.fetch(:file, File.join(Dir.pwd, 'Batali'))
         ui.verbose "Loading Batali file from: #{path}"
         bfile = BFile.new(path, cache_directory)
-        if(bfile.discover)
+        if bfile.discover
           bfile.auto_discover!(config[:environment])
         end
         bfile.data.keys.each do |key|
-          unless(bfile.respond_to?(key))
+          unless bfile.respond_to?(key)
             ui.warn "Unknown keyword used within Batali file: #{key.inspect}"
           end
         end
@@ -69,7 +68,7 @@ module Batali
       memoize(['cache_directory', *args].join('_')) do
         directory = config.fetch(:cache_directory, File.join(user_home, '.batali', 'cache'))
         ui.debug "Cache directory to persist cookbooks: #{directory}"
-        unless(args.empty?)
+        unless args.empty?
           directory = File.join(directory, *args.map(&:to_s))
         end
         FileUtils.mkdir_p(directory)
@@ -82,7 +81,7 @@ module Batali
     # @param action [String] action to be performed
     # @yield block to execute
     def dry_run(action)
-      if(config[:dry_run])
+      if config[:dry_run]
         ui.warn "Dry run disabled: #{action}"
       else
         yield
@@ -91,11 +90,8 @@ module Batali
 
     # @return [TrueClass, FalseClass] infrastructure mode
     def infrastructure?
-      config[:infrastructure] || (
-        config[:infrastructure].nil? &&
-        manifest.infrastructure
-      )
+      config[:infrastructure] || (config[:infrastructure].nil? &&
+                                  manifest.infrastructure)
     end
-
   end
 end

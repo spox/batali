@@ -4,7 +4,6 @@ require 'batali/monkey'
 
 # Batali namespace
 module Batali
-
   autoload :BFile, 'batali/b_file'
   autoload :Command, 'batali/command'
   autoload :Config, 'batali/config'
@@ -30,7 +29,7 @@ module Batali
     # @param ui [Bogo::Ui]
     # @return [Bogo::Ui]
     def ui=(ui)
-      unless(ui.respond_to?(:verbose) && ui.respond_to?(:debug))
+      unless ui.respond_to?(:verbose) && ui.respond_to?(:debug)
         raise TypeError.new "Expecting type `Bogo::Ui` but received `#{ui.class}`"
       end
       @ui = Grimoire.ui = ui
@@ -38,20 +37,18 @@ module Batali
 
     # Write verbose message
     def verbose(*args)
-      if(ui)
+      if ui
         ui.verbose(*args)
       end
     end
 
     # Write debug message
     def debug(*args)
-      if(ui)
+      if ui
         ui.debug(*args)
       end
     end
-
   end
-
 end
 
 require 'batali/b_file'

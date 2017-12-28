@@ -16,7 +16,7 @@ module Batali
             FileUtils.mkdir_p(install_path)
             nil
           end
-          if(manifest.cookbook.nil? || manifest.cookbook.empty?)
+          if manifest.cookbook.nil? || manifest.cookbook.empty?
             ui.error 'No cookbooks defined within manifest! Try resolving first. (`batali resolve`)'
           else
             run_action('Installing cookbooks') do
@@ -24,14 +24,14 @@ module Batali
                 units_slice.map do |unit|
                   Thread.new do
                     ui.debug "Starting unit install for: #{unit.name}<#{unit.version}>"
-                    if(unit.source.respond_to?(:cache_path))
+                    if unit.source.respond_to?(:cache_path)
                       unit.source.cache_path = cache_directory(
                         Bogo::Utility.snake(unit.source.class.name.split('::').last)
                       )
                     end
                     asset_path = unit.source.asset
                     final_path = File.join(install_path, unit.name)
-                    if(infrastructure?)
+                    if infrastructure?
                       final_path << "-#{unit.version}"
                     end
                     begin
@@ -54,8 +54,6 @@ module Batali
           end
         end
       end
-
     end
-
   end
 end

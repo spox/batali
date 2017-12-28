@@ -13,7 +13,7 @@ module Batali
         # @return [Constant]
         def self.const_missing(const)
           [::Object, ::ObjectSpace].map do |root|
-            if(root.const_defined?(const))
+            if root.const_defined?(const)
               root.const_get(const)
             end
           end.compact.first || super
@@ -23,7 +23,6 @@ module Batali
           set!(:depends, args)
           self
         end
-
       end
 
       include Bogo::Memoization
@@ -33,7 +32,7 @@ module Batali
       def initialize(*_)
         super
         self.identifier = Smash.new(:path => path).checksum
-        unless(name?)
+        unless name?
           self.name = identifier
         end
       end
@@ -42,8 +41,8 @@ module Batali
       def units
         memoize(:units) do
           info = load_metadata
-          if(info[:depends])
-            unless(info[:depends].first.is_a?(Array))
+          if info[:depends]
+            unless info[:depends].first.is_a?(Array)
               info[:depends] = [info[:depends]]
             end
             info[:depends] = info[:depends].map do |dep|
@@ -65,9 +64,9 @@ module Batali
                 :version => info[:version],
                 :path => path,
                 :dependencies => info.fetch(:depends, []),
-                :cache_path => cache_path
-              )
-            )
+                :cache_path => cache_path,
+              ),
+            ),
           ]
         end
       end
@@ -75,9 +74,9 @@ module Batali
       # @return [Smash] metadata information
       def load_metadata
         memoize(:metadata) do
-          if(File.exist?(json = File.join(path, 'metadata.json')))
+          if File.exist?(json = File.join(path, 'metadata.json'))
             MultiJson.load(File.read(json)).to_smash
-          elsif(File.exist?(rb = File.join(path, 'metadata.rb')))
+          elsif File.exist?(rb = File.join(path, 'metadata.rb'))
             struct = Metadata.new
             struct.set_state!(:value_collapse => true)
             struct.instance_eval(File.read(rb), rb, 1)
@@ -87,7 +86,6 @@ module Batali
           end
         end
       end
-
     end
   end
 end

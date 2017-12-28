@@ -3,7 +3,6 @@ require_relative 'command_helper'
 REMOTE_SITE_CACHE_ID = '7402ae8bc051165aced4c70ce76dcced8e79d22436f11d43e322111ab2445737'
 
 describe Batali::Command::Resolve do
-
   before do
     @cache = Dir.mktmpdir('batali-cache')
     FileUtils.mkdir_p(
@@ -29,9 +28,7 @@ describe Batali::Command::Resolve do
   end
 
   describe 'Single path resolution' do
-
     describe 'Single cookbook' do
-
       before do
         File.open(File.join(@cwd, 'Batali'), 'w') do |file|
           file.puts <<-EOF
@@ -55,7 +52,6 @@ EOF
         contents['cookbook'].size.must_equal 1
         contents['cookbook'].first['version'].must_equal '2.0.0'
       end
-
     end
 
     describe 'Multiple cookbooks' do
@@ -88,7 +84,7 @@ EOF
           'apt-chef' => '0.2.2',
           'apt' => '2.9.2',
           'yum-chef' => '0.2.2',
-          'yum' => '3.8.2'
+          'yum' => '3.8.2',
         )
         contents['cookbook'].size.must_equal expected.size
         expected.each do |name, version|
@@ -100,15 +96,11 @@ EOF
           result['version'].must_equal version
         end
       end
-
     end
-
   end
 
   describe 'Multiple path resolution (infrastructure-mode)' do
-
     describe 'Single cookbook' do
-
       before do
         File.open(File.join(@cwd, 'Batali'), 'w') do |file|
           file.puts <<-EOF
@@ -122,7 +114,7 @@ EOF
           Batali::Command::Resolve.new(
             Smash.new(
               :cache_directory => @cache,
-              :infrastructure => true
+              :infrastructure => true,
             ),
             Array.new
           ).execute!
@@ -137,9 +129,6 @@ EOF
           Gem::Version.new(item['version']) > Gem::Version.new('1.0.0')
         end.must_equal true
       end
-
     end
-
   end
-
 end

@@ -6,9 +6,8 @@ module Batali
 
   # Custom struct class for file processing
   class Struct < AttributeStruct
-
     def cookbook(*args)
-      unless(self[:cookbook])
+      unless self[:cookbook]
         set!(:cookbook, ::AttributeStruct::CollapseArray.new.push(args))
       else
         self[:cookbook].push(args)
@@ -17,7 +16,7 @@ module Batali
     end
 
     def source(*args)
-      unless(self[:source])
+      unless self[:source]
         set!(:source, ::AttributeStruct::CollapseArray.new.push(args))
       else
         self[:source].push(args)
@@ -26,7 +25,7 @@ module Batali
     end
 
     def chef_server(*args)
-      unless(self[:chef_server])
+      unless self[:chef_server]
         set!(:chef_server, ::AttributeStruct::CollapseArray.new.push(args))
       else
         self[:chef_server].push(args)
@@ -35,7 +34,7 @@ module Batali
     end
 
     def restrict(*args)
-      unless(self[:restrict])
+      unless self[:restrict]
         set!(:restrict, ::AttributeStruct::CollapseArray.new.push(args))
       else
         self[:restrict].push(args)
@@ -49,7 +48,7 @@ module Batali
 
     def _dump(*_)
       _keys.each do |k|
-        if(_data[k].nil? && _data[k].is_a?(::AttributeStruct))
+        if _data[k].nil? && _data[k].is_a?(::AttributeStruct)
           _data[k] = true
         end
       end
@@ -64,7 +63,7 @@ module Batali
         :Bignum,
         :NIL,
         :TRUE,
-        :FALSE
+        :FALSE,
       ]
       next if deprecated_constants.include?(const_name)
       const_set(const_name, ::Object.const_get(const_name))
@@ -82,7 +81,7 @@ module Batali
               :Bignum,
               :NIL,
               :TRUE,
-              :FALSE
+              :FALSE,
             ]
             next if deprecated_constants.include?(const_name)
             const_set(const_name, ::Object.const_get(const_name))
@@ -91,7 +90,6 @@ module Batali
       end
       result
     end
-
   end
 
   # Create a new file
@@ -125,13 +123,13 @@ module Batali
     def self.cookbook_coerce
       proc do |v|
         v = [v].flatten.compact
-        if(v.size == 1 && v.first.is_a?(Hash))
+        if v.size == 1 && v.first.is_a?(Hash)
           Cookbook.new(v.first)
         else
           name, args = v.first, v.slice(1, v.size)
-          if(args.empty?)
+          if args.empty?
             args = Smash.new
-          elsif(args.size == 1 && args.first.is_a?(Hash))
+          elsif args.size == 1 && args.first.is_a?(Hash)
             args = args.first
           else
             args = Smash.new(:constraint => args.map(&:to_s))
@@ -164,67 +162,67 @@ module Batali
     end
 
     attribute :discover, [TrueClass, FalseClass], :required => true, :default => false
-    attribute :restrict, Restriction, :multiple => true, :coerce => lambda{|v|
-      if(v.is_a?(Hash))
-        Restriction.new(v)
-      else
-        Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
-      end
-    }
-    attribute :source, Origin::RemoteSite, :multiple => true, :default => [], :coerce => lambda{|v, b_file|
-      if(v.is_a?(Hash))
-        args = v
-      else
-        args = Smash.new(:endpoint => v.first)
-        if(v.last.is_a?(Hash))
-          args.merge!(v.last)
-        end
-      end
-      Origin::RemoteSite.new(args.merge(:cache_path => b_file.cache))
-    }
-    attribute :chef_server, Origin::ChefServer, :multiple => true, :default => [], :coerce => lambda{|v, b_file|
-      if(v.is_a?(Hash))
-        args = v
-      else
-        args = Smash.new(:endpoint => v.first)
-        if(v.last.is_a?(Hash))
-          args.merge!(v.last)
-        end
-      end
-      Origin::ChefServer.new(args.merge(:cache_path => b_file.cache))
-    }
-    attribute :group, Group, :multiple => true, :coerce => lambda{|v| Group.new(v)}
+    attribute :restrict, Restriction, :multiple => true, :coerce => lambda { |v|
+                              if v.is_a?(Hash)
+                                Restriction.new(v)
+                              else
+                                Restriction.new(:cookbook => v.first, :source => v.last.to_smash[:source])
+                              end
+                            }
+    attribute :source, Origin::RemoteSite, :multiple => true, :default => [], :coerce => lambda { |v, b_file|
+                                   if v.is_a?(Hash)
+                                     args = v
+                                   else
+                                     args = Smash.new(:endpoint => v.first)
+                                     if v.last.is_a?(Hash)
+                                       args.merge!(v.last)
+                                     end
+                                   end
+                                   Origin::RemoteSite.new(args.merge(:cache_path => b_file.cache))
+                                 }
+    attribute :chef_server, Origin::ChefServer, :multiple => true, :default => [], :coerce => lambda { |v, b_file|
+                                        if v.is_a?(Hash)
+                                          args = v
+                                        else
+                                          args = Smash.new(:endpoint => v.first)
+                                          if v.last.is_a?(Hash)
+                                            args.merge!(v.last)
+                                          end
+                                        end
+                                        Origin::ChefServer.new(args.merge(:cache_path => b_file.cache))
+                                      }
+    attribute :group, Group, :multiple => true, :coerce => lambda { |v| Group.new(v) }
     attribute :cookbook, Cookbook, :multiple => true, :coerce => BFile.cookbook_coerce, :default => []
-    attribute :metadata, Cookbook, :coerce => lambda{ |v, b_file|
-      if(v.is_a?(Hash))
-        ckbk = Cookbook.new(v)
-      else
-        dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
-        m_unit = Origin::Path.new(:name => 'metadata', :path => dir, :cache_path => b_file.cache).units.first
-        ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
-      end
-      unless(b_file.cookbook.map(&:name).include?(ckbk.name))
-        b_file.cookbook.push ckbk
-      end
-      ckbk
-    }
+    attribute :metadata, Cookbook, :coerce => lambda { |v, b_file|
+                           if v.is_a?(Hash)
+                             ckbk = Cookbook.new(v)
+                           else
+                             dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
+                             m_unit = Origin::Path.new(:name => 'metadata', :path => dir, :cache_path => b_file.cache).units.first
+                             ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
+                           end
+                           unless b_file.cookbook.map(&:name).include?(ckbk.name)
+                             b_file.cookbook.push ckbk
+                           end
+                           ckbk
+                         }
 
     # Search environments for cookbooks and restraints
     #
     # @return [TrueClass]
-    def auto_discover!(environment=nil)
+    def auto_discover!(environment = nil)
       debug 'Starting cookbook auto-discovery'
-      unless(discover)
+      unless discover
         raise 'Attempting to perform auto-discovery but auto-discovery is not enabled!'
       end
       environment_items = Dir.glob(File.join(File.dirname(path), 'environments', '*.{json,rb}')).map do |e_path|
         result = parse_environment(e_path)
-        if(result[:name] && result[:cookbooks])
+        if result[:name] && result[:cookbooks]
           Smash.new(
-            result[:name] => result[:cookbooks]
+            result[:name] => result[:cookbooks],
           )
         end
-      end.compact.inject(Smash.new){|m, n| m.merge(n)}
+      end.compact.inject(Smash.new) { |m, n| m.merge(n) }
       environment_items.each do |e_name, items|
         next if environment && e_name != environment
         debug "Discovery processing of environment: #{e_name}"
@@ -232,8 +230,8 @@ module Batali
           ckbk = cookbook.detect do |c|
             c.name == ckbk_name
           end
-          if(ckbk)
-            unless(ckbk.constraint)
+          if ckbk
+            unless ckbk.constraint
               debug "Skipping constraint merging due to lack of original constraints: #{ckbk.inspect}"
               next
             end
@@ -248,7 +246,7 @@ module Batali
             cookbook.push(
               Cookbook.new(
                 :name => ckbk_name,
-                :constraint => constraints
+                :constraint => constraints,
               )
             )
           end
@@ -266,7 +264,7 @@ module Batali
     # @param [Array<String>]
     def convert_constraint(constraint)
       comp, ver = constraint.split(' ', 2).map(&:strip)
-      if(comp == '~>')
+      if comp == '~>'
         ver = UnitVersion.new(ver)
         [">= #{ver}", "< #{ver.bump}"]
       else
@@ -286,16 +284,16 @@ module Batali
       grouped = Smash[
         grouped.map do |comp, items|
           versions = items.map(&:last)
-          if(comp.start_with?('>'))
+          if comp.start_with?('>')
             [comp, [versions.min]]
-          elsif(comp.start_with?('<'))
+          elsif comp.start_with?('<')
             [comp, [versions.max]]
           else
             [comp, versions]
           end
         end
       ]
-      if(grouped['='])
+      if grouped['=']
         grouped['>='] ||= []
         grouped['<='] ||= []
         grouped['='].each do |ver|
@@ -304,8 +302,8 @@ module Batali
         end
         grouped.delete('=')
       end
-      if(grouped['>'] || grouped['>='])
-        if(grouped['>='] && (grouped['>'].nil? || grouped['>='].min <= grouped['>'].min))
+      if grouped['>'] || grouped['>=']
+        if grouped['>='] && (grouped['>'].nil? || grouped['>='].min <= grouped['>'].min)
           grouped['>='] = [grouped['>='].min]
           grouped.delete('>')
         else
@@ -313,8 +311,8 @@ module Batali
           grouped.delete('>=')
         end
       end
-      if(grouped['<'] || grouped['<='])
-        if(grouped['<='] && (grouped['<'].nil? || grouped['<='].max >= grouped['<'].max))
+      if grouped['<'] || grouped['<=']
+        if grouped['<='] && (grouped['<'].nil? || grouped['<='].max >= grouped['<'].max)
           grouped['<='] = [grouped['<='].max]
           grouped.delete('<')
         else
@@ -353,8 +351,8 @@ module Batali
           env.fetch(
             :cookbook_versions,
             Smash.new
-          ).map{|k, v| [k, v.to_s.split(',')]}
-        ]
+          ).map { |k, v| [k, v.to_s.split(',')] }
+        ],
       )
     end
 
@@ -362,7 +360,5 @@ module Batali
     def debug(s)
       Batali.debug(s)
     end
-
   end
-
 end

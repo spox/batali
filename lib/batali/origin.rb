@@ -1,9 +1,8 @@
 require 'batali'
 
-module  Batali
+module Batali
   # Cookbook source origin
   class Origin < Utility
-
     autoload :ChefServer, 'batali/origin/chef_server'
     autoload :RemoteSite, 'batali/origin/remote_site'
     autoload :Git, 'batali/origin/git'
@@ -17,6 +16,5 @@ module  Batali
     def units
       raise NotImplementedError.new 'Abstract class'
     end
-
   end
 end

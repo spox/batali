@@ -8,7 +8,7 @@ module Batali
 
       # Display information from manifest
       def execute!
-        if(opts[:scrub])
+        if opts[:scrub]
           scrub!
         end
         ui.puts ui.color('Batali cache information:', :bold) + "\n"
@@ -32,13 +32,11 @@ module Batali
         cache_size = "#{sprintf('%.2f', ((cache_size / 1024.to_f) / 1024))}M"
         [
           "#{ui.color('Path:', :bold)} #{cache_directory}",
-          "#{ui.color('Size:', :bold)} #{cache_size}"
+          "#{ui.color('Size:', :bold)} #{cache_size}",
         ].each do |line|
           ui.puts "  #{line}"
         end
       end
-
     end
-
   end
 end

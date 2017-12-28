@@ -7,7 +7,6 @@ module Batali
   class Source
     # Path based source
     class Git < Path
-
       include Bogo::Memoization
       include Batali::Git
 
@@ -31,11 +30,10 @@ module Batali
             :url => url,
             :ref => ref,
             :type => self.class.name,
-            :subdirectory => subdirectory
+            :subdirectory => subdirectory,
           ), *args
         )
       end
-
     end
   end
 end

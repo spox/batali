@@ -8,7 +8,6 @@ module Batali
   class Source
     # Site based source
     class Site < Source
-
       include Bogo::Memoization
 
       # @return [Array<Hash>] dependency strings
@@ -25,7 +24,7 @@ module Batali
       #
       # @param args [Hash]
       # @return [self]
-      def initialize(args={})
+      def initialize(args = {})
         @deps = args.delete(:dependencies) || {}
         super
       end
@@ -51,22 +50,22 @@ module Batali
       # @return [String] directory
       def asset
         path = File.join(cache_directory, Base64.urlsafe_encode64(url))
-        if(File.directory?(path))
+        if File.directory?(path)
           discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
             i.end_with?("#{File::SEPARATOR}asset")
           end.first
           FileUtils.rm_rf(path)
         end
-        unless(discovered_path)
+        unless discovered_path
           retried = false
           begin
             FileUtils.mkdir_p(path)
             result = HTTP.get(url)
-            while(result.code == 302)
+            while result.code == 302
               result = HTTP.get(result.headers['Location'])
             end
             File.open(a_path = File.join(path, 'asset'), 'wb') do |file|
-              while(content = result.body.readpartial(2048))
+              while content = result.body.readpartial(2048)
                 file.write content
               end
             end
@@ -79,7 +78,7 @@ module Batali
               n_path = File.join(path, entry.full_name)
               FileUtils.mkdir_p(File.dirname(n_path))
               File.open(n_path, 'wb') do |file|
-                while(content = entry.read(2048))
+                while content = entry.read(2048)
                   file.write(content)
                 end
               end
@@ -91,7 +90,7 @@ module Batali
             end
           rescue => e
             FileUtils.rm_rf(path)
-            unless(retried)
+            unless retried
               FileUtils.mkdir_p(path)
               retried = true
               retry
@@ -102,7 +101,7 @@ module Batali
             i.end_with?("#{File::SEPARATOR}asset")
           end.first
         end
-        unless(discovered_path)
+        unless discovered_path
           raise Errno::ENOENT.new "Failed to locate asset within `#{path}`"
         end
         discovered_path
@@ -110,13 +109,12 @@ module Batali
 
       # @return [TrueClass, FalseClass]
       def clean_asset(asset_path)
-        if(asset_path)
+        if asset_path
           super File.dirname(asset_path)
         else
           false
         end
       end
-
     end
   end
 end

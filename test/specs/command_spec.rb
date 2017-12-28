@@ -4,7 +4,6 @@ require 'tmpdir'
 require 'minitest/autorun'
 
 describe Batali::Command do
-
   before do
     @cache = Dir.mktmpdir('batali-test')
     @command = Batali::Command.new(
@@ -15,7 +14,7 @@ describe Batali::Command do
         ),
         :cache_directory => @cache,
         :dry_run => true,
-        :ui => Bogo::Ui.new(:output_to => StringIO.new(''))
+        :ui => Bogo::Ui.new(:output_to => StringIO.new('')),
       ),
       []
     )
@@ -25,7 +24,7 @@ describe Batali::Command do
     FileUtils.rm_rf(@cache)
   end
 
-  let(:command){ @command }
+  let(:command) { @command }
 
   it 'should load a Batali file with given path' do
     command.batali_file.class.must_equal Batali::BFile
@@ -58,5 +57,4 @@ describe Batali::Command do
     end
     result.must_equal true
   end
-
 end

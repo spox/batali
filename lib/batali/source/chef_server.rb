@@ -5,7 +5,6 @@ module Batali
   class Source
     # Chef Server based source
     class ChefServer < Source
-
       include Bogo::Memoization
       include Utility::Chef
 
@@ -22,7 +21,7 @@ module Batali
       #
       # @param args [Hash]
       # @return [self]
-      def initialize(args={})
+      def initialize(args = {})
         @deps = args.delete(:dependencies) || {}
         super
         init_chef!
@@ -61,7 +60,7 @@ module Batali
           cookbook = rest.get_rest("cookbooks/#{name}/#{version}")
           manifest = cookbook.manifest
           Chef::CookbookVersion::COOKBOOK_SEGMENTS.each do |segement|
-            if(manifest.key?(segment))
+            if manifest.key?(segment)
               manifest[segement].each do |s_file|
                 new_path = File.join(path, s_file['path'].gsub('/', File::SEPARATOR))
                 FileUtils.mkdir_p(File.dirname(new_path))
@@ -78,7 +77,6 @@ module Batali
         end
         path
       end
-
     end
   end
 end

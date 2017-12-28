@@ -11,7 +11,7 @@ module Batali
       # Generate supermarket
       def execute!
         ui.info "Batali supermarket generator #{ui.color('started', :bold)}"
-        if(config[:skip_install])
+        if config[:skip_install]
           ui.warn 'Skipping cookbook installation.'
         else
           Install.new(config.merge(:ui => ui, :install => {}), arguments).execute!
@@ -26,8 +26,8 @@ module Batali
           new_universe, new_universe_file = generate_universe
           nil
         end
-        unless(config[:universe_only])
-          if(config[:clean_assets])
+        unless config[:universe_only]
+          if config[:clean_assets]
             Dir.glob(File.join(config[:assets_path], '*')).each do |old_asset|
               FileUtils.rm(old_asset)
             end
@@ -60,13 +60,13 @@ module Batali
           tar_ckbk_name = "#{ckbk.name}-#{ckbk.version}"
           ckbk_content_path = File.join('cookbooks', ckbk_name)
           ckbk_path = File.join(config[:assets_path], base_name)
-          unless(File.exist?(ckbk_path))
+          unless File.exist?(ckbk_path)
             ckbk_io = File.open(ckbk_path, 'wb')
             gz_io = Zlib::GzipWriter.new(ckbk_io, Zlib::BEST_COMPRESSION)
             begin
               gz_io.mtime = Time.now
               Gem::Package::TarWriter.new(gz_io) do |tar|
-                unless(File.directory?(ckbk_content_path))
+                unless File.directory?(ckbk_content_path)
                   raise "Cookbook path not found! Run `install`. (#{ckbk_content_path})"
                 end
                 Dir.glob(File.join(ckbk_content_path, '**', '**', '*')).each do |c_file|
@@ -75,7 +75,7 @@ module Batali
                   c_path = c_file.sub(File.join(ckbk_content_path, ''), '')
                   tar.add_file_simple(File.join(tar_ckbk_name, c_path), stat.mode, stat.size) do |dst|
                     File.open(c_file, 'rb') do |src|
-                      until(src.eof?)
+                      until src.eof?
                         dst.write src.read(4096)
                       end
                     end
@@ -111,21 +111,20 @@ module Batali
         universe = Smash.new.tap do |uni|
           manifest.cookbook.each do |ckbk|
             uni.set(ckbk.name, ckbk.version.to_s,
-              Smash.new(
-                :location_type => config[:location_type],
-                :location_path => File.join(config[:remote_supermarket_url], 'api', 'v1'),
-                :download_url => File.join(
-                  config[:remote_supermarket_url],
-                  config[:download_prefix],
-                  "#{ckbk.name}-#{ckbk.version}.tgz"
-                ),
-                :dependencies => Smash[
-                  ckbk.dependencies.map do |dep|
-                    [dep.name, dep.requirement]
-                  end
-                ]
-              )
-            )
+                    Smash.new(
+              :location_type => config[:location_type],
+              :location_path => File.join(config[:remote_supermarket_url], 'api', 'v1'),
+              :download_url => File.join(
+                config[:remote_supermarket_url],
+                config[:download_prefix],
+                "#{ckbk.name}-#{ckbk.version}.tgz"
+              ),
+              :dependencies => Smash[
+                ckbk.dependencies.map do |dep|
+                  [dep.name, dep.requirement]
+                end
+              ],
+            ))
           end
         end
 
@@ -135,8 +134,6 @@ module Batali
         new_universe_file.rewind
         [universe, new_universe_file]
       end
-
     end
-
   end
 end

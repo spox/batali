@@ -3,12 +3,11 @@ require 'batali'
 module Batali
   # Collection of resolved units
   class Manifest < Utility
-
     include Bogo::Memoization
 
     attribute :path, String
     attribute :infrastructure, [TrueClass, FalseClass]
-    attribute :cookbook, Batali::Unit, :multiple => true, :coerce => lambda{|v| Batali::Unit.new(v)}, :default => []
+    attribute :cookbook, Batali::Unit, :multiple => true, :coerce => lambda { |v| Batali::Unit.new(v) }, :default => []
 
     # Build manifest from given path. If no file exists, empty
     # manifest will be provided.
@@ -16,7 +15,7 @@ module Batali
     # @param path [String] path to manifest
     # @return [Manifest]
     def self.build(path)
-      if(File.exist?(path))
+      if File.exist?(path)
         new(Bogo::Config.new(path).data.merge(:path => path))
       else
         new(:path => path)
@@ -29,7 +28,7 @@ module Batali
     # @return [TrueClass, FalseClass]
     def include?(unit)
       memoize(unit.inspect) do
-        if(cookbook)
+        if cookbook
           !!cookbook.detect do |ckbk|
             ckbk.name == unit.name &&
               ckbk.version == unit.version
@@ -39,6 +38,5 @@ module Batali
         end
       end
     end
-
   end
 end

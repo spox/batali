@@ -15,7 +15,7 @@ module Batali
     #
     # @return [TrueClass]
     def clone_repository
-      if(File.directory?(base_path))
+      if File.directory?(base_path)
         repo = ::Git.open(base_path)
         repo.checkout('master')
         repo.pull
@@ -36,7 +36,7 @@ module Batali
       git.pull('origin', ref)
       self.ref = git.log.first.sha
       self.path = File.join(cache_path, 'git', ref)
-      unless(File.directory?(path))
+      unless File.directory?(path)
         FileUtils.mkdir_p(path)
         FileUtils.cp_r(File.join(base_path, '.'), path)
         FileUtils.rm_rf(File.join(path, '.git'))
@@ -51,6 +51,5 @@ module Batali
         attribute :ref, String, :required => true, :equivalent => true
       end
     end
-
   end
 end
