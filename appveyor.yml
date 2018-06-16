@@ -1,7 +1,8 @@
 ---
-init:
+install:
   # To avoid duplicated executables in PATH, see https://github.com/ruby/spec/pull/468
   - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
+  - bundle install
 
 environment:
   matrix:
@@ -9,3 +10,9 @@ environment:
     - ruby_version: 25-x64
 
 build: off
+
+before_test:
+  - ruby -v
+
+test_script:
+  - bundle exec rake
