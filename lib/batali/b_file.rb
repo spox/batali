@@ -58,6 +58,7 @@ module Batali
     ::Object.constants.each do |const_name|
       deprecated_constants = [
         :Config,
+        :Data,
         :TimeoutError,
         :Fixnum,
         :Bignum,
@@ -76,6 +77,7 @@ module Batali
           ::Object.constants.each do |const_name|
             deprecated_constants = [
               :Config,
+              :Data,
               :TimeoutError,
               :Fixnum,
               :Bignum,
