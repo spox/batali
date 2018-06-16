@@ -200,7 +200,7 @@ module Batali
                            if v.is_a?(Hash)
                              ckbk = Cookbook.new(v)
                            else
-                             dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
+                             dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Utility.clean_path(Dir.pwd))).to_path
                              m_unit = Origin::Path.new(:name => "metadata", :path => dir, :cache_path => b_file.cache).units.first
                              ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
                            end
