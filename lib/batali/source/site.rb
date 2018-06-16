@@ -65,7 +65,7 @@ module Batali
               result = HTTP.get(result.headers["Location"])
             end
             File.open(a_path = Utility.join_path(path, "asset"), "wb") do |file|
-              while(content = result.body.readpartial(2048))
+              while content = result.body.readpartial(2048)
                 file.write content
               end
             end

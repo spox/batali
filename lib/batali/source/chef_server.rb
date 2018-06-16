@@ -62,7 +62,7 @@ module Batali
           Chef::CookbookVersion::COOKBOOK_SEGMENTS.each do |segement|
             if manifest.key?(segment)
               manifest[segement].each do |s_file|
-                new_path = Utility.join_path(path, s_file['path'].gsub("/", File::SEPARATOR))
+                new_path = Utility.join_path(path, s_file["path"].gsub("/", File::SEPARATOR))
                 FileUtils.mkdir_p(File.dirname(new_path))
                 api_service.sign_on_redirect = false
                 t_file = api_service.get_rest(s_file["url"], true)
