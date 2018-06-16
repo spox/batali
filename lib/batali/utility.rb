@@ -11,7 +11,9 @@ module Batali
     # on platform in use
     def self.clean_path(path)
       path = File.expand_path(path.to_s)
-      if RUBY_PLATFORM =~ /mswin|mingw|windows/ && path.downcase.match(/^[a-z]:/)
+      if RUBY_PLATFORM =~ /mswin|mingw|windows/ &&
+         path.downcase.match(/^[a-z]:/) &&
+         ENV["BATALI_ENABLE_UNC"]
         path = path.tr("/", '\\')
         path = UNC_PREFIX + path
       end
