@@ -1,0 +1,11 @@
+---
+init:
+  # To avoid duplicated executables in PATH, see https://github.com/ruby/spec/pull/468
+  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
+
+environment:
+  matrix:
+    - ruby_version: 24-x64
+    - ruby_version: 25-x64
+
+build: off
