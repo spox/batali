@@ -452,7 +452,7 @@ $ batali supermarket --remote-supermarket-url="http://supermarket.example.com"
 
 # Info
 
-* Repository: https://github.com/hw-labs/batali
+* Repository: https://github.com/spox/batali
 
 [1]: https://rubygems.org/gems/librarian "A Framework for Bundlers"
 [2]: https://rubygems.org/gems/chef "A systems integration framework"
