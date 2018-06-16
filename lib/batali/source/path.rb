@@ -1,6 +1,6 @@
-require 'batali'
-require 'fileutils'
-require 'tmpdir'
+require "batali"
+require "fileutils"
+require "tmpdir"
 
 module Batali
   # Source of asset
@@ -9,9 +9,9 @@ module Batali
     class Path < Source
 
       # @return [Array<String>] default ignore globs
-      DEFAULT_IGNORE = ['.git*']
+      DEFAULT_IGNORE = [".git*"]
       # @return [Array<String>] valid ignore file names
-      IGNORE_FILE = ['chefignore', '.chefignore']
+      IGNORE_FILE = ["chefignore", ".chefignore"]
 
       include Bogo::Memoization
 
@@ -28,10 +28,10 @@ module Batali
           chefignore = chefignore ? File.readlines(chefignore) : []
           chefignore += DEFAULT_IGNORE
           chefignore.uniq!
-          files_to_copy = Dir.glob(File.join(path, '{.[^.]*,**}', '**', '{*,*.*,.*}'))
+          files_to_copy = Dir.glob(File.join(path, "{.[^.]*,**}", "**", "{*,*.*,.*}"))
           files_to_copy = files_to_copy.map do |file_path|
             next unless File.file?(file_path)
-            relative_path = file_path.sub("#{path}#{File::SEPARATOR}", '')
+            relative_path = file_path.sub("#{path}#{File::SEPARATOR}", "")
             relative_path unless chefignore.detect { |ig| File.fnmatch(ig, relative_path) }
           end.compact
           files_to_copy.each do |relative_path|

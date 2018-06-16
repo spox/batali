@@ -1,11 +1,11 @@
-require 'batali'
-require 'tmpdir'
-require 'stringio'
-require 'minitest/autorun'
+require "batali"
+require "tmpdir"
+require "stringio"
+require "minitest/autorun"
 
 def quiet_in_directory(dir)
   o_out = $stdout
-  output = StringIO.new('')
+  output = StringIO.new("")
   $stdout = output
   Dir.chdir(dir) do
     yield

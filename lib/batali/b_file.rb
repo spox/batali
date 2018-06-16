@@ -1,5 +1,5 @@
-require 'batali'
-require 'pathname'
+require "batali"
+require "pathname"
 
 # Batali namespace
 module Batali
@@ -198,7 +198,7 @@ module Batali
                              ckbk = Cookbook.new(v)
                            else
                              dir = Pathname.new(File.dirname(b_file.path)).relative_path_from(Pathname.new(Dir.pwd)).to_path
-                             m_unit = Origin::Path.new(:name => 'metadata', :path => dir, :cache_path => b_file.cache).units.first
+                             m_unit = Origin::Path.new(:name => "metadata", :path => dir, :cache_path => b_file.cache).units.first
                              ckbk = Cookbook.new(:name => m_unit.name, :version => m_unit.version, :path => dir)
                            end
                            unless b_file.cookbook.map(&:name).include?(ckbk.name)
@@ -211,11 +211,11 @@ module Batali
     #
     # @return [TrueClass]
     def auto_discover!(environment = nil)
-      debug 'Starting cookbook auto-discovery'
+      debug "Starting cookbook auto-discovery"
       unless discover
-        raise 'Attempting to perform auto-discovery but auto-discovery is not enabled!'
+        raise "Attempting to perform auto-discovery but auto-discovery is not enabled!"
       end
-      environment_items = Dir.glob(File.join(File.dirname(path), 'environments', '*.{json,rb}')).map do |e_path|
+      environment_items = Dir.glob(File.join(File.dirname(path), "environments", "*.{json,rb}")).map do |e_path|
         result = parse_environment(e_path)
         if result[:name] && result[:cookbooks]
           Smash.new(
@@ -252,7 +252,7 @@ module Batali
           end
         end
       end
-      debug 'Completed cookbook auto-discovery'
+      debug "Completed cookbook auto-discovery"
       true
     end
 
@@ -263,8 +263,8 @@ module Batali
     # @param constraint [String]
     # @param [Array<String>]
     def convert_constraint(constraint)
-      comp, ver = constraint.split(' ', 2).map(&:strip)
-      if comp == '~>'
+      comp, ver = constraint.split(" ", 2).map(&:strip)
+      if comp == "~>"
         ver = UnitVersion.new(ver)
         [">= #{ver}", "< #{ver.bump}"]
       else
@@ -284,40 +284,40 @@ module Batali
       grouped = Smash[
         grouped.map do |comp, items|
           versions = items.map(&:last)
-          if comp.start_with?('>')
+          if comp.start_with?(">")
             [comp, [versions.min]]
-          elsif comp.start_with?('<')
+          elsif comp.start_with?("<")
             [comp, [versions.max]]
           else
             [comp, versions]
           end
         end
       ]
-      if grouped['=']
-        grouped['>='] ||= []
-        grouped['<='] ||= []
-        grouped['='].each do |ver|
-          grouped['>='] << ver
-          grouped['<='] << ver
+      if grouped["="]
+        grouped[">="] ||= []
+        grouped["<="] ||= []
+        grouped["="].each do |ver|
+          grouped[">="] << ver
+          grouped["<="] << ver
         end
-        grouped.delete('=')
+        grouped.delete("=")
       end
-      if grouped['>'] || grouped['>=']
-        if grouped['>='] && (grouped['>'].nil? || grouped['>='].min <= grouped['>'].min)
-          grouped['>='] = [grouped['>='].min]
-          grouped.delete('>')
+      if grouped[">"] || grouped[">="]
+        if grouped[">="] && (grouped[">"].nil? || grouped[">="].min <= grouped[">"].min)
+          grouped[">="] = [grouped[">="].min]
+          grouped.delete(">")
         else
-          grouped['>'] = [grouped['>'].min]
-          grouped.delete('>=')
+          grouped[">"] = [grouped[">"].min]
+          grouped.delete(">=")
         end
       end
-      if grouped['<'] || grouped['<=']
-        if grouped['<='] && (grouped['<'].nil? || grouped['<='].max >= grouped['<'].max)
-          grouped['<='] = [grouped['<='].max]
-          grouped.delete('<')
+      if grouped["<"] || grouped["<="]
+        if grouped["<="] && (grouped["<"].nil? || grouped["<="].max >= grouped["<"].max)
+          grouped["<="] = [grouped["<="].max]
+          grouped.delete("<")
         else
-          grouped['<'] = [grouped['<'].max]
-          grouped.delete('<=')
+          grouped["<"] = [grouped["<"].max]
+          grouped.delete("<=")
         end
       end
       grouped.map do |comp, vers|
@@ -333,11 +333,11 @@ module Batali
     # @return [Smash]
     def parse_environment(path)
       case File.extname(path)
-      when '.json'
+      when ".json"
         env = MultiJson.load(
           File.read(path)
         ).to_smash
-      when '.rb'
+      when ".rb"
         struct = Struct.new
         struct.set_state!(:value_collapse => true)
         struct.instance_eval(File.read(path), path, 1)
@@ -351,7 +351,7 @@ module Batali
           env.fetch(
             :cookbook_versions,
             Smash.new
-          ).map { |k, v| [k, v.to_s.split(',')] }
+          ).map { |k, v| [k, v.to_s.split(",")] }
         ],
       )
     end

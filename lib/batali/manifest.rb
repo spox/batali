@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 module Batali
   # Collection of resolved units

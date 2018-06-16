@@ -1,5 +1,5 @@
-require 'git'
-require 'batali'
+require "git"
+require "batali"
 
 # Batali namespace
 module Batali
@@ -17,7 +17,7 @@ module Batali
     def clone_repository
       if File.directory?(base_path)
         repo = ::Git.open(base_path)
-        repo.checkout('master')
+        repo.checkout("master")
         repo.pull
         repo.fetch
       else
@@ -33,13 +33,13 @@ module Batali
     def ref_dup
       git = ::Git.open(base_path)
       git.checkout(ref)
-      git.pull('origin', ref)
+      git.pull("origin", ref)
       self.ref = git.log.first.sha
-      self.path = File.join(cache_path, 'git', ref)
+      self.path = File.join(cache_path, "git", ref)
       unless File.directory?(path)
         FileUtils.mkdir_p(path)
-        FileUtils.cp_r(File.join(base_path, '.'), path)
-        FileUtils.rm_rf(File.join(path, '.git'))
+        FileUtils.cp_r(File.join(base_path, "."), path)
+        FileUtils.rm_rf(File.join(path, ".git"))
       end
       path
     end

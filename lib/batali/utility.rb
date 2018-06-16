@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 module Batali
   class Utility < Grimoire::Utility
@@ -19,21 +19,21 @@ module Batali
 
       # Load and configure chef
       def init_chef!
-        debug 'Loading chef into the runtime'
+        debug "Loading chef into the runtime"
         begin
-          require 'chef'
+          require "chef"
           begin
-            require 'chef/rest'
+            require "chef/rest"
             @_api_klass = ::Chef::REST
           rescue LoadError
             # Newer versions of chef do not include REST
-            require 'chef/server_api'
+            require "chef/server_api"
             @_api_klass = ::Chef::ServerAPI
           end
-          debug 'Successfully loaded chef into the runtime'
+          debug "Successfully loaded chef into the runtime"
         rescue LoadError => e
           debug "Failed to load the chef gem: #{e.class}: #{e}"
-          raise 'The `chef` gem was not found. Please `gem install chef` or add `chef` to your bundle.'
+          raise "The `chef` gem was not found. Please `gem install chef` or add `chef` to your bundle."
         end
         Smash.new(
           :endpoint => :chef_server_url,
@@ -42,7 +42,7 @@ module Batali
         ).each do |local_attr, config_key|
           unless self.send(local_attr)
             memoize(:knife_configure, :global) do
-              require 'chef/knife'
+              require "chef/knife"
               ::Chef::Knife.new.configure_chef
             end
             debug "Settting #{config_key} from knife configuration file for #{self.class} <#{endpoint}>"

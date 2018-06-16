@@ -1,7 +1,7 @@
-require 'batali'
-require 'stringio'
-require 'fileutils'
-require 'tmpdir'
+require "batali"
+require "stringio"
+require "fileutils"
+require "tmpdir"
 
 # ChefSpec namespace
 module ChefSpec
@@ -21,17 +21,17 @@ module ChefSpec
 
     # Setup the environment (load cookbooks)
     def setup!
-      output = ''
+      output = ""
       begin
         ::Batali::Command::Update.new(
           Smash.new(
-            :file => File.join(Dir.pwd, 'Batali'),
+            :file => File.join(Dir.pwd, "Batali"),
             :path => @vendor_path,
             :update => {
               :install => true,
             },
             :ui => Bogo::Ui.new(
-              :app_name => 'Batali',
+              :app_name => "Batali",
               :output_to => StringIO.new(output),
             ),
           ),

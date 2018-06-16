@@ -1,12 +1,12 @@
-require 'batali'
+require "batali"
 
 module Batali
   # Source of asset
   class Source < Utility
-    autoload :Path, 'batali/source/path'
-    autoload :Site, 'batali/source/site'
-    autoload :Git, 'batali/source/git'
-    autoload :ChefServer, 'batali/source/chef_server'
+    autoload :Path, "batali/source/path"
+    autoload :Site, "batali/source/site"
+    autoload :Git, "batali/source/git"
+    autoload :ChefServer, "batali/source/chef_server"
 
     # @return [String] path to local cache
     attr_accessor :cache_path
@@ -20,17 +20,17 @@ module Batali
 
     # @return [String]
     def unit_version
-      raise NotImplementedError.new 'Abstract class'
+      raise NotImplementedError.new "Abstract class"
     end
 
     # @return [Array<Array<name, constraints>>]
     def unit_dependencies
-      raise NotImplementedError.new 'Abstract class'
+      raise NotImplementedError.new "Abstract class"
     end
 
     # @return [String] directory containing contents
     def asset
-      raise NotImplementedError.new 'Abstract class'
+      raise NotImplementedError.new "Abstract class"
     end
 
     # @return [TrueClass, FalseClass]
@@ -77,10 +77,10 @@ module Batali
     def self.build(args)
       type = args.delete(:type)
       unless type
-        raise ArgumentError.new 'Missing required option `:type`!'
+        raise ArgumentError.new "Missing required option `:type`!"
       end
-      unless type.to_s.include?('::')
-        type = [name, Bogo::Utility.camel(type)].join('::')
+      unless type.to_s.include?("::")
+        type = [name, Bogo::Utility.camel(type)].join("::")
       end
       klass = Bogo::Utility.constantize(type)
       unless klass

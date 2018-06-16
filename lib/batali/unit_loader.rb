@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 # Batali namespace
 module Batali
@@ -34,7 +34,7 @@ module Batali
               :name => ckbk.name,
               :url => ckbk.git,
               :subdirectory => ckbk.path,
-              :ref => ckbk.ref || 'master',
+              :ref => ckbk.ref || "master",
               :cache_path => cache,
             )
           elsif ckbk.path

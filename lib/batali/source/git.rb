@@ -1,6 +1,6 @@
-require 'batali'
-require 'fileutils'
-require 'tmpdir'
+require "batali"
+require "fileutils"
+require "tmpdir"
 
 module Batali
   # Source of asset

@@ -1,4 +1,4 @@
-require 'bogo/http_proxy'
+require "bogo/http_proxy"
 
 # Batali namespace
 module Batali
@@ -15,7 +15,7 @@ module Batali
       result = [
         name,
         *requirement.requirements.map do |req|
-          req.join(' ')
+          req.join(" ")
         end,
       ]
       # Prevent stupid conversion errors of

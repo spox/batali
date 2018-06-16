@@ -1,8 +1,8 @@
-require 'batali'
-require 'digest/sha2'
-require 'securerandom'
-require 'http'
-require 'fileutils'
+require "batali"
+require "digest/sha2"
+require "securerandom"
+require "http"
+require "fileutils"
 
 module Batali
   class Origin
@@ -10,7 +10,7 @@ module Batali
     class RemoteSite < Origin
 
       # Site suffix for API endpoint
-      API_SUFFIX = 'api/v1/'
+      API_SUFFIX = "api/v1/"
 
       include Bogo::Memoization
 
@@ -33,7 +33,7 @@ module Batali
       # @return [String] cache directory path
       def cache_directory
         memoize(:cache_directory) do
-          c_path = File.join(cache_path, 'remote_site', identifier)
+          c_path = File.join(cache_path, "remote_site", identifier)
           FileUtils.mkdir_p(c_path)
           c_path
         end
@@ -84,8 +84,8 @@ module Batali
         end
         if do_fetch
           t_uni = "#{universe_path}.#{SecureRandom.urlsafe_base64}"
-          result = HTTP.get(URI.join(endpoint, 'universe'))
-          File.open(t_uni, 'w') do |file|
+          result = HTTP.get(URI.join(endpoint, "universe"))
+          File.open(t_uni, "w") do |file|
             while content = result.body.readpartial(2048)
               file.write content
             end
@@ -97,7 +97,7 @@ module Batali
 
       # @return [String] path to universe file
       def universe_path
-        File.join(cache_directory, 'universe.json')
+        File.join(cache_directory, "universe.json")
       end
     end
   end

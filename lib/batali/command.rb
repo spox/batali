@@ -1,20 +1,20 @@
-require 'batali'
-require 'fileutils'
+require "batali"
+require "fileutils"
 
 module Batali
   # Customized command base for Batali
   class Command < Bogo::Cli::Command
-    DEFAULT_CONFIGURATION_FILES = ['.batali']
+    DEFAULT_CONFIGURATION_FILES = [".batali"]
 
     include Bogo::Memoization
 
-    autoload :Cache, 'batali/command/cache'
-    autoload :Configure, 'batali/command/configure'
-    autoload :Display, 'batali/command/display'
-    autoload :Install, 'batali/command/install'
-    autoload :Resolve, 'batali/command/resolve'
-    autoload :Supermarket, 'batali/command/supermarket'
-    autoload :Update, 'batali/command/update'
+    autoload :Cache, "batali/command/cache"
+    autoload :Configure, "batali/command/configure"
+    autoload :Display, "batali/command/display"
+    autoload :Install, "batali/command/install"
+    autoload :Resolve, "batali/command/resolve"
+    autoload :Supermarket, "batali/command/supermarket"
+    autoload :Update, "batali/command/update"
 
     # Set UI when loading via command
     def initialize(*_)
@@ -26,7 +26,7 @@ module Batali
     def batali_file
       memoize(:batali_file) do
         # TODO: Add directory traverse searching
-        path = config.fetch(:file, File.join(Dir.pwd, 'Batali'))
+        path = config.fetch(:file, File.join(Dir.pwd, "Batali"))
         ui.verbose "Loading Batali file from: #{path}"
         bfile = BFile.new(path, cache_directory)
         if bfile.discover
@@ -46,8 +46,8 @@ module Batali
       memoize(:manifest) do
         path = File.join(
           File.dirname(
-            config.fetch(:file, File.join(Dir.pwd, 'batali.manifest'))
-          ), 'batali.manifest'
+            config.fetch(:file, File.join(Dir.pwd, "batali.manifest"))
+          ), "batali.manifest"
         )
         ui.verbose "Loading manifest file from: #{path}"
         Manifest.build(path)
@@ -57,7 +57,7 @@ module Batali
     # @return [String] correct user home location for platform
     def user_home
       if RUBY_PLATFORM =~ /mswin|mingw|windows/
-        ENV.fetch('LOCALAPPDATA', Dir.home)
+        ENV.fetch("LOCALAPPDATA", Dir.home)
       else
         Dir.home
       end
@@ -65,8 +65,8 @@ module Batali
 
     # @return [String] path to local cache
     def cache_directory(*args)
-      memoize(['cache_directory', *args].join('_')) do
-        directory = config.fetch(:cache_directory, File.join(user_home, '.batali', 'cache'))
+      memoize(["cache_directory", *args].join("_")) do
+        directory = config.fetch(:cache_directory, File.join(user_home, ".batali", "cache"))
         ui.debug "Cache directory to persist cookbooks: #{directory}"
         unless args.empty?
           directory = File.join(directory, *args.map(&:to_s))

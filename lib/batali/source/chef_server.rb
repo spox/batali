@@ -1,5 +1,5 @@
-require 'batali'
-require 'tmpdir'
+require "batali"
+require "tmpdir"
 
 module Batali
   class Source
@@ -47,7 +47,7 @@ module Batali
       # @return [String] path to cache
       def cache_directory
         memoize(:cache_directory) do
-          @cache ||= File.join(cache_path, 'chef_server', endpoint)
+          @cache ||= File.join(cache_path, "chef_server", endpoint)
           cache
         end
       end
@@ -62,10 +62,10 @@ module Batali
           Chef::CookbookVersion::COOKBOOK_SEGMENTS.each do |segement|
             if manifest.key?(segment)
               manifest[segement].each do |s_file|
-                new_path = File.join(path, s_file['path'].gsub('/', File::SEPARATOR))
+                new_path = File.join(path, s_file["path"].gsub("/", File::SEPARATOR))
                 FileUtils.mkdir_p(File.dirname(new_path))
                 api_service.sign_on_redirect = false
-                t_file = api_service.get_rest(s_file['url'], true)
+                t_file = api_service.get_rest(s_file["url"], true)
                 FilUtils.mv(t_file.path, new_path)
               end
             end

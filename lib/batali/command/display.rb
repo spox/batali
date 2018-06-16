@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 module Batali
   class Command
@@ -8,7 +8,7 @@ module Batali
 
       # Display information from manifest
       def execute!
-        ui.puts ui.color('Batali manifest information:', :bold) + "\n"
+        ui.puts ui.color("Batali manifest information:", :bold) + "\n"
         display(arguments)
       end
 

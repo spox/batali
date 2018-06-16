@@ -1,5 +1,5 @@
-require 'git'
-require 'batali'
+require "git"
+require "batali"
 
 module Batali
   class Origin

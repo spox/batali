@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 # Batali namespace
 module Batali

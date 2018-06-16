@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 module Batali
   class Command
@@ -11,14 +11,14 @@ module Batali
         if opts[:scrub]
           scrub!
         end
-        ui.puts ui.color('Batali cache information:', :bold) + "\n"
+        ui.puts ui.color("Batali cache information:", :bold) + "\n"
         display
       end
 
       # Remove all contents from local cache
       def scrub!
         ui.confirm "Remove all contents from local cache (#{cache_directory})" unless opts[:yes]
-        run_action 'Scrubbing local cache' do
+        run_action "Scrubbing local cache" do
           FileUtils.rm_rf(cache_directory)
           nil
         end
@@ -26,13 +26,13 @@ module Batali
 
       # Display local cache information
       def display
-        cache_size = Dir.glob(File.join(cache_directory, '**', '**', '*')).map do |path|
+        cache_size = Dir.glob(File.join(cache_directory, "**", "**", "*")).map do |path|
           File.size(path) if File.file?(path)
         end.compact.inject(&:+).to_i
-        cache_size = "#{sprintf('%.2f', ((cache_size / 1024.to_f) / 1024))}M"
+        cache_size = "#{sprintf("%.2f", ((cache_size / 1024.to_f) / 1024))}M"
         [
-          "#{ui.color('Path:', :bold)} #{cache_directory}",
-          "#{ui.color('Size:', :bold)} #{cache_size}",
+          "#{ui.color("Path:", :bold)} #{cache_directory}",
+          "#{ui.color("Size:", :bold)} #{cache_size}",
         ].each do |line|
           ui.puts "  #{line}"
         end

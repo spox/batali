@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 module Batali
   # Provide scores for units
@@ -54,7 +54,7 @@ module Batali
             # value up (with satisfaction within minor segment being
             # worth more than satisfaction within major segment)
             satisfied = UnitRequirement.new(
-              "~> #{manifest_unit.version.segments.slice(0, 2).join('.')}"
+              "~> #{manifest_unit.version.segments.slice(0, 2).join(".")}"
             ).satisfied_by?(unit.version)
             pos = satisfied ? 1 : 0
             multi_val = pos == 1 ? MULTIPLIERS[:minor] : MULTIPLIERS[:major]

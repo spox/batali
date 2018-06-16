@@ -1,4 +1,4 @@
-require 'batali'
+require "batali"
 
 module Batali
   class Origin
@@ -48,9 +48,9 @@ module Batali
             info[:depends] = info[:depends].map do |dep|
               case dep
               when String
-                [dep, '> 0']
+                [dep, "> 0"]
               else
-                dep.size == 1 ? dep.push('> 0') : dep
+                dep.size == 1 ? dep.push("> 0") : dep
               end
             end
           end
@@ -74,9 +74,9 @@ module Batali
       # @return [Smash] metadata information
       def load_metadata
         memoize(:metadata) do
-          if File.exist?(json = File.join(path, 'metadata.json'))
+          if File.exist?(json = File.join(path, "metadata.json"))
             MultiJson.load(File.read(json)).to_smash
-          elsif File.exist?(rb = File.join(path, 'metadata.rb'))
+          elsif File.exist?(rb = File.join(path, "metadata.rb"))
             struct = Metadata.new
             struct.set_state!(:value_collapse => true)
             struct.instance_eval(File.read(rb), rb, 1)

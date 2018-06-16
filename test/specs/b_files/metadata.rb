@@ -1,2 +1,2 @@
-name 'test-cook'
-version '1.2.3'
+name "test-cook"
+version "1.2.3"

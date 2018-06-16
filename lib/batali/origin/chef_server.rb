@@ -1,8 +1,8 @@
-require 'batali'
-require 'digest/sha2'
-require 'securerandom'
-require 'http'
-require 'fileutils'
+require "batali"
+require "digest/sha2"
+require "securerandom"
+require "http"
+require "fileutils"
 
 module Batali
   class Origin
@@ -27,13 +27,13 @@ module Batali
       def units
         memoize(:units) do
           debug "Fetching units from chef server: #{endpoint}"
-          units = api_service.get_rest('cookbooks?num_versions=all').map do |c_name, meta|
-            meta['versions'].map do |info|
-              "#{c_name}/#{info['version']}"
+          units = api_service.get_rest("cookbooks?num_versions=all").map do |c_name, meta|
+            meta["versions"].map do |info|
+              "#{c_name}/#{info["version"]}"
             end
           end.flatten.map do |ckbk|
             debug "Unit information from #{endpoint}: #{ckbk.inspect}"
-            c_name, c_version = ckbk.split('/', 2)
+            c_name, c_version = ckbk.split("/", 2)
             c_deps = api_service.get_rest(
               "cookbooks/#{c_name}/#{c_version}"
             ).metadata.dependencies.to_a

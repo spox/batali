@@ -1,8 +1,8 @@
-require 'batali'
-require 'http'
-require 'tmpdir'
-require 'rubygems/package'
-require 'zlib'
+require "batali"
+require "http"
+require "tmpdir"
+require "rubygems/package"
+require "zlib"
 
 module Batali
   class Source
@@ -42,7 +42,7 @@ module Batali
       # @return [String] path to cache
       def cache_directory
         memoize(:cache_directory) do
-          @cache ||= File.join(cache_path, 'remote_site')
+          @cache ||= File.join(cache_path, "remote_site")
           cache
         end
       end
@@ -51,7 +51,7 @@ module Batali
       def asset
         path = File.join(cache_directory, Base64.urlsafe_encode64(url))
         if File.directory?(path)
-          discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
+          discovered_path = Dir.glob(File.join(path, "*")).reject do |i|
             i.end_with?("#{File::SEPARATOR}asset")
           end.first
           FileUtils.rm_rf(path)
@@ -60,11 +60,11 @@ module Batali
           retried = false
           begin
             FileUtils.mkdir_p(path)
-            result = HTTP.get(url.end_with?('/') ? url : url + '/')
+            result = HTTP.get(url.end_with?("/") ? url : url + "/")
             while result.code == 302
-              result = HTTP.get(result.headers['Location'])
+              result = HTTP.get(result.headers["Location"])
             end
-            File.open(a_path = File.join(path, 'asset'), 'wb') do |file|
+            File.open(a_path = File.join(path, "asset"), "wb") do |file|
               while content = result.body.readpartial(2048)
                 file.write content
               end
@@ -77,7 +77,7 @@ module Batali
               next unless entry.file?
               n_path = File.join(path, entry.full_name)
               FileUtils.mkdir_p(File.dirname(n_path))
-              File.open(n_path, 'wb') do |file|
+              File.open(n_path, "wb") do |file|
                 while content = entry.read(2048)
                   file.write(content)
                 end
@@ -97,7 +97,7 @@ module Batali
             end
             raise
           end
-          discovered_path = Dir.glob(File.join(path, '*')).reject do |i|
+          discovered_path = Dir.glob(File.join(path, "*")).reject do |i|
             i.end_with?("#{File::SEPARATOR}asset")
           end.first
         end
