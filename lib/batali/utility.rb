@@ -5,7 +5,7 @@ module Batali
   class Utility < Grimoire::Utility
 
     # Prefix for building UNC paths on Windows
-    UNC_PREFIX = '\\\?\\'.freeze
+    UNC_PREFIX = '//?/'.freeze
 
     # Properly format and expand path based
     # on platform in use
@@ -14,7 +14,6 @@ module Batali
       if RUBY_PLATFORM =~ /mswin|mingw|windows/ &&
          path.downcase.match(/^[a-z]:/) &&
          ENV["BATALI_DISABLE_UNC"].nil?
-        path = path.tr("/", '\\')
         path = UNC_PREFIX + path
       end
       path
