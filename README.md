@@ -1,3 +1,5 @@
+[![Travis status](https://api.travis-ci.org/spox/batali.svg?branch=develop)](https://travis-ci.org/spox/batali) [![Appveyor status](https://ci.appveyor.com/api/projects/status/bua5vb1f2jvpuu90?svg=true)](https://ci.appveyor.com/project/chrisroberts/batali)
+
 ![Batali](img/batali-logo.png)
 
 # Batali

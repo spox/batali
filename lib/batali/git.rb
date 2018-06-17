@@ -8,7 +8,7 @@ module Batali
 
     # @return [String] path to repository clone
     def base_path
-      File.join(cache_path, Base64.urlsafe_encode64(url))
+      Utility.join_path(cache_path, Base64.urlsafe_encode64(url))
     end
 
     # Clone the repository to the local machine
@@ -35,11 +35,11 @@ module Batali
       git.checkout(ref)
       git.pull("origin", ref)
       self.ref = git.log.first.sha
-      self.path = File.join(cache_path, "git", ref)
+      self.path = Utility.join_path(cache_path, "git", ref)
       unless File.directory?(path)
         FileUtils.mkdir_p(path)
-        FileUtils.cp_r(File.join(base_path, "."), path)
-        FileUtils.rm_rf(File.join(path, ".git"))
+        FileUtils.cp_r(Utility.join_path(base_path, "."), path)
+        FileUtils.rm_rf(Utility.join_path(path, ".git"))
       end
       path
     end

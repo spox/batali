@@ -13,11 +13,17 @@ module Batali
       attribute :subdirectory, String, :equivalent => true
       attribute :path, String
 
+      def initialize(*_, &block)
+        super
+        self.subdirectory = Utility.clean_path(subdirectory)
+        self.path = Utility.clean_path(path)
+      end
+
       # @return [String] directory containing contents
       def asset
         clone_repository
         clone_path = ref_dup
-        self.path = File.join(*[ref_dup, subdirectory].compact)
+        self.path = Utility.join_path(*[ref_dup, subdirectory].compact)
         result = super
         self.path = clone_path
         result

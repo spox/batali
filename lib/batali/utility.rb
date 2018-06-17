@@ -1,7 +1,32 @@
 require "batali"
 
 module Batali
+  # Utility class to provide helper methods
   class Utility < Grimoire::Utility
+
+    # Prefix for building UNC paths on Windows
+    UNC_PREFIX = "//?/".freeze
+
+    # Properly format and expand path based
+    # on platform in use
+    def self.clean_path(path)
+      path = File.expand_path(path.to_s)
+      if RUBY_PLATFORM =~ /mswin|mingw|windows/ &&
+         path.downcase.match(/^[a-z]:/) &&
+         ENV["BATALI_DISABLE_UNC"].nil?
+        path = UNC_PREFIX + path
+      end
+      path
+    end
+
+    # Join arguments to base path and clean
+    #
+    # @param base [String] base path
+    # @param args [Array<String>]
+    # @return [String]
+    def self.join_path(base, *args)
+      clean_path(File.join(base, *args))
+    end
 
     # Helper module for enabling chef server support
     module Chef

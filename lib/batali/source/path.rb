@@ -17,12 +17,17 @@ module Batali
 
       attribute :path, String, :required => true, :equivalent => true
 
+      def initialize(*_, &block)
+        super
+        self.path = Utility.clean_path(path)
+      end
+
       # @return [String] directory containing contents
       def asset
         memoize(:asset) do
           dir = Dir.mktmpdir
           chefignore = IGNORE_FILE.map do |c_name|
-            c_path = File.join(path, c_name)
+            c_path = Utility.join_path(path, c_name)
             c_path if File.exist?(c_path)
           end.compact.first
           chefignore = chefignore ? File.readlines(chefignore) : []
@@ -35,9 +40,9 @@ module Batali
             relative_path unless chefignore.detect { |ig| File.fnmatch(ig, relative_path) }
           end.compact
           files_to_copy.each do |relative_path|
-            new_path = File.join(dir, relative_path)
+            new_path = Utility.join_path(dir, relative_path)
             FileUtils.mkdir_p(File.dirname(new_path))
-            FileUtils.cp(File.join(path, relative_path), new_path)
+            FileUtils.cp(Utility.join_path(path, relative_path), new_path)
           end
           dir
         end

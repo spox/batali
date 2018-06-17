@@ -14,7 +14,7 @@ module Batali
     attribute :type, String, :required => true, :default => lambda { self.name } # rubocop:disable Style/RedundantSelf
 
     def initialize(args = {})
-      @cache_path = args.delete(:cache_path)
+      @cache_path = Utility.clean_path(args.delete(:cache_path))
       super
     end
 

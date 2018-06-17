@@ -47,14 +47,14 @@ module Batali
       # @return [String] path to cache
       def cache_directory
         memoize(:cache_directory) do
-          @cache ||= File.join(cache_path, "chef_server", endpoint)
+          @cache ||= Utility.join_path(cache_path, "chef_server", endpoint)
           cache
         end
       end
 
       # @return [String] directory
       def asset
-        path = File.join(cache_directory, name, version)
+        path = Utility.join_path(cache_directory, name, version)
         begin
           FileUtils.mkdir_p(path)
           cookbook = rest.get_rest("cookbooks/#{name}/#{version}")
@@ -62,7 +62,7 @@ module Batali
           Chef::CookbookVersion::COOKBOOK_SEGMENTS.each do |segement|
             if manifest.key?(segment)
               manifest[segement].each do |s_file|
-                new_path = File.join(path, s_file["path"].gsub("/", File::SEPARATOR))
+                new_path = Utility.join_path(path, s_file["path"].gsub("/", File::SEPARATOR))
                 FileUtils.mkdir_p(File.dirname(new_path))
                 api_service.sign_on_redirect = false
                 t_file = api_service.get_rest(s_file["url"], true)

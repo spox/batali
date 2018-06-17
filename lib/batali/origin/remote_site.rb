@@ -33,7 +33,7 @@ module Batali
       # @return [String] cache directory path
       def cache_directory
         memoize(:cache_directory) do
-          c_path = File.join(cache_path, "remote_site", identifier)
+          c_path = Utility.join_path(cache_path, "remote_site", identifier)
           FileUtils.mkdir_p(c_path)
           c_path
         end
@@ -97,7 +97,7 @@ module Batali
 
       # @return [String] path to universe file
       def universe_path
-        File.join(cache_directory, "universe.json")
+        Utility.join_path(cache_directory, "universe.json")
       end
     end
   end

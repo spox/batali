@@ -32,7 +32,7 @@ describe Batali::Command do
   end
 
   it "should load a batali.manifest in the same directory as the Batali file" do
-    command.manifest.path.must_equal File.join(File.dirname(command.options[:file]), "batali.manifest")
+    command.manifest.path.must_equal Batali::Utility.clean_path(File.join(File.dirname(command.options[:file]), "batali.manifest"))
     command.manifest.cookbook.first.name.must_equal "users"
     command.manifest.cookbook.first.version.must_equal Batali::UnitVersion.new("1.7.0")
   end
