@@ -5,7 +5,7 @@ module Batali
   class Utility < Grimoire::Utility
 
     # Prefix for building UNC paths on Windows
-    UNC_PREFIX = '//?/'.freeze
+    UNC_PREFIX = "//?/".freeze
 
     # Properly format and expand path based
     # on platform in use
