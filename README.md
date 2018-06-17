@@ -4,8 +4,7 @@
 
 # Batali
 
-Batali is a light weight cookbook resolver. It is now in
-a beta state, moving quickly towards a proper stable release.
+Batali is a light weight cookbook resolver.
 
 ## What is Batali?
 
@@ -402,7 +401,7 @@ end
 
 Batali can be used with [Test Kitchen](https://github.com/test-kitchen/test-kitchen):
 
-* https://github.com/hw-labs/batali-tk
+* https://github.com/spox/batali-tk
 
 ## ChefSpec
 
