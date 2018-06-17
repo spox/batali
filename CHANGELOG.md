@@ -1,3 +1,8 @@
+# v0.5.0
+* [enhancement] Use UNC style paths on Windows (#95)
+* [enhancement] Use LOCALAPPDATA on Windows (#90)
+* [fix] Fix metadata loading when JSON file (#86)
+
 # v0.4.10
 * [fix] Cookbook installation errors on windows (#82)
 
