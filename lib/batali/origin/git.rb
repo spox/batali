@@ -39,7 +39,7 @@ module Batali
       def load_metadata
         fetch_repo
         original_path = path.dup
-        self.path = Utility.path_join(*[path, subdirectory].compact)
+        self.path = Utility.join_path(*[path, subdirectory].compact)
         result = super
         self.path = original_path
         result
