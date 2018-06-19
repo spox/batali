@@ -1,6 +1,8 @@
 require "batali"
 require "http"
 require "tmpdir"
+require "uri"
+require "pathname"
 require "rubygems/package"
 require "zlib"
 
@@ -60,7 +62,12 @@ module Batali
           retried = false
           begin
             FileUtils.mkdir_p(path)
-            result = HTTP.get(url.end_with?("/") ? url : url + "/")
+            if !url.end_with?("/") && Pathname.new(URI.parse(url).path).extname == ""
+              req_url = "#{url}/"
+            else
+              req_url = url
+            end
+            result = HTTP.get(req_url)
             while result.code == 302
               result = HTTP.get(result.headers["Location"])
             end
