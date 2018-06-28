@@ -14,7 +14,7 @@ module Batali
     attribute :type, String, :required => true, :default => lambda { self.name } # rubocop:disable Style/RedundantSelf
 
     def initialize(args = {})
-      @lock = Mutex.new
+      @@lock = Mutex.new
       @cache_path = Utility.clean_path(args.delete(:cache_path))
       super
     end
@@ -24,7 +24,7 @@ module Batali
     # @yield Block to be executed
     # @return [Object]
     def synchronize
-      @lock.synchronize do
+      @@lock.synchronize do
         yield
       end
     end
