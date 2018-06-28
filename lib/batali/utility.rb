@@ -11,11 +11,12 @@ module Batali
     # on platform in use
     def self.clean_path(path)
       if RUBY_PLATFORM =~ /mswin|mingw|windows/ &&
-         ENV["BATALI_DISABLE_UNC"].nil?
-        if !path.to_s.match(/^[A-Za-z]:/) && !path.start_with?(UNC_PREFIX)
+         ENV["BATALI_DISABLE_UNC"].nil? &&
+         path
+        if !path.to_s.match(/^[A-Za-z]:/) && !path.to_s.start_with?(UNC_PREFIX)
           path = File.expand_path(path.to_s)
         end
-        path = UNC_PREFIX + path unless path.start_with?(UNC_PREFIX)
+        path = UNC_PREFIX + path.to_s unless path.to_s.start_with?(UNC_PREFIX)
       end
       path
     end
