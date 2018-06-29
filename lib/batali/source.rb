@@ -18,6 +18,14 @@ module Batali
       super
     end
 
+    # Helper to synchronize access to this source.
+    #
+    # @yield Block to be executed
+    # @return [Object]
+    def synchronize
+      yield
+    end
+
     # @return [String]
     def unit_version
       raise NotImplementedError.new "Abstract class"
