@@ -19,6 +19,12 @@ module Batali
         self.path = Utility.clean_path(path)
       end
 
+      def synchronize
+        self.class.path_lock(path) do
+          yield
+        end
+      end
+
       # @return [String] directory containing contents
       def asset
         clone_repository

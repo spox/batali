@@ -24,6 +24,7 @@ module Batali
                 units_slice.map do |unit|
                   Thread.new do
                     ui.debug "Starting unit install for: #{unit.name}<#{unit.version}>"
+                    ui.debug "Unit source: #{unit.source.inspect}"
                     unit.source.synchronize do
                       if unit.source.respond_to?(:cache_path)
                         unit.source.cache_path = cache_directory(

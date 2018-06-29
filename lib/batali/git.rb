@@ -49,6 +49,24 @@ module Batali
       klass.class_eval do
         attribute :url, String, :required => true, :equivalent => true
         attribute :ref, String, :required => true, :equivalent => true
+
+        @@locks = {}
+        @@lock_init = Mutex.new
+
+        def self.path_lock(path)
+          @@lock_init.synchronize do
+            if !@@locks[path]
+              @@locks[path] = Mutex.new
+            end
+          end
+          if block_given?
+            @@locks[path].synchronize do
+              yield
+            end
+          else
+            @@locks[path]
+          end
+        end
       end
     end
   end
